@@ -1,0 +1,37 @@
+<svg width="800" height="600" viewBox="0 0 800 600" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient id="reviewGradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7c3aed;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#a855f7;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <rect width="800" height="600" fill="url(#reviewGradient)"/>
+  <rect x="50" y="50" width="700" height="500" fill="#1f2937" rx="20"/>
+  <rect x="100" y="100" width="600" height="300" fill="#374151" rx="15"/>
+  <rect x="150" y="150" width="500" height="200" fill="#4b5563" rx="10"/>
+  <g transform="translate(350, 200)">
+    <circle cx="0" cy="0" r="80" fill="#7c3aed"/>
+    <polygon points="-30,-20 -30,20 30,0" fill="white"/>
+  </g>
+  <g transform="translate(200, 450)">
+    <circle cx="0" cy="0" r="15" fill="#fbbf24"/>
+    <path d="M-8,-3 L-3,7 L3,7 L8,-3 L5,-8 L-5,-8 Z" fill="white"/>
+  </g>
+  <g transform="translate(250, 450)">
+    <circle cx="0" cy="0" r="15" fill="#fbbf24"/>
+    <path d="M-8,-3 L-3,7 L3,7 L8,-3 L5,-8 L-5,-8 Z" fill="white"/>
+  </g>
+  <g transform="translate(300, 450)">
+    <circle cx="0" cy="0" r="15" fill="#fbbf24"/>
+    <path d="M-8,-3 L-3,7 L3,7 L8,-3 L5,-8 L-5,-8 Z" fill="white"/>
+  </g>
+  <g transform="translate(350, 450)">
+    <circle cx="0" cy="0" r="15" fill="#fbbf24"/>
+    <path d="M-8,-3 L-3,7 L3,7 L8,-3 L5,-8 L-5,-8 Z" fill="white"/>
+  </g>
+  <g transform="translate(400, 450)">
+    <circle cx="0" cy="0" r="15" fill="#6b7280"/>
+    <path d="M-8,-3 L-3,7 L3,7 L8,-3 L5,-8 L-5,-8 Z" fill="white"/>
+  </g>
+  <text x="400" y="520" text-anchor="middle" fill="#9ca3af" font-family="Arial, sans-serif" font-size="24" font-weight="bold">GAME REVIEW</text>
+</svg>
