@@ -17,7 +17,7 @@ image: "/images/Champion-Chimaev.jpeg"
 
 ## Who is The Chechnya's Wolf?
 
-Khamzat Chimaev, often called *"The Wolf"*, was born in Chechnya before moving to Sweden, where his MMA journey began. Known for his relentless grappling and ferocious striking, Chimaev quickly made a name for himself in the UFC. According to his [official biography](https://en.wikipedia.org/wiki/Khamzat_Chimaev), his undefeated record across multiple weight classes has set him apart as one of the promotion's most dominant athletes.
+Khamzat Chimaev, often called "The Wolf", was born in Chechnya before moving to Sweden, where his MMA journey began. Known for his relentless grappling and ferocious striking, Chimaev quickly made a name for himself in the UFC. According to his [official biography](https://en.wikipedia.org/wiki/Khamzat_Chimaev), his undefeated record across multiple weight classes has set him apart as one of the promotion's most dominant athletes.
 
 His fighting style combines unyielding pressure with precise control, often overwhelming opponents before they can mount any offense.
 
@@ -35,6 +35,6 @@ Yet, according to [comprehensive fight coverage](https://www.usatoday.com/story/
 
 ## The UFC 319 Results and What's Next for Khamzat Chimaev
 
-Chimaev's victory left fans asking one question: *who can stop him now?* As [expert analysis suggests](https://bleacherreport.com/articles/25239105-can-anyone-stop-khamzat-chimaev-new-champ-looked-unbeatable-ufc-319), the performance felt more like a statement than a title win. With a perfect 15-0 record and his first UFC gold, Chimaev has positioned himself as the face of a new era in MMA.
+Chimaev's victory left fans asking one question: who can stop him now? As [expert analysis suggests](https://bleacherreport.com/articles/25239105-can-anyone-stop-khamzat-chimaev-new-champ-looked-unbeatable-ufc-319), the performance felt more like a statement than a title win. With a perfect 15-0 record and his first UFC gold, Chimaev has positioned himself as the face of a new era in MMA.
 
 The UFC has yet to confirm his next opponent, but speculation swirls. Top contenders in the middleweight division, along with potential superfights at welterweight or light heavyweight, are already on fans' wish lists. One thing is clear: Khamzat Chimaev's reign has just begun, and finding a challenger capable of breaking his streak may prove to be the UFC's toughest matchmaking puzzle.

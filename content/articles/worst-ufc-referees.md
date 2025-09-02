@@ -18,7 +18,7 @@ image: "/images/worst-ufc-referees.jpeg"
 
 Few names in MMA spark frustration among fighters and fans like Steve Mazzagatti, Dave Seljestad, and Mario Yamasaki.
 
-- **Steve Mazzagatti** has been on the receiving end of harsh criticism from UFC President Dana White, who once called him *"dangerous with continued incompetence"*. His history of late stoppages and questionable calls has been documented in outlets like [Bleacher Report](https://bleacherreport.com/articles/1674811-dana-white-referee-steve-mazzagatti-is-dangerous-with-continued-incompetence).
+- **Steve Mazzagatti** has been on the receiving end of harsh criticism from UFC President Dana White, who once called him "dangerous with continued incompetence". His history of late stoppages and questionable calls has been documented in outlets like [Bleacher Report](https://bleacherreport.com/articles/1674811-dana-white-referee-steve-mazzagatti-is-dangerous-with-continued-incompetence).
 - **Dave Seljestad** recently came under fire during UFC 307 for poorly handled eye pokes and untimely separations, prompting backlash from fans and fighters alike. [MMA News](https://www.mmanews.com/news/ufc/fans-slam-referee-eye-pokes-separations-ufc-307-fight/) reported the incident as a turning point in the call for higher officiating standards.
 - **Mario Yamasaki** is notorious for letting fighters endure unnecessary punishment. His infamous "be a warrior" stance drew heavy criticism, and his reluctance to step in quickly has led to accusations of negligence.
 

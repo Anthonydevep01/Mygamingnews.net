@@ -20,9 +20,9 @@ references: [
 
 ## Doom Eternal Meets High Seas Chaos?
 
-First impressions of *Davy X Jones* are anything but subtle. The game has been described as a pirate-themed FPS that borrows its frantic combat rhythm from *Doom Eternal*. Fans who tried the [Steam Next Fest demo](https://bleedingcool.com/games/davy-x-jones-reveals-early-access-release-this-week) noted its relentless pace, heavy-hitting arsenal, and over-the-top enemy designs—all wrapped in swashbuckling energy.
+First impressions of Davy X Jones are anything but subtle. The game has been described as a pirate-themed FPS that borrows its frantic combat rhythm from Doom Eternal. Fans who tried the [Steam Next Fest demo](https://bleedingcool.com/games/davy-x-jones-reveals-early-access-release-this-week) noted its relentless pace, heavy-hitting arsenal, and over-the-top enemy designs—all wrapped in swashbuckling energy.
 
-The result is an experience that feels both familiar and wild: *what if Doomguy traded his armor for a pirate hat and cutlass?*
+The result is an experience that feels both familiar and wild: what if Doomguy traded his armor for a pirate hat and cutlass?
 
 ## Platforms Confirmed: Consoles and PC
 
@@ -32,15 +32,15 @@ This staggered approach allows the team to polish mechanics while ensuring cross
 
 ## The Legendary Pirate's Revenge Story
 
-In *Davy X Jones*, players step into the boots of the legendary pirate himself—betrayed, robbed, and ultimately beheaded. Jones awakens in The Locker, a pirate hell shattered into islands floating on an endless sea of clouds. But death is merely the beginning of his epic tale of revenge.
+In Davy X Jones, players step into the boots of the legendary pirate himself—betrayed, robbed, and ultimately beheaded. Jones awakens in The Locker, a pirate hell shattered into islands floating on an endless sea of clouds. But death is merely the beginning of his epic tale of revenge.
 
 Control the captain's headless body—Jones—and forge an unlikely alliance with your stubborn skull—Davy—as you reclaim your legendary Artifacts and face your eternal nemesis: Blackbeard. Fight like a true pirate legend, wielding sword, gun, and even your sharp-tongued skull, whose tentacle makes for one hell of a grappling hook.
 
 ## What's Next on Our Site
 
-With its Early Access launch confirmed, you can expect a full review on our site once we've had the chance to explore the final build. We'll cover how it stacks up against other indie shooters, whether the pirate aesthetic holds up long-term, and if it truly deserves its *Doom Eternal* comparisons.
+With its Early Access launch confirmed, you can expect a full review on our site once we've had the chance to explore the final build. We'll cover how it stacks up against other indie shooters, whether the pirate aesthetic holds up long-term, and if it truly deserves its Doom Eternal comparisons.
 
-For now, the excitement is real: *Davy X Jones* is shaping up to be one of 2025's surprise indie hits.
+For now, the excitement is real: Davy X Jones is shaping up to be one of 2025's surprise indie hits.
 
 ## Early Access Features
 
@@ -51,4 +51,4 @@ The Early Access version promises several key features:
 - **Risk-Reward System**: Volatile essence drops that create treasure chests—but also unleash unpredictable fiends
 - **Your Living Vessel**: Meet Abby, a hybrid ship-whale who serves as your base and ally
 
-*Davy X Jones* enters Early Access on Steam on August 28, 2025, with console versions to follow.
+Davy X Jones enters Early Access on Steam on August 28, 2025, with console versions to follow.
