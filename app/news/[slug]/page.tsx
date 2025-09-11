@@ -3,6 +3,7 @@ import { getArticleBySlug, getArticlesByCategory, ArticleContent } from '../../d
 import Link from 'next/link'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
 import ArticleSidebar from '../../components/ArticleSidebar'
+import SchemaMarkup from '../../components/SchemaMarkup'
 
 interface ArticlePageProps {
   params: {
@@ -47,6 +48,31 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
 
   return (
     <div className="min-h-screen py-12">
+      <SchemaMarkup 
+        type="article" 
+        data={{ 
+          article: {
+            title: article.title,
+            slug: article.slug,
+            author: article.author,
+            category: article.category,
+            date: article.date,
+            meta_description: article.meta_description || article.description,
+            image: article.image,
+            word_count: article.word_count
+          }
+        }} 
+      />
+      <SchemaMarkup 
+        type="breadcrumb" 
+        data={{ 
+          breadcrumbs: [
+            { name: 'Home', url: '/' },
+            { name: 'News', url: '/news' },
+            { name: article.title, url: `/news/${article.slug}` }
+          ]
+        }} 
+      />
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Back Button */}
         <Link 
