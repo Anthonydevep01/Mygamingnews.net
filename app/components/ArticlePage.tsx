@@ -117,27 +117,6 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
           />
         </div>
 
-        {/* Article References */}
-        {article.references && article.references.length > 0 && (
-          <div className="mt-12 p-6 bg-gray-100 dark:bg-gray-800 rounded-lg">
-            <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-4">References</h3>
-            <ul className="space-y-2">
-              {article.references.map((ref, index) => (
-                <li key={index}>
-                  <a 
-                    href={ref} 
-                    target="_blank" 
-                    rel="noopener noreferrer"
-                    className="text-blue-600 dark:text-blue-400 hover:underline break-all"
-                  >
-                    {ref}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-        )}
-
         {/* Article Tags */}
         {article.primary_keyword && (
           <div className="mt-8">
