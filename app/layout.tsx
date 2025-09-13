@@ -1,6 +1,7 @@
 import './globals.css'
 import { Inter } from 'next/font/google'
 import Script from 'next/script'
+import { SpeedInsights } from '@vercel/speed-insights/next'
 import { ThemeProvider } from './components/ThemeProvider'
 import Navbar from './components/Navbar'
 import Footer from './components/Footer'
@@ -79,6 +80,7 @@ export default function RootLayout({
             <Footer />
           </div>
         </ThemeProvider>
+        <SpeedInsights />
       </body>
     </html>
   )
