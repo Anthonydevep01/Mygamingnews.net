@@ -10,7 +10,7 @@ Disallow: /api/
 Disallow: /_next/
 Disallow: /.*
 
-# Sitemap location
+# Sitemap location (static file)
 Sitemap: https://mygamingnews.net/sitemap.xml
 
 # Crawl-delay for respectful crawling
