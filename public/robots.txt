@@ -1,5 +1,6 @@
 # Robots.txt for MyGamingNews.net
 # Allow all crawlers to access all content
+# Updated: 2025-01-19
 
 User-agent: *
 Allow: /
