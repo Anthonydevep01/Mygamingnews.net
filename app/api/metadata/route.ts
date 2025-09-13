@@ -86,7 +86,7 @@ export async function GET(request: NextRequest) {
           totalArticles: articles.length,
           categoryCounts: categoryStats,
           latestUpdate: Math.max(...articles.map(a => new Date(a.date).getTime())),
-          authors: [...new Set(articles.map(a => a.author))],
+          authors: Array.from(new Set(articles.map(a => a.author))),
           averageWordCount: Math.round(articles.reduce((sum, a) => sum + (a.word_count || 600), 0) / articles.length)
         });
 
