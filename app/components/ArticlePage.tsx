@@ -113,23 +113,28 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <div className="text-gray-800 dark:text-gray-200 leading-relaxed">
             {article.content.map((section, index) => {
-              if (section.type === 'heading_h2' && section.heading_h2) {
+              // Handle H2 headings
+              if (section.heading_h2) {
                 return (
                   <h2 key={index} className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">
                     {section.heading_h2}
                   </h2>
                 )
               }
-              if (section.type === 'text' && section.text) {
+              
+              // Handle hook (first paragraph in bold)
+              if (section.type === 'hook' && section.text) {
                 return (
-                  <div 
-                    key={index} 
-                    className="mb-4"
-                    dangerouslySetInnerHTML={{ __html: section.text }}
-                  />
+                  <div key={index} className="mb-6">
+                    <p className="text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
+                      {section.text}
+                    </p>
+                  </div>
                 )
               }
-              if (section.type === 'video_embed' && section.video_embed) {
+              
+              // Handle video embeds
+              if (section.type === 'video' && section.video_embed) {
                 return (
                   <div key={index} className="my-8">
                     <div 
@@ -139,6 +144,18 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
                   </div>
                 )
               }
+              
+              // Handle regular text content
+              if (section.text) {
+                return (
+                  <div key={index} className="mb-4">
+                    <p className="text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
+                      {section.text}
+                    </p>
+                  </div>
+                )
+              }
+              
               return null
             })}
           </div>
