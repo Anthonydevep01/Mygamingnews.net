@@ -113,8 +113,23 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
         <div className="prose prose-lg dark:prose-invert max-w-none">
           <div className="text-gray-800 dark:text-gray-200 leading-relaxed">
             {article.content.map((section, index) => {
-              // Handle H2 headings
-              if (section.heading_h2) {
+              // Handle sections with both heading and text
+              if (section.heading_h2 && section.text) {
+                return (
+                  <div key={index}>
+                    <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">
+                      {section.heading_h2}
+                    </h2>
+                    <div 
+                      className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
+                      dangerouslySetInnerHTML={{ __html: section.text }}
+                    />
+                  </div>
+                )
+              }
+              
+              // Handle headings only
+              if (section.heading_h2 && !section.text) {
                 return (
                   <h2 key={index} className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">
                     {section.heading_h2}
@@ -145,16 +160,16 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
                 )
               }
               
-              // Handle regular text content
-               if (section.text) {
-                 return (
-                   <div 
-                     key={index} 
-                     className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
-                     dangerouslySetInnerHTML={{ __html: section.text }}
-                   />
-                 )
-               }
+              // Handle regular text content only
+              if (section.text && !section.heading_h2) {
+                return (
+                  <div 
+                    key={index} 
+                    className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
+                    dangerouslySetInnerHTML={{ __html: section.text }}
+                  />
+                )
+              }
               
               return null
             })}
