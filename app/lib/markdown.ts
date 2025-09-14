@@ -45,14 +45,14 @@ export function getAllArticles(): Article[] {
   const fileNames = fs.readdirSync(contentDirectory)
   const articles = fileNames
     .filter(name => name.endsWith('.md'))
-    .map(fileName => {
+    .map(async fileName => {
       const id = fileName.replace(/\.md$/, '')
       const fullPath = path.join(contentDirectory, fileName)
       const fileContents = fs.readFileSync(fullPath, 'utf8')
       const { data, content } = matter(fileContents)
       
       // Parse markdown content into structured format
-      const parsedContent = parseMarkdownContent(content)
+      const parsedContent = await parseMarkdownContent(content)
       
       return {
         id,
@@ -62,10 +62,49 @@ export function getAllArticles(): Article[] {
       }
     })
   
-  return articles.sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
+  // Wait for all async operations to complete
+  const resolvedArticles = Promise.all(articles)
+  
+  // Since this needs to be synchronous for the current architecture, 
+  // we'll use a synchronous approach instead
+  return fileNames
+    .filter(name => name.endsWith('.md'))
+    .map(fileName => {
+      const id = fileName.replace(/\.md$/, '')
+      const fullPath = path.join(contentDirectory, fileName)
+      const fileContents = fs.readFileSync(fullPath, 'utf8')
+      const { data, content } = matter(fileContents)
+      
+      // For now, use synchronous parsing without HTML processing
+      const parsedContent = parseMarkdownContentSync(content)
+      
+      return {
+        id,
+        ...data as ArticleMetadata,
+        content: parsedContent,
+        description: data.meta_description || extractDescription(content)
+      }
+    })
+    .sort((a, b) => new Date(b.date).getTime() - new Date(a.date).getTime())
 }
 
-function parseMarkdownContent(content: string): ArticleContent[] {
+async function processMarkdownToHtml(text: string): Promise<string> {
+  const result = await remark()
+    .use(gfm)
+    .use(html)
+    .process(text)
+  return result.toString()
+}
+
+function processMarkdownToHtmlSync(text: string): string {
+  const result = remark()
+    .use(gfm)
+    .use(html)
+    .processSync(text)
+  return result.toString()
+}
+
+async function parseMarkdownContent(content: string): Promise<ArticleContent[]> {
   const lines = content.split('\n')
   const sections: ArticleContent[] = []
   let currentSection: Partial<ArticleContent> = {}
@@ -78,9 +117,10 @@ function parseMarkdownContent(content: string): ArticleContent[] {
     if (trimmedLine.startsWith('<video>') || trimmedLine.includes('youtube.com/embed/')) {
       // Save current section if it has content
       if (currentSection.heading_h2 || currentText.trim()) {
+        const processedText = currentText.trim() ? await processMarkdownToHtml(currentText.trim()) : ''
         sections.push({
           ...currentSection,
-          text: currentText.trim()
+          text: processedText
         } as ArticleContent)
         currentSection = {}
         currentText = ''
@@ -102,9 +142,10 @@ function parseMarkdownContent(content: string): ArticleContent[] {
     if (trimmedLine.startsWith('## ')) {
       // Save previous section
       if (currentSection.heading_h2 || currentText.trim()) {
+        const processedText = currentText.trim() ? await processMarkdownToHtml(currentText.trim()) : ''
         sections.push({
           ...currentSection,
-          text: currentText.trim()
+          text: processedText
         } as ArticleContent)
       }
       
@@ -133,9 +174,90 @@ function parseMarkdownContent(content: string): ArticleContent[] {
   
   // Add final section
   if (currentSection.heading_h2 || currentText.trim()) {
+    const processedText = currentText.trim() ? await processMarkdownToHtml(currentText.trim()) : ''
     sections.push({
       ...currentSection,
-      text: currentText.trim()
+      text: processedText
+    } as ArticleContent)
+  }
+  
+  return sections
+}
+
+function parseMarkdownContentSync(content: string): ArticleContent[] {
+  const lines = content.split('\n')
+  const sections: ArticleContent[] = []
+  let currentSection: Partial<ArticleContent> = {}
+  let currentText = ''
+  
+  for (const line of lines) {
+    const trimmedLine = line.trim()
+    
+    // Handle video embeds
+    if (trimmedLine.startsWith('<video>') || trimmedLine.includes('youtube.com/embed/')) {
+      // Save current section if it has content
+      if (currentSection.heading_h2 || currentText.trim()) {
+        const processedText = currentText.trim() ? processMarkdownToHtmlSync(currentText.trim()) : ''
+        sections.push({
+          ...currentSection,
+          text: processedText
+        } as ArticleContent)
+        currentSection = {}
+        currentText = ''
+      }
+      
+      // Extract video URL and create embed
+      const videoUrl = trimmedLine.replace('<video>', '').replace('</video>', '').trim()
+      const videoId = extractYouTubeId(videoUrl)
+      if (videoId) {
+        sections.push({
+          type: 'video',
+          video_embed: `<iframe width="560" height="315" src="https://www.youtube.com/embed/${videoId}" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" referrerpolicy="strict-origin-when-cross-origin" allowfullscreen></iframe>`
+        })
+      }
+      continue
+    }
+    
+    // Handle H2 headings
+    if (trimmedLine.startsWith('## ')) {
+      // Save previous section
+      if (currentSection.heading_h2 || currentText.trim()) {
+        const processedText = currentText.trim() ? processMarkdownToHtmlSync(currentText.trim()) : ''
+        sections.push({
+          ...currentSection,
+          text: processedText
+        } as ArticleContent)
+      }
+      
+      // Start new section
+      currentSection = {
+        heading_h2: trimmedLine.replace('## ', '')
+      }
+      currentText = ''
+      continue
+    }
+    
+    // Handle hook (first paragraph in bold)
+    if (trimmedLine.startsWith('**') && trimmedLine.endsWith('**') && sections.length === 0 && !currentSection.heading_h2) {
+      sections.push({
+        type: 'hook',
+        text: trimmedLine.replace(/\*\*/g, '')
+      })
+      continue
+    }
+    
+    // Accumulate text content
+    if (trimmedLine && !trimmedLine.startsWith('#') && !trimmedLine.startsWith('---')) {
+      currentText += (currentText ? '\n' : '') + trimmedLine
+    }
+  }
+  
+  // Add final section
+  if (currentSection.heading_h2 || currentText.trim()) {
+    const processedText = currentText.trim() ? processMarkdownToHtmlSync(currentText.trim()) : ''
+    sections.push({
+      ...currentSection,
+      text: processedText
     } as ArticleContent)
   }
   

@@ -146,15 +146,15 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
               }
               
               // Handle regular text content
-              if (section.text) {
-                return (
-                  <div key={index} className="mb-4">
-                    <p className="text-gray-800 dark:text-gray-200 leading-relaxed whitespace-pre-line">
-                      {section.text}
-                    </p>
-                  </div>
-                )
-              }
+               if (section.text) {
+                 return (
+                   <div 
+                     key={index} 
+                     className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
+                     dangerouslySetInnerHTML={{ __html: section.text }}
+                   />
+                 )
+               }
               
               return null
             })}
