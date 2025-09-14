@@ -111,10 +111,37 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
 
         {/* Article Content */}
         <div className="prose prose-lg dark:prose-invert max-w-none">
-          <div 
-            className="text-gray-800 dark:text-gray-200 leading-relaxed"
-            dangerouslySetInnerHTML={{ __html: article.content }}
-          />
+          <div className="text-gray-800 dark:text-gray-200 leading-relaxed">
+            {article.content.map((section, index) => {
+              if (section.type === 'heading_h2' && section.heading_h2) {
+                return (
+                  <h2 key={index} className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">
+                    {section.heading_h2}
+                  </h2>
+                )
+              }
+              if (section.type === 'text' && section.text) {
+                return (
+                  <div 
+                    key={index} 
+                    className="mb-4"
+                    dangerouslySetInnerHTML={{ __html: section.text }}
+                  />
+                )
+              }
+              if (section.type === 'video_embed' && section.video_embed) {
+                return (
+                  <div key={index} className="my-8">
+                    <div 
+                      className="aspect-video"
+                      dangerouslySetInnerHTML={{ __html: section.video_embed }}
+                    />
+                  </div>
+                )
+              }
+              return null
+            })}
+          </div>
         </div>
 
         {/* Article Tags */}
