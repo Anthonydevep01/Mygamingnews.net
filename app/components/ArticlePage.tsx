@@ -153,7 +153,7 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
                 return (
                   <div key={index} className="my-8">
                     <div 
-                      className="aspect-video"
+                      className="video-responsive"
                       dangerouslySetInnerHTML={{ __html: section.video_embed }}
                     />
                   </div>
