@@ -116,3 +116,23 @@
   height: 100%;
   border: 0;
 }
+
+/* External link styling */
+a[href^="http"]:not([href*="mygamingnews.net"]) {
+  color: #3b82f6 !important;
+  text-decoration: underline !important;
+  transition: color 0.3s ease;
+}
+
+a[href^="http"]:not([href*="mygamingnews.net"]):hover {
+  color: #2563eb !important;
+}
+
+/* Dark mode external link styling */
+.dark a[href^="http"]:not([href*="mygamingnews.net"]) {
+  color: #60a5fa !important;
+}
+
+.dark a[href^="http"]:not([href*="mygamingnews.net"]):hover {
+  color: #3b82f6 !important;
+}
