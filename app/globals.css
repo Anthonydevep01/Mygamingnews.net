@@ -41,6 +41,18 @@
   .navbar-item-light {
     @apply text-white hover:text-primary-400 transition-colors duration-300 font-medium;
   }
+  
+  .back-button {
+    @apply inline-block px-3 py-1 text-sm font-medium rounded-full transition-all duration-300;
+    /* Light mode: black background */
+    @apply bg-black text-white hover:bg-gray-800;
+  }
+  
+  .dark .back-button {
+    /* Dark mode: light blue gradient */
+    background: linear-gradient(135deg, #60a5fa, #3b82f6);
+    @apply text-white hover:opacity-90;
+  }
 }
 
 @layer utilities {
