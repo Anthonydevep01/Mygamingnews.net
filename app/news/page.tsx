@@ -1,6 +1,6 @@
 import { getArticlesByCategory } from '../data/articles'
 import ArticleCard from '../components/ArticleCard'
-import { motion } from 'framer-motion'
+import EmojiCarousel from '../components/EmojiCarousel'
 
 export const metadata = {
   title: 'Gaming News - MyGamingNews.net',
@@ -21,6 +21,11 @@ export default function NewsPage() {
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Stay updated with the latest gaming news, industry updates, and breaking stories from the world of video games.
           </p>
+        </div>
+
+        {/* Top Carousel */}
+        <div className="mb-10">
+          <EmojiCarousel articles={newsArticles} />
         </div>
 
         {/* Articles Grid */}

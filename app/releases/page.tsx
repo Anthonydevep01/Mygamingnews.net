@@ -1,5 +1,6 @@
 import { getArticlesByCategory } from '../data/articles'
 import ArticleCard from '../components/ArticleCard'
+import EmojiCarousel from '../components/EmojiCarousel'
 
 export const metadata = {
   title: 'Game Releases - MyGamingNews.net',
@@ -20,6 +21,11 @@ export default function ReleasesPage() {
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Discover upcoming game releases, launch dates, and everything you need to know about new games coming to all platforms.
           </p>
+        </div>
+
+        {/* Top Carousel */}
+        <div className="mb-10">
+          <EmojiCarousel articles={releasesArticles} />
         </div>
 
         {/* Articles Grid */}

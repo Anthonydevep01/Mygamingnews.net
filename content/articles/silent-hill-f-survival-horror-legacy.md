@@ -19,7 +19,7 @@ image: "/images/SilentHillFRelease.jpeg"
 
 The announcement of Silent Hill F sparked debate among fans: is this a bold reinvention or just another spin-off riding nostalgia? Early impressions suggest it's more than a side project. Critics highlight how its haunting narrative structure diverges from past entries while still honoring the psychological tension that defined the series.
 
-What emerges from [early reviews](https://www.gamespot.com/reviews/silent-hill-f-review-spirited-away/1900-6418411) is a game that dares to challenge expectations. Rather than simply recycling familiar fog-drenched streets, Silent Hill F introduces fresh elements that feel both alien and authentically terrifying.
+What emerges from early reviews is a game that dares to challenge expectations. Rather than simply recycling familiar fog-drenched streets, Silent Hill F introduces fresh elements that feel both alien and authentically terrifying.
 
 ## Fresh Atmosphere, Bold Design Choices
 
@@ -43,11 +43,11 @@ The sound design deserves particular praise, creating an audio landscape that's 
 
 ## A New Dawn or Another False Start?
 
-The Silent Hill franchise has faced years of uncertainty, with canceled projects and uneven spin-offs. Fans understandably ask: is this finally the rebirth? [Early reviews suggest](https://www.pcgamer.com/games/horror/silent-hill-f-is-actually-really-fun-when-theres-not-a-little-worm-in-your-ear-telling-you-to-compare-every-scene-against-silent-hill-2) that while not flawless, Silent Hill F balances nostalgia with innovation—a promising sign for long-time followers.
+The Silent Hill franchise has faced years of uncertainty, with canceled projects and uneven spin-offs. Fans understandably ask: is this finally the rebirth? Early reviews suggest that while not flawless, Silent Hill F balances nostalgia with innovation—a promising sign for long-time followers.
 
 The release represents more than just another entry; it's a litmus test for Konami's commitment to the series. If Silent Hill F succeeds, it could pave the way for more ambitious horror projects and prove the genre still thrives in a new gaming generation.
 
-Critics note that [the game works best when experienced on its own merits](https://www.pcgamer.com/games/horror/silent-hill-f-is-actually-really-fun-when-theres-not-a-little-worm-in-your-ear-telling-you-to-compare-every-scene-against-silent-hill-2) rather than constantly compared to Silent Hill 2. This suggests Konami has created something genuinely fresh while respecting the franchise's core identity.
+Critics note that the game works best when experienced on its own merits rather than constantly compared to Silent Hill 2. This suggests Konami has created something genuinely fresh while respecting the franchise's core identity.
 
 ## Release Date and Platforms
 

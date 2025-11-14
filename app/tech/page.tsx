@@ -1,5 +1,6 @@
 import { getArticlesByCategory } from '../data/articles'
 import ArticleCard from '../components/ArticleCard'
+import EmojiCarousel from '../components/EmojiCarousel'
 
 export const metadata = {
   title: 'Gaming Tech - MyGamingNews.net',
@@ -20,6 +21,11 @@ export default function TechPage() {
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Explore the latest gaming technology, hardware reviews, industry innovations, and technical developments in gaming.
           </p>
+        </div>
+
+        {/* Top Carousel */}
+        <div className="mb-10">
+          <EmojiCarousel articles={techArticles} />
         </div>
 
         {/* Articles Grid */}

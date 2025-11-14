@@ -41,18 +41,6 @@
   .navbar-item-light {
     @apply text-white hover:text-primary-400 transition-colors duration-300 font-medium;
   }
-  
-  .back-button {
-    @apply inline-block px-3 py-1 text-sm font-medium rounded-full transition-all duration-300;
-    /* Light mode: black background */
-    @apply bg-black text-white hover:bg-gray-800;
-  }
-  
-  .dark .back-button {
-    /* Dark mode: light blue gradient */
-    background: linear-gradient(135deg, #60a5fa, #3b82f6);
-    @apply text-white hover:opacity-90;
-  }
 }
 
 @layer utilities {
@@ -76,6 +64,42 @@
   
   .scrollbar-hide::-webkit-scrollbar {
     display: none;
+  }
+
+  @keyframes mg-carousel-vertical {
+    0% {
+      transform: translateY(100%) scale(0.5);
+      opacity: 0;
+      visibility: hidden;
+    }
+    3%,
+    11.111% {
+      transform: translateY(100%) scale(0.7);
+      opacity: 0.4;
+      visibility: visible;
+    }
+    14.111%,
+    22.222% {
+      transform: translateY(0) scale(1);
+      opacity: 1;
+      visibility: visible;
+    }
+    25.222%,
+    33.333% {
+      transform: translateY(-100%) scale(0.7);
+      opacity: 0.4;
+      visibility: visible;
+    }
+    36.333% {
+      transform: translateY(-100%) scale(0.5);
+      opacity: 0;
+      visibility: visible;
+    }
+    100% {
+      transform: translateY(-100%) scale(0.5);
+      opacity: 0;
+      visibility: hidden;
+    }
   }
 }
 
@@ -108,43 +132,4 @@
 
 .light ::-webkit-scrollbar-thumb:hover {
   background: #475569;
-}
-
-/* Responsive video embeds */
-.video-responsive {
-  position: relative;
-  width: 100%;
-  height: 0;
-  padding-bottom: 56.25%; /* 16:9 aspect ratio */
-  overflow: hidden;
-  border-radius: 8px;
-}
-
-.video-responsive iframe {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  border: 0;
-}
-
-/* External link styling */
-a[href^="http"]:not([href*="mygamingnews.net"]) {
-  color: #3b82f6 !important;
-  text-decoration: underline !important;
-  transition: color 0.3s ease;
-}
-
-a[href^="http"]:not([href*="mygamingnews.net"]):hover {
-  color: #2563eb !important;
-}
-
-/* Dark mode external link styling */
-.dark a[href^="http"]:not([href*="mygamingnews.net"]) {
-  color: #60a5fa !important;
-}
-
-.dark a[href^="http"]:not([href*="mygamingnews.net"]):hover {
-  color: #3b82f6 !important;
 }

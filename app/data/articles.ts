@@ -1,11 +1,10 @@
 // Import from markdown system
-import { getAllArticles, getArticlesByCategory as getMarkdownArticlesByCategory, getRecentArticles as getMarkdownRecentArticles, getArticleBySlug as getMarkdownArticleBySlug, Article, ArticleContent } from '../lib/markdown'
+import { getArticlesByCategory as getMarkdownArticlesByCategory, getRecentArticles as getMarkdownRecentArticles, getArticleBySlug as getMarkdownArticleBySlug, Article, ArticleContent } from '../lib/markdown'
 
 // Export types for compatibility
 export type { Article, ArticleContent }
 
-// Load articles from markdown files
-export const sampleArticles: Article[] = getAllArticles()
+// Removed unused sampleArticles to avoid unnecessary data loading
 
 // Keep existing helper functions but use markdown data
 export const getArticlesByCategory = (category: string, limit?: number): Article[] => {

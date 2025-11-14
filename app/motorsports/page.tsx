@@ -1,5 +1,6 @@
 import { getArticlesByCategory } from '../data/articles'
 import ArticleCard from '../components/ArticleCard'
+import EmojiCarousel from '../components/EmojiCarousel'
 
 export const metadata = {
   title: 'Motorsports - MyGamingNews.net',
@@ -21,6 +22,11 @@ export default function MotorsportsPage() {
           <p className="text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
             Latest motorsports news, Formula Drift coverage, racing updates, and championship results from the world of competitive racing.
           </p>
+        </div>
+
+        {/* Top Carousel */}
+        <div className="mb-10">
+          <EmojiCarousel articles={motorsportsArticles} />
         </div>
 
         {/* Articles Grid */}

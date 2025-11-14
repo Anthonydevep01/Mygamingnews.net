@@ -1,5 +1,6 @@
 import { getArticlesByCategory } from '../data/articles'
 import ArticleCard from '../components/ArticleCard'
+import EmojiCarousel from '../components/EmojiCarousel'
 
 export const metadata = {
   title: 'Lifestyle - MyGamingNews.net',
@@ -20,6 +21,11 @@ export default function LifestylePage() {
           <p className="text-xl text-gray-700 dark:text-gray-300 max-w-3xl mx-auto">
             Discover lifestyle content, wellness tips, productivity hacks, and personal development insights for gamers and tech enthusiasts.
           </p>
+        </div>
+
+        {/* Top Carousel */}
+        <div className="mb-10">
+          <EmojiCarousel articles={lifestyleArticles} />
         </div>
 
         {/* Articles Grid */}

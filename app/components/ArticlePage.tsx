@@ -54,7 +54,7 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
         {/* Back Button */}
         <Link 
           href={`/${category.toLowerCase()}`}
-          className="back-button inline-flex items-center mb-8"
+          className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mb-8"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to {categoryDisplayName}
@@ -153,7 +153,7 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
                 return (
                   <div key={index} className="my-8">
                     <div 
-                      className="video-responsive"
+                      className="aspect-video"
                       dangerouslySetInnerHTML={{ __html: section.video_embed }}
                     />
                   </div>
