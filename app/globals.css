@@ -41,6 +41,18 @@
   .navbar-item-light {
     @apply text-white hover:text-primary-400 transition-colors duration-300 font-medium;
   }
+  .link-anchor {
+    @apply text-primary-400 underline;
+  }
+  .link-anchor:hover {
+    @apply text-primary-300;
+  }
+  .prose a {
+    @apply text-primary-400 underline;
+  }
+  .prose a:hover {
+    @apply text-primary-300;
+  }
 }
 
 @layer utilities {

@@ -35,7 +35,11 @@ const ArticleCard = ({ article, index = 0 }: ArticleCardProps) => {
             <div 
               className="w-full h-48 bg-gradient-to-br from-gray-800 to-gray-900 transition-transform duration-500 group-hover:scale-110 relative overflow-hidden"
               style={{
-                backgroundImage: `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${article.image})`,
+                backgroundImage: (() => {
+                  const normalized = article.image?.startsWith('/') ? article.image : `/${article.image}`
+                  const src = normalized || '/images/Mygamingnewslogo.png'
+                  return `linear-gradient(rgba(0,0,0,0.3), rgba(0,0,0,0.3)), url(${src}?v=${article.slug})`
+                })(),
                 backgroundSize: 'cover',
                 backgroundPosition: 'center'
               }}

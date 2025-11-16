@@ -1,5 +1,6 @@
 import { notFound } from 'next/navigation'
 import { getArticleBySlug, getArticlesByCategory, ArticleContent } from '../../data/articles'
+import Image from 'next/image'
 import Link from 'next/link'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
 import ArticleSidebar from '../../components/ArticleSidebar'
@@ -114,13 +115,16 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
 
         {/* Article Image */}
         <div className="mb-8">
-          <div 
-            className="w-full h-64 md:h-96 rounded-lg bg-gradient-to-br from-gray-800 to-gray-900"
-            style={{
-              backgroundImage: `url(${article.image})`,
-              backgroundSize: 'cover',
-              backgroundPosition: 'center'
-            }}
+          <Image
+            src={(() => {
+              const normalized = article.image?.startsWith('/') ? article.image : `/${article.image}`
+              return article.slug === 'valve-steam-machine-next-gen-competition' ? '/images/valve-steam-machine.jpeg' : normalized
+            })()}
+            alt={article.title}
+            width={1200}
+            height={600}
+            className="w-full h-64 md:h-96 object-cover rounded-lg"
+            priority
           />
         </div>
 
@@ -132,7 +136,7 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
                 {section.type === 'hook' && (
                   <div 
                     className="text-xl font-medium text-blue-400 mb-6 leading-relaxed"
-                    dangerouslySetInnerHTML={{ __html: section.text?.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">$1</a>') || '' }}
+                    dangerouslySetInnerHTML={{ __html: section.text?.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="link-anchor">$1</a>') || '' }}
                   />
                 )}
                 
@@ -145,7 +149,7 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
                 {section.text && section.type !== 'hook' && (
                   <div 
                     className="text-gray-300 dark:text-gray-300 text-gray-700 leading-relaxed mb-4 prose prose-lg dark:prose-invert"
-                    dangerouslySetInnerHTML={{ __html: section.text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="text-blue-400 hover:text-blue-300 underline">$1</a>') }}
+                    dangerouslySetInnerHTML={{ __html: section.text.replace(/\[([^\]]+)\]\(([^)]+)\)/g, '<a href="$2" target="_blank" rel="noopener noreferrer" class="link-anchor">$1</a>') }}
                   />
                 )}
                 

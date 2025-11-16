@@ -275,9 +275,10 @@ function extractDescription(content: string): string {
 }
 
 export function getArticlesByCategory(category: string): Article[] {
-  return getAllArticles().filter(article => 
-    article.category.toLowerCase() === category.toLowerCase()
-  )
+  return getAllArticles().filter(article => {
+    const c = (article as any)?.category
+    return typeof c === 'string' && c.toLowerCase() === category.toLowerCase()
+  })
 }
 
 export function getRecentArticles(limit: number = 6): Article[] {

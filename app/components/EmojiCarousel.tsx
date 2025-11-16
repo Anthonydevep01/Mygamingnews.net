@@ -41,7 +41,16 @@ const EmojiCarousel: React.FC<Props> = ({ articles }) => {
               <div className="relative w-full">
                 <div
                   className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-5 md:-translate-x-6 z-10 rounded-full w-[90px] h-[90px]"
-                  style={{ backgroundImage: `url(${current.image})`, backgroundSize: 'cover', backgroundPosition: 'center', backgroundColor: '#d7f7fc' }}
+                  style={{
+                    backgroundImage: (() => {
+                      const normalized = current.image?.startsWith('/') ? current.image : `/${current.image}`
+                      const src = normalized || '/images/Mygamingnewslogo.png'
+                      return `url(${src}?v=${current.slug})`
+                    })(),
+                    backgroundSize: 'cover',
+                    backgroundPosition: 'center',
+                    backgroundColor: '#d7f7fc'
+                  }}
                 />
                 <div className="w-full rounded-lg bg-white dark:bg-dark-800/70 border border-gray-200 dark:border-dark-700 px-5 py-4 pl-[125px] sm:pl-[135px] md:pl-[145px]">
                   <p className="uppercase text-[20px] mt-2 text-gray-900 dark:text-white font-semibold line-clamp-1">

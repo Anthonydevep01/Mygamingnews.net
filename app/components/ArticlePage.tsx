@@ -1,6 +1,7 @@
 import { notFound } from 'next/navigation'
 import { getArticleBySlug, getArticlesByCategory } from '../data/articles'
 import Link from 'next/link'
+import Image from 'next/image'
 import { Calendar, User, ArrowLeft } from 'lucide-react'
 import ArticleSidebar from './ArticleSidebar'
 import SchemaMarkup from './SchemaMarkup'
@@ -101,10 +102,13 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
         {/* Article Image */}
         {article.image && (
           <div className="mb-8">
-            <img 
-              src={article.image} 
+            <Image 
+              src={article.image.startsWith('/') ? article.image : `/${article.image}`}
               alt={article.title}
+              width={1200}
+              height={600}
               className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+              priority
             />
           </div>
         )}
