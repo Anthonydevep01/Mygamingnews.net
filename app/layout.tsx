@@ -11,6 +11,7 @@ import SchemaMarkup from './components/SchemaMarkup'
 const inter = Inter({ subsets: ['latin'] })
 
 export const metadata = {
+  metadataBase: new URL('https://mygamingnews.net'),
   title: 'MyGamingNews.net - Latest Gaming News & Reviews',
   description: 'Your ultimate destination for gaming news, reviews, features, releases, and eSports coverage.',
   keywords: 'gaming news, game reviews, esports, gaming industry, video games, gaming features',
