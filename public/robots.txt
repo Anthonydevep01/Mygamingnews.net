@@ -1,6 +1,6 @@
 # Robots.txt for MyGamingNews.net
 # Allow all crawlers to access all content
-# Updated: 2025-01-19
+# Updated: 2025-11-16
 
 User-agent: *
 Allow: /
@@ -9,7 +9,7 @@ Allow: /
 Disallow: /admin/
 Disallow: /api/
 Disallow: /_next/
-Disallow: /.*
+# Removed broad wildcard disallow to avoid conflicting with Allow rules
 
 # Sitemap location (static file)
 Sitemap: https://mygamingnews.net/sitemap.xml
