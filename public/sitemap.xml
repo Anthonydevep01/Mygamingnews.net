@@ -3,7 +3,7 @@
   <!-- Homepage -->
   <url>
     <loc>https://mygamingnews.net</loc>
-    <lastmod>2025-11-16T00:00:00Z</lastmod>
+    <lastmod>2025-11-23T00:00:00Z</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
@@ -35,7 +35,7 @@
   </url>
   <url>
     <loc>https://mygamingnews.net/search</loc>
-    <lastmod>2025-01-19T00:00:00Z</lastmod>
+    <lastmod>2025-11-23T00:00:00Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.8</priority>
   </url>

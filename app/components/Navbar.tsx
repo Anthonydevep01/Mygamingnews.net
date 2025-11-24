@@ -10,6 +10,7 @@ import { motion, AnimatePresence } from 'framer-motion'
 const Navbar = () => {
   const [mounted, setMounted] = useState(false)
   const [isSearchOpen, setIsSearchOpen] = useState(false)
+  const [searchText, setSearchText] = useState('')
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false)
   const [isOtherDropdownOpen, setIsOtherDropdownOpen] = useState(false)
   const { theme, setTheme } = useTheme()
@@ -125,12 +126,38 @@ const Navbar = () => {
                     exit={{ opacity: 0, width: 0 }}
                     className="absolute right-0 top-full mt-2"
                   >
-                    <input
-                      type="text"
-                      placeholder="Search articles..."
-                      className="w-64 px-4 py-2 bg-dark-800 dark:bg-dark-800 bg-white border border-dark-700 dark:border-dark-700 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:border-primary-500 transition-colors duration-300"
-                      autoFocus
-                    />
+                    <div className="flex items-center space-x-2">
+                      <input
+                        type="text"
+                        value={searchText}
+                        onChange={(e) => setSearchText(e.target.value)}
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter') {
+                            const q = searchText.trim()
+                            if (q) {
+                              window.location.href = `/search?q=${encodeURIComponent(q)}`
+                              setIsSearchOpen(false)
+                            }
+                          }
+                        }}
+                        placeholder="Search articles..."
+                        className="w-64 px-4 py-2 bg-dark-800 dark:bg-dark-800 bg-white border border-dark-700 dark:border-dark-700 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:border-primary-500 transition-colors duration-300"
+                        autoFocus
+                      />
+                      <button
+                        type="button"
+                        onClick={() => {
+                          const q = searchText.trim()
+                          if (q) {
+                            window.location.href = `/search?q=${encodeURIComponent(q)}`
+                            setIsSearchOpen(false)
+                          }
+                        }}
+                        className="px-4 py-2 bg-primary-600 hover:bg-primary-700 text-white rounded-md transition-colors duration-200"
+                      >
+                        Search
+                      </button>
+                    </div>
                   </motion.div>
                 )}
               </AnimatePresence>
