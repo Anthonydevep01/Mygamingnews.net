@@ -170,6 +170,21 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
           )}
         </div>
 
+        {article.primary_keyword && (
+          <div className="mt-8">
+            <div className="flex flex-wrap gap-2">
+              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+                {article.primary_keyword}
+              </span>
+              {article.secondary_keywords?.map((keyword, index) => (
+                <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
+                  {keyword}
+                </span>
+              ))}
+            </div>
+          </div>
+        )}
+
         {/* Article Score (for reviews) */}
         {article.score && (
           <div className="mt-8 p-6 bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg">
