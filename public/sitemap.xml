@@ -49,7 +49,7 @@
   </url>
   <url>
     <loc>https://mygamingnews.net/reviews</loc>
-    <lastmod>2025-01-19T00:00:00Z</lastmod>
+    <lastmod>2025-11-16T00:00:00Z</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
@@ -196,6 +196,12 @@
   <url>
     <loc>https://mygamingnews.net/reviews/ninja-gaiden-4-review</loc>
     <lastmod>2025-01-19T00:00:00Z</lastmod>
+    <changefreq>monthly</changefreq>
+    <priority>0.8</priority>
+  </url>
+  <url>
+    <loc>https://mygamingnews.net/reviews/black-ops-7-campaign-review-coop-failure</loc>
+    <lastmod>2025-11-15T00:00:00Z</lastmod>
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
