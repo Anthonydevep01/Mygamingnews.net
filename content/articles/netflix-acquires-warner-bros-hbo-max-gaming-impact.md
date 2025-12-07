@@ -23,11 +23,11 @@ references: [
 
 ## Netflix’s Massive Acquisition Signals a Bold Move Into Gaming
 
-Netflix has officially agreed to purchase Warner Bros., HBO Max, and Warner Bros. Games in a historic deal. This acquisition folds some of the biggest entertainment properties in the world under Netflix’s banner. Early reporting from [Game Informer's coverage of the deal](https://gameinformer.com/2025/12/05/netflix-is-acquiring-warner-bros-and-its-games-division-including-netherrealm-rocksteady) highlights that studios like NetherRealm (Mortal Kombat), Rocksteady (Batman Arkham series), and Avalanche Software (Hogwarts Legacy) are now part of Netflix’s expanding ecosystem.
+Netflix has officially agreed to purchase Warner Bros., HBO Max, and Warner Bros. Games in a historic deal. This acquisition folds some of the biggest entertainment properties in the world under Netflix’s banner. Early reporting from [Game Informer](https://gameinformer.com/2025/12/05/netflix-is-acquiring-warner-bros-and-its-games-division-including-netherrealm-rocksteady) highlights that studios like NetherRealm (Mortal Kombat), Rocksteady (Batman Arkham series), and Avalanche Software (Hogwarts Legacy) are now part of Netflix’s expanding ecosystem.
 
 This move follows Netflix’s growing investment in interactive entertainment. What once began as a mobile gaming initiative is now evolving into a full-scale publishing and development push—one strengthened by some of the industry's most respected studios.
 
-According to an early [business breakdown by The New York Times](https://www.nytimes.com/2025/12/06/business/netflix-warner-bros-what-to-know.html), the acquisition positions Netflix as a direct competitor to companies like Disney, Sony, and Microsoft not only in streaming, but across all of entertainment.
+According to an early breakdown from [The New York Times](https://www.nytimes.com/2025/12/06/business/netflix-warner-bros-what-to-know.html), the acquisition positions Netflix as a direct competitor to companies like Disney, Sony, and Microsoft not only in streaming, but across all of entertainment.
 
 ## The Bidding War Behind the Deal — And Who Netflix Beat
 
@@ -41,13 +41,13 @@ While the details of the bidding war remain partly undisclosed, the outcome is c
 
 A purchase of this size has raised immediate regulatory and ethical questions. If a company already in the global top three for streaming suddenly gains full control over iconic franchises—from DC superheroes to Harry Potter to Mortal Kombat—the concentration of power becomes hard to ignore.
 
-Analysis from [PC Gamer regarding monopoly concerns](https://www.pcgamer.com/gaming-industry/netflix-agrees-to-buy-warner-bros-including-its-game-studios-for-nearly-usd83-billion-with-a-b-but-the-fight-may-not-be-over-yet/) suggests legal challenges may emerge, particularly around antitrust concerns. Even if approved, the deal could set a precedent that reshapes entertainment consolidation for years.
+Analysis from [PC Gamer](https://www.pcgamer.com/gaming-industry/netflix-agrees-to-buy-warner-bros-including-its-game-studios-for-nearly-usd83-billion-with-a-b-but-the-fight-may-not-be-over-yet/) suggests legal challenges may emerge, particularly around antitrust concerns. Even if approved, the deal could set a precedent that reshapes entertainment consolidation for years.
 
 Groups including writers’ unions, game developers, and digital rights advocates are already expressing concern that Netflix may establish a monopoly-like grip on multiple sectors: television, film, animation, and now premium video games.
 
 ## WB Games Joins Netflix — Including Mortal Kombat, Rocksteady, Hogwarts Legacy & More
 
-One of the most surprising elements of the acquisition is Netflix’s commitment to integrating Warner Bros. Games rather than spinning it off. According to reporting from [VGC's confirmation of the studio list](https://www.videogameschronicle.com/news/netflix-has-agreed-to-buy-warner-bros-including-game-developers-behind-mortal-kombat-hogwarts-legacy/), this includes:
+One of the most surprising elements of the acquisition is Netflix’s commitment to integrating Warner Bros. Games rather than spinning it off. According to reporting from [VGC](https://www.videogameschronicle.com/news/netflix-has-agreed-to-buy-warner-bros-including-game-developers-behind-mortal-kombat-hogwarts-legacy/), this includes:
 
 - **NetherRealm Studios** (Mortal Kombat)
 - **Rocksteady Studios** (Batman Arkham)
