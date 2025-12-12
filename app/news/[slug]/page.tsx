@@ -97,9 +97,10 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
             </span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             {article.title}
           </h1>
+          <hr className="border-gray-200 dark:border-gray-700 mb-6" />
           
           <div className="flex items-center space-x-6 text-gray-300 dark:text-gray-300 text-gray-600">
             <div className="flex items-center">
@@ -141,9 +142,12 @@ export default function NewsArticlePage({ params }: ArticlePageProps) {
                 )}
                 
                 {section.heading_h2 && (
-                  <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-4">
-                    {section.heading_h2}
-                  </h2>
+                  <>
+                    <h2 className="text-2xl font-bold text-gray-900 dark:text-white mt-8 mb-2">
+                      {section.heading_h2}
+                    </h2>
+                    <hr className="border-gray-200 dark:border-gray-700 mb-4" />
+                  </>
                 )}
                 
                 {section.text && section.type !== 'hook' && (

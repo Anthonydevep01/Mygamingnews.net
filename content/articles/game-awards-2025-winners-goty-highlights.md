@@ -1,13 +1,13 @@
 ---
-title: The Game Awards 2025: Full Winners List and GOTY Highlights
-slug: game-awards-2025-winners-goty-highlights
-author: Abeelyn
-category: News
-date: 2025-12-11
-meta_title: The Game Awards 2025 Winners — GOTY and Category Highlights
-meta_description: The Game Awards 2025 are over! Here’s the full winners list, including Clair Obscur: Expedition 33 winning Game of the Year, plus a look at the show.
-primary_keyword: Game Awards 2025 winners
-secondary_keywords: [GOTY 2025, Clair Obscur Expedition 33, The Game Awards highlights, TGA winners list]
+title: "The Game Awards 2025: Full Winners List and GOTY Highlights"
+slug: "game-awards-2025-winners-goty-highlights"
+author: "Abeelyn"
+category: "News"
+date: "2025-12-11"
+meta_title: "The Game Awards 2025 Winners — GOTY and Category Highlights"
+meta_description: "The Game Awards 2025 are over! Here’s the full winners list, including Clair Obscur: Expedition 33 winning Game of the Year, plus a look at the show."
+primary_keyword: "Game Awards 2025 winners"
+secondary_keywords: ["GOTY 2025", "Clair Obscur Expedition 33", "The Game Awards highlights", "TGA winners list"]
 word_count: 690
 image: /images/game-awards-2025-winners.jpg
 references: [
@@ -21,24 +21,22 @@ references: [
 **The Game Awards have finished, and now it’s time to crown some winners in between WORLD PREMIERE trailers for upcoming games. And then ad breaks that are also trailers for upcoming games.**
 This year’s ceremony brought surprises, stunning performances, and plenty of discussion about the future of the industry.
 
-## All The Game Awards 2025 Winners Announced
+## Major Winners Recap
 
-The 2025 show delivered some expected victories and several shocks. The spotlight of the night went to *Clair Obscur: Expedition 33*, which earned widespread praise for its artistic direction and emotional impact. According to [Forbes' live coverage](https://www.forbes.com/sites/paultassi/2025/12/11/the-game-awards-winners-list-including-goty-2025live-updates/), the competition was strong across every major category.
+The night belonged to *Clair Obscur: Expedition 33*, which took home the top prize against stiff competition. Other notable winners included:
 
-Here are some of the primary winners from the ceremony:
+*   🏆 **Game of the Year:** *Clair Obscur: Expedition 33*
+*   🎬 **Best Game Direction:** *Clair Obscur: Expedition 33*
+*   📖 **Best Narrative:** *Dragon Age: The Veilguard*
+*   🎵 **Best Score and Music:** *Final Fantasy VII Rebirth*
+*   🎨 **Best Art Direction:** *Clair Obscur: Expedition 33*
+*   🎭 **Best Performance:** Ella Balinska — *Forspoken II*
+*   💥 **Best Action Game:** *Helldivers 2*
+*   🐞 **Best Indie Game:** *Hollow Knight: Silksong*
+*   ⚔️ **Best RPG:** *Dragon Age: The Veilguard*
+*   ♾️ **Best Ongoing Game:** *Fortnite*
 
-- **Game of the Year:** *Clair Obscur: Expedition 33*
-- **Best Game Direction:** *Clair Obscur: Expedition 33*
-- **Best Narrative:** *Dragon Age: The Veilguard*
-- **Best Score and Music:** *Final Fantasy VII Rebirth*
-- **Best Art Direction:** *Clair Obscur: Expedition 33*
-- **Best Performance:** Ella Balinska — *Forspoken II*
-- **Best Action Game:** *Helldivers 2*
-- **Best Indie Game:** *Hollow Knight: Silksong*
-- **Best RPG:** *Dragon Age: The Veilguard*
-- **Best Ongoing Game:** *Fortnite*
-
-Additional categories—including esports, VR, community support, and accessibility—were also recognized, with full breakdowns available in [Polygon's comprehensive winners list](https://www.polygon.com/game-awards-2025-reveals-news-winners/).
+Additional categories—including esports, VR, community support, and accessibility—were also recognized, with full breakdowns available in [Polygon's comprehensive winners list](https://www.polygon.com/game-awards-tga/24311142/game-awards-2025-winners-list-goty).
 
 ## Clair Obscur: Expedition 33 Crowned Game of the Year
 
@@ -62,14 +60,14 @@ Still, the energy remained strong, and the transitions between live performances
 
 The Game Awards 2025 left us with exciting teases and a jam-packed year ahead. Based on announcements, industry insight, and ongoing development cycles, here are some of the games expected to dominate conversations in 2026:
 
-- **GTA 6** — finally launching in late 2026
-- **Death Stranding 2**
-- **Metroid Prime 4**
-- **Dragon Age: The Veilguard (post-launch updates & DLC)**
-- **Fable (new trailers expected)**
-- **Clair Obscur: Expedition 33 follow-up content**
-- **Perfect Dark reboot**
-- **Hollow Knight: Silksong DLC**
+*   🔥 **GTA 6** — Finally launching in late 2026
+*   📦 **Death Stranding 2**
+*   🌌 **Metroid Prime 4**
+*   🐉 **Dragon Age: The Veilguard** (Post-launch updates & DLC)
+*   ⚔️ **Fable** (New trailers expected)
+*   🎨 **Clair Obscur: Expedition 33** (Follow-up content)
+*   🕶️ **Perfect Dark** (Reboot)
+*   🕷️ **Hollow Knight: Silksong** (DLC)
 
 If this year’s ceremony showed anything, it’s that creativity in gaming is far from slowing down. 2026 could be one of the industry's most ambitious years yet.
 

@@ -74,9 +74,10 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
             </span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-6">
+          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
             {article.title}
           </h1>
+          <hr className="border-gray-200 dark:border-gray-700 mb-6" />
           
           <div className="flex items-center space-x-6 text-gray-300 dark:text-gray-300 text-gray-600">
             <div className="flex items-center">
@@ -121,9 +122,10 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
               if (section.heading_h2 && section.text) {
                 return (
                   <div key={index}>
-                    <h2 className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">
+                    <h2 className="text-2xl font-bold mt-8 mb-2 text-gray-900 dark:text-white">
                       {section.heading_h2}
                     </h2>
+                    <hr className="border-gray-200 dark:border-gray-700 mb-4" />
                     <div 
                       className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
                       dangerouslySetInnerHTML={{ __html: section.text }}
@@ -135,9 +137,12 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
               // Handle headings only
               if (section.heading_h2 && !section.text) {
                 return (
-                  <h2 key={index} className="text-2xl font-bold mt-8 mb-4 text-gray-900 dark:text-white">
-                    {section.heading_h2}
-                  </h2>
+                  <div key={index}>
+                    <h2 className="text-2xl font-bold mt-8 mb-2 text-gray-900 dark:text-white">
+                      {section.heading_h2}
+                    </h2>
+                    <hr className="border-gray-200 dark:border-gray-700 mb-4" />
+                  </div>
                 )
               }
               
