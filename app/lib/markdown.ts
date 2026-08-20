@@ -7,6 +7,10 @@ import gfm from 'remark-gfm'
 
 const contentDirectory = path.join(process.cwd(), 'content/articles')
 
+function isPublishedArticleFile(fileName: string): boolean {
+  return fileName.endsWith('.md') && !fileName.startsWith('_')
+}
+
 export interface ArticleMetadata {
   title: string
   slug: string
@@ -20,6 +24,12 @@ export interface ArticleMetadata {
   score?: number
   word_count: number
   image: string
+  faqs?: FaqItem[]
+}
+
+export interface FaqItem {
+  question: string
+  answer: string
 }
 
 export interface ArticleContent {
@@ -27,6 +37,8 @@ export interface ArticleContent {
   heading_h2?: string
   text?: string
   video_embed?: string
+  image_src?: string
+  image_alt?: string
 }
 
 export interface Article extends ArticleMetadata {
@@ -44,7 +56,7 @@ export function getAllArticles(): Article[] {
 
   const fileNames = fs.readdirSync(contentDirectory)
   const articles = fileNames
-    .filter(name => name.endsWith('.md'))
+    .filter(isPublishedArticleFile)
     .map(async fileName => {
       const id = fileName.replace(/\.md$/, '')
       const fullPath = path.join(contentDirectory, fileName)
@@ -68,7 +80,7 @@ export function getAllArticles(): Article[] {
   // Since this needs to be synchronous for the current architecture, 
   // we'll use a synchronous approach instead
   return fileNames
-    .filter(name => name.endsWith('.md'))
+    .filter(isPublishedArticleFile)
     .map(fileName => {
       const id = fileName.replace(/\.md$/, '')
       const fullPath = path.join(contentDirectory, fileName)
@@ -156,6 +168,28 @@ async function parseMarkdownContent(content: string): Promise<ArticleContent[]> 
       currentText = ''
       continue
     }
+
+    // Handle standalone markdown images as dedicated content blocks
+    const imageMatch = trimmedLine.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+    if (imageMatch) {
+      if (currentSection.heading_h2 || currentText.trim()) {
+        const processedText = currentText.trim() ? await processMarkdownToHtml(currentText.trim()) : ''
+        sections.push({
+          ...currentSection,
+          text: processedText
+        } as ArticleContent)
+      }
+
+      sections.push({
+        type: 'image',
+        image_src: imageMatch[2],
+        image_alt: imageMatch[1] || 'Article image'
+      })
+
+      currentSection = {}
+      currentText = ''
+      continue
+    }
     
     // Handle hook (first paragraph in bold)
     if (trimmedLine.startsWith('**') && trimmedLine.endsWith('**') && sections.length === 0 && !currentSection.heading_h2) {
@@ -233,6 +267,28 @@ function parseMarkdownContentSync(content: string): ArticleContent[] {
       currentSection = {
         heading_h2: trimmedLine.replace('## ', '')
       }
+      currentText = ''
+      continue
+    }
+
+    // Handle standalone markdown images as dedicated content blocks
+    const imageMatch = trimmedLine.match(/^!\[([^\]]*)\]\(([^)]+)\)$/)
+    if (imageMatch) {
+      if (currentSection.heading_h2 || currentText.trim()) {
+        const processedText = currentText.trim() ? processMarkdownToHtmlSync(currentText.trim()) : ''
+        sections.push({
+          ...currentSection,
+          text: processedText
+        } as ArticleContent)
+      }
+
+      sections.push({
+        type: 'image',
+        image_src: imageMatch[2],
+        image_alt: imageMatch[1] || 'Article image'
+      })
+
+      currentSection = {}
       currentText = ''
       continue
     }

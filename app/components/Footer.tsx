@@ -22,43 +22,58 @@ const Footer = () => {
   ]
 
   const socialLinks = [
-    { name: 'Facebook', href: '#', icon: Facebook },
-    { name: 'X (Twitter)', href: '#', icon: Twitter },
-    { name: 'Instagram', href: '#', icon: Instagram },
+    { name: 'Facebook', icon: Facebook },
+    { name: 'X (Twitter)', icon: Twitter },
+    { name: 'Instagram', icon: Instagram },
   ]
 
   return (
-    <footer className="bg-black border-t border-gray-800 mt-20">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12">
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+    <footer className="mgn-footer-shell relative z-10 mt-20">
+      <div className="max-w-7xl mx-auto px-4 py-14 sm:px-6 lg:px-8">
+        <div className="mgn-footer-cta mb-10 rounded-[2rem] border border-fuchsia-400/15 px-6 py-8 shadow-[0_18px_52px_rgba(0,0,0,0.12)] sm:px-8">
+          <div className="grid gap-8 lg:grid-cols-[1.2fr,0.8fr] lg:items-center">
+            <div>
+              <div className="mb-3 text-[11px] font-black uppercase tracking-[0.28em] text-fuchsia-200/80">The MGN Drop</div>
+              <h2 className="mgn-text-strong text-2xl font-black sm:text-3xl">One gaming brief. No filler.</h2>
+              <p className="mgn-text-body mt-3 max-w-2xl text-sm leading-7 sm:text-base">
+                News, reviews, releases, features, eSports and platform trends in one broadcast-style destination.
+              </p>
+            </div>
+            <div className="flex flex-wrap gap-3 lg:justify-end">
+              <Link href="/news" className="btn-primary">Start Reading</Link>
+              <Link href="/advertise" className="btn-secondary">Advertise With Us</Link>
+            </div>
+          </div>
+        </div>
+
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-2 lg:grid-cols-[1.55fr,0.8fr,0.8fr,0.85fr]">
           {/* Logo Column */}
-          <div className="space-y-4">
-            <Link href="/" className="flex items-center space-x-2 group">
-              <div className="relative">
+          <div className="mgn-panel space-y-5 p-6">
+            <Link href="/" className="group flex items-center space-x-3">
+              <div className="overflow-hidden rounded-2xl border border-fuchsia-400/20 bg-[#050912] px-3 py-2">
                 <Image
-                  src="/images/Mygamingnewslogo.png"
+                  src="/images/petlogo.png"
                   alt="MyGamingNews.net Logo"
-                  width={32}
-                  height={32}
-                  className="transition-all duration-300 group-hover:scale-110"
+                  width={320}
+                  height={80}
+                  className="h-12 w-auto"
                 />
               </div>
-              <span className="text-lg font-bold text-gradient">MyGamingNews.net</span>
             </Link>
-            <p className="text-white text-sm leading-relaxed">
+            <p className="mgn-text-soft text-sm leading-7">
               Your ultimate destination for the latest gaming news, reviews, and industry insights.
             </p>
           </div>
 
           {/* Quick Links Column */}
-          <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Quick Links</h3>
+          <div className="mgn-panel space-y-4 p-6">
+            <h3 className="mgn-text-strong text-lg font-black uppercase tracking-[0.2em]">Quick Links</h3>
             <ul className="space-y-2">
               {quickLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-white hover:text-primary-400 transition-colors duration-300 text-sm"
+                    className="mgn-text-soft text-sm transition-colors duration-150 hover:text-[var(--mgn-text-strong)]"
                   >
                     {link.name}
                   </Link>
@@ -68,14 +83,14 @@ const Footer = () => {
           </div>
 
           {/* Contact Us Column */}
-          <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Contact Us</h3>
+          <div className="mgn-panel space-y-4 p-6">
+            <h3 className="mgn-text-strong text-lg font-black uppercase tracking-[0.2em]">Contact</h3>
             <ul className="space-y-2">
               {contactLinks.map((link) => (
                 <li key={link.name}>
                   <Link
                     href={link.href}
-                    className="text-white hover:text-primary-400 transition-colors duration-300 text-sm"
+                    className="mgn-text-soft text-sm transition-colors duration-150 hover:text-[var(--mgn-text-strong)]"
                   >
                     {link.name}
                   </Link>
@@ -85,51 +100,50 @@ const Footer = () => {
           </div>
 
           {/* Follow Us Column */}
-          <div className="space-y-4">
-            <h3 className="text-white font-semibold text-lg">Follow Us</h3>
+          <div className="mgn-panel space-y-4 p-6">
+            <h3 className="mgn-text-strong text-lg font-black uppercase tracking-[0.2em]">Follow</h3>
             <div className="flex space-x-4">
               {socialLinks.map((social) => {
                 const IconComponent = social.icon
                 return (
-                  <Link
+                  <span
                     key={social.name}
-                    href={social.href}
-                    className="p-2 rounded-lg bg-gray-800 hover:bg-primary-600 transition-all duration-300 hover:scale-110 group"
+                    className="grid h-11 w-11 place-items-center rounded-2xl border border-white/10 bg-white/5"
                     aria-label={social.name}
                   >
-                    <IconComponent className="w-5 h-5 text-white group-hover:text-white transition-colors duration-300" />
-                  </Link>
+                    <IconComponent className="mgn-text-strong w-5 h-5" />
+                  </span>
                 )
               })}
             </div>
-            <div className="text-white text-sm">
+            <div className="mgn-text-soft text-sm">
               <p>Stay connected for the latest updates!</p>
             </div>
           </div>
         </div>
 
         {/* Bottom Section */}
-        <div className="border-t border-gray-700 mt-8 pt-8">
+        <div className="mgn-divider mt-10 border-t pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
-            <p className="text-white text-sm">
+            <p className="mgn-text-soft text-sm">
               © 2024 MyGamingNews.net. All rights reserved.
             </p>
             <div className="flex space-x-6">
               <Link
                 href="/terms"
-                className="text-white hover:text-primary-400 transition-colors duration-300 text-sm"
+                className="mgn-text-soft text-sm transition-colors duration-150 hover:text-[var(--mgn-text-strong)]"
               >
                 Terms of Service
               </Link>
               <Link
                 href="/privacy"
-                className="text-white hover:text-primary-400 transition-colors duration-300 text-sm"
+                className="mgn-text-soft text-sm transition-colors duration-150 hover:text-[var(--mgn-text-strong)]"
               >
                 Privacy Policy
               </Link>
               <Link
                 href="/cookies"
-                className="text-white hover:text-primary-400 transition-colors duration-300 text-sm"
+                className="mgn-text-soft text-sm transition-colors duration-150 hover:text-[var(--mgn-text-strong)]"
               >
                 Cookie Policy
               </Link>

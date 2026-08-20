@@ -2,8 +2,9 @@
 
 import React from 'react'
 import Link from 'next/link'
+import Image from 'next/image'
+import { ChevronLeft, ChevronRight } from 'lucide-react'
 import { Article } from '../data/articles'
-import { AnimatePresence, motion } from 'framer-motion'
 
 interface Props {
   articles: Article[]
@@ -13,64 +14,81 @@ const EmojiCarousel: React.FC<Props> = ({ articles }) => {
   const items = articles.slice(0, 9)
   const [index, setIndex] = React.useState(0)
   const count = items.length
-  React.useEffect(() => {
-    if (count === 0) return
-    const id = setInterval(() => {
-      setIndex((i) => (i + 1) % count)
-    }, 4000)
-    return () => clearInterval(id)
-  }, [count])
+
   if (count === 0) return null
 
   const current = items[index]
   const href = `/${current.category.toLowerCase()}/${current.slug}`
+  const currentImage = current.image?.startsWith('/') ? current.image : `/${current.image}`
+  const previousItem = () => setIndex((value) => (value - 1 + count) % count)
+  const nextItem = () => setIndex((value) => (value + 1) % count)
 
   return (
     <div className="w-full flex justify-center">
-      <div className="relative w-full max-w-2xl mx-auto h-[170px] sm:h-[180px] md:h-[190px] my-8 flex flex-col justify-center">
-        <AnimatePresence mode="wait">
-          <motion.div
-            key={current.id}
-            initial={{ opacity: 0, y: 60, scale: 0.95 }}
-            animate={{ opacity: 1, y: 0, scale: 1 }}
-            exit={{ opacity: 0, y: -60, scale: 0.95 }}
-            transition={{ duration: 0.6 }}
-            className="absolute w-full px-3"
-          >
-            <Link href={href} className="block">
-              <div className="relative w-full">
-                <div
-                  className="absolute left-0 top-1/2 -translate-y-1/2 -translate-x-4 sm:-translate-x-5 md:-translate-x-6 z-10 rounded-full w-[90px] h-[90px]"
-                  style={{
-                    backgroundImage: (() => {
-                      const normalized = current.image?.startsWith('/') ? current.image : `/${current.image}`
-                      const src = normalized || '/images/Mygamingnewslogo.png'
-                      return `url(${src}?v=${current.slug})`
-                    })(),
-                    backgroundSize: 'cover',
-                    backgroundPosition: 'center',
-                    backgroundColor: '#d7f7fc'
-                  }}
+      <div className="relative my-4 flex min-h-[172px] w-full max-w-3xl flex-col justify-center sm:my-5 sm:h-[166px] sm:min-h-0 md:h-[172px]">
+        <div className="absolute w-full px-2">
+          <Link href={href} prefetch={false} className="block">
+            <div className="relative w-full">
+              <div className="absolute left-0 top-1/2 z-10 h-[64px] w-[64px] -translate-x-1 -translate-y-1/2 overflow-hidden rounded-full border-4 border-[#120f1c] shadow-[0_12px_36px_rgba(0,0,0,0.3)] sm:h-[82px] sm:w-[82px] sm:-translate-x-4 md:-translate-x-5">
+                <Image
+                  src={currentImage || '/images/pet.png'}
+                  alt={current.title}
+                  fill
+                  sizes="82px"
+                  className="object-cover"
                 />
-                <div className="w-full rounded-lg bg-white dark:bg-dark-800/70 border border-gray-200 dark:border-dark-700 px-5 py-4 pl-[125px] sm:pl-[135px] md:pl-[145px]">
-                  <p className="uppercase text-[20px] mt-2 text-gray-900 dark:text-white font-semibold line-clamp-1">
-                    {current.title}
-                  </p>
-                  {current.description && (
-                    <p className="text-gray-700 dark:text-gray-300 mt-1 line-clamp-2">
-                      {current.description}
+              </div>
+              <div className="mgn-panel w-full rounded-[1.5rem] px-4 py-4 pl-[72px] shadow-[0_18px_54px_rgba(0,0,0,0.14)] sm:px-5 sm:py-4 sm:pl-[112px] md:pl-[122px]">
+                <div className="flex items-start justify-between gap-3">
+                  <div>
+                    <div className="text-[11px] font-black uppercase tracking-[0.22em] text-fuchsia-200/80">
+                      Fast Feed
+                    </div>
+                    <p className="mgn-text-strong mt-1.5 line-clamp-2 text-[15px] font-black uppercase tracking-[0.03em] sm:line-clamp-1 sm:text-lg">
+                      {current.title}
                     </p>
-                  )}
-                  {current.date && (
-                    <p className="text-gray-600 dark:text-gray-300 text-sm mt-1">
-                      {current.date}
-                    </p>
+                  </div>
+                  {count > 1 && (
+                    <div className="hidden items-center gap-2 sm:flex">
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault()
+                          previousItem()
+                        }}
+                        className="mgn-control-surface grid h-8 w-8 place-items-center rounded-full transition-colors duration-200"
+                        aria-label="Previous item"
+                      >
+                        <ChevronLeft className="h-4 w-4" />
+                      </button>
+                      <button
+                        type="button"
+                        onClick={(event) => {
+                          event.preventDefault()
+                          nextItem()
+                        }}
+                        className="mgn-control-surface grid h-8 w-8 place-items-center rounded-full transition-colors duration-200"
+                        aria-label="Next item"
+                      >
+                        <ChevronRight className="h-4 w-4" />
+                      </button>
+                    </div>
                   )}
                 </div>
+                {current.description && (
+                  <p className="mgn-text-soft mt-1.5 line-clamp-2 text-xs leading-5 sm:text-sm">
+                    {current.description}
+                  </p>
+                )}
+                {current.date && (
+                  <p className="mgn-text-faint mt-1.5 text-[11px] font-semibold uppercase tracking-[0.16em]">
+                    {current.date}
+                  </p>
+                )}
               </div>
-            </Link>
-          </motion.div>
-        </AnimatePresence>
+            </div>
+          </Link>
+        </div>
       </div>
     </div>
   )

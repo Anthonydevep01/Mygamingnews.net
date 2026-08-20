@@ -1,7 +1,7 @@
 'use client'
 
 import { useState, useEffect } from 'react'
-import { useSearchParams } from 'next/navigation'
+import { useRouter, useSearchParams } from 'next/navigation'
 import ArticleCard from '../components/ArticleCard'
 import { Search } from 'lucide-react'
 import { Article } from '../lib/markdown'
@@ -11,6 +11,7 @@ interface SearchClientProps {
 }
 
 export default function SearchClient({ articles }: SearchClientProps) {
+  const router = useRouter()
   const searchParams = useSearchParams()
   const query = searchParams.get('q') || ''
   const [searchQuery, setSearchQuery] = useState(query)
@@ -31,70 +32,67 @@ export default function SearchClient({ articles }: SearchClientProps) {
 
   const handleSearch = (e: React.FormEvent) => {
     e.preventDefault()
-    // Update URL with search query
-    const url = new URL(window.location.href)
-    url.searchParams.set('q', searchQuery)
-    window.history.pushState({}, '', url.toString())
+    const q = searchQuery.trim()
+    const nextUrl = q ? `/search?q=${encodeURIComponent(q)}` : '/search'
+    router.replace(nextUrl, { scroll: false })
   }
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Search Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white dark:text-white text-gray-900 mb-6">
-            Search Articles
-          </h1>
-          
-          {/* Search Form */}
-          <form onSubmit={handleSearch} className="max-w-2xl mx-auto">
-            <div className="relative">
-              <input
-                type="text"
-                value={searchQuery}
-                onChange={(e) => setSearchQuery(e.target.value)}
-                placeholder="Search for articles, categories, or keywords..."
-                className="w-full px-6 py-4 pl-12 text-lg border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-transparent bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-              />
-              <Search className="absolute left-4 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-              <button
-                type="submit"
-                className="absolute right-2 top-1/2 transform -translate-y-1/2 px-6 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-md transition-colors duration-200"
-              >
-                Search
-              </button>
-            </div>
-          </form>
-        </div>
+    <div className="mgn-page-shell">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10">
+        <header className="mgn-page-header">
+          <div className="relative z-10">
+            <div className="mgn-kicker">Search Archive</div>
+            <h1 className="mgn-text-strong mt-4 text-4xl font-black leading-[0.95] sm:text-5xl lg:text-6xl">
+              Search Articles
+            </h1>
 
-        {/* Search Results */}
-        <div className="mb-8">
-          <div className="flex items-center justify-between mb-6">
-            <h2 className="text-2xl font-bold text-white dark:text-white text-gray-900">
+            <form onSubmit={handleSearch} className="mt-8 max-w-3xl">
+              <div className="relative">
+                <input
+                  type="text"
+                  value={searchQuery}
+                  onChange={(e) => setSearchQuery(e.target.value)}
+                  placeholder="Search for articles, categories, or keywords..."
+                  className="mgn-input min-h-[64px] pl-12 pr-28 text-base sm:text-lg"
+                />
+                <Search className="absolute left-4 top-1/2 h-5 w-5 -translate-y-1/2 text-fuchsia-200/70" />
+                <button
+                  type="submit"
+                  className="absolute right-2 top-1/2 -translate-y-1/2 rounded-full bg-gradient-to-r from-violet-500 via-fuchsia-500 to-rose-500 px-5 py-2.5 text-sm font-black uppercase tracking-[0.14em] text-white transition-opacity duration-150 hover:opacity-90"
+                >
+                  Search
+                </button>
+              </div>
+            </form>
+          </div>
+        </header>
+
+        <section className="mgn-panel px-6 py-6 sm:px-8">
+          <div className="flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
+            <h2 className="mgn-text-strong text-2xl font-black">
               {searchQuery ? `Search Results for "${searchQuery}"` : 'All Articles'}
             </h2>
-            <span className="text-gray-300 dark:text-gray-300 text-gray-600">
+            <span className="mgn-surface-chip rounded-full px-4 py-2 text-sm uppercase tracking-[0.14em]">
               {filteredArticles.length} article{filteredArticles.length !== 1 ? 's' : ''} found
             </span>
           </div>
+        </section>
 
-          {filteredArticles.length > 0 ? (
-            <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-              {filteredArticles.map((article, index) => (
-                <ArticleCard key={article.id} article={article} index={index} />
-              ))}
-            </div>
-          ) : (
-            <div className="text-center py-12">
-              <div className="text-gray-500 dark:text-gray-400 text-lg mb-4">
-                No articles found matching your search.
-              </div>
-              <p className="text-gray-400 dark:text-gray-500">
-                Try different keywords or browse our categories.
-              </p>
-            </div>
-          )}
-        </div>
+        {filteredArticles.length > 0 ? (
+          <section className="grid grid-cols-1 gap-6 md:grid-cols-2 xl:grid-cols-3">
+            {filteredArticles.map((article, index) => (
+              <ArticleCard key={article.id} article={article} index={index} />
+            ))}
+          </section>
+        ) : (
+          <section className="mgn-panel px-6 py-16 text-center sm:px-8">
+            <h2 className="mgn-text-strong text-2xl font-black">No articles found matching your search.</h2>
+            <p className="mgn-text-soft mx-auto mt-4 max-w-2xl text-base leading-7">
+              Try different keywords or browse our categories.
+            </p>
+          </section>
+        )}
       </div>
     </div>
   )

@@ -13,11 +13,17 @@ interface Article {
   word_count?: number;
 }
 
+interface FaqItem {
+  question: string;
+  answer: string;
+}
+
 interface SchemaMarkupProps {
-  type: 'website' | 'article' | 'organization' | 'breadcrumb';
+  type: 'website' | 'article' | 'organization' | 'breadcrumb' | 'faq';
   data?: {
     article?: Article;
     breadcrumbs?: Array<{ name: string; url: string }>;
+    faqs?: FaqItem[];
     pageTitle?: string;
     pageDescription?: string;
     pageUrl?: string;
@@ -42,7 +48,7 @@ export default function SchemaMarkup({ type, data }: SchemaMarkupProps) {
             name: 'MyGamingNews.net',
             logo: {
               '@type': 'ImageObject',
-              url: `${baseUrl}/images/Mygamingnewslogo.png`
+              url: `${baseUrl}/images/petlogo.png`
             }
           },
           potentialAction: {
@@ -65,9 +71,9 @@ export default function SchemaMarkup({ type, data }: SchemaMarkupProps) {
           url: baseUrl,
           logo: {
             '@type': 'ImageObject',
-            url: `${baseUrl}/images/Mygamingnewslogo.png`,
-            width: 400,
-            height: 400
+            url: `${baseUrl}/images/petlogo.png`,
+            width: 1600,
+            height: 900
           },
           sameAs: [
             // Add social media URLs when available
@@ -88,7 +94,7 @@ export default function SchemaMarkup({ type, data }: SchemaMarkupProps) {
             '@type': 'Article',
             headline: article.title,
             description: article.meta_description,
-            image: article.image ? `${baseUrl}${article.image}` : `${baseUrl}/images/Mygamingnewslogo.png`,
+            image: article.image ? `${baseUrl}${article.image}` : `${baseUrl}/images/petlogo.png`,
             author: {
               '@type': 'Person',
               name: article.author
@@ -98,7 +104,7 @@ export default function SchemaMarkup({ type, data }: SchemaMarkupProps) {
               name: 'MyGamingNews.net',
               logo: {
                 '@type': 'ImageObject',
-                url: `${baseUrl}/images/Mygamingnewslogo.png`
+                url: `${baseUrl}/images/petlogo.png`
               }
             },
             datePublished: new Date(article.date).toISOString(),
@@ -125,6 +131,23 @@ export default function SchemaMarkup({ type, data }: SchemaMarkupProps) {
               position: index + 1,
               name: crumb.name,
               item: `${baseUrl}${crumb.url}`
+            }))
+          };
+        }
+        break;
+
+      case 'faq':
+        if (data?.faqs?.length) {
+          schema = {
+            '@context': 'https://schema.org',
+            '@type': 'FAQPage',
+            mainEntity: data.faqs.map((faq) => ({
+              '@type': 'Question',
+              name: faq.question,
+              acceptedAnswer: {
+                '@type': 'Answer',
+                text: faq.answer
+              }
             }))
           };
         }

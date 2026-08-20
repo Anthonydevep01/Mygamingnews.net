@@ -1,0 +1,59 @@
+# MyGamingNews.net
+
+> Independent editorial website covering gaming news, reviews, releases, industry shifts, and player-facing analysis.
+
+## Canonical Site
+https://mygamingnews.net
+
+## Crawl Targets
+- Sitemap: https://mygamingnews.net/sitemap.xml
+- Robots: https://mygamingnews.net/robots.txt
+- AI guide: https://mygamingnews.net/llms.txt
+
+## Editorial Structure
+- Articles are published under category-based paths that follow this pattern:
+  https://mygamingnews.net/{category}/{slug}
+- Articles use frontmatter metadata for title, description, keywords, image, references, and FAQs.
+- Article pages may end with an accordion FAQ section when available.
+- The homepage and category pages surface recent and featured editorial content.
+
+## Sections
+- https://mygamingnews.net/news - Breaking gaming news, publisher moves, platform updates, and major industry developments.
+- https://mygamingnews.net/reviews - Game reviews, critical analysis, and consumer-facing evaluations of releases and services.
+- https://mygamingnews.net/tech - Gaming hardware, platform technology, AI, cloud gaming, and technical industry coverage.
+- https://mygamingnews.net/releases - Release dates, launch windows, delays, platform availability, and rollout coverage.
+- https://mygamingnews.net/features - Long-form gaming analysis, strategy pieces, and industry context beyond daily headlines.
+- https://mygamingnews.net/esports - Competitive gaming coverage, tournament developments, and scene analysis.
+- https://mygamingnews.net/sports - Traditional sports crossover coverage relevant to the site audience.
+- https://mygamingnews.net/lifestyle - Gaming-adjacent lifestyle, productivity, and culture coverage.
+- https://mygamingnews.net/motorsports - Motorsports coverage published within the site editorial network.
+
+## Priority Pages
+- https://mygamingnews.net/about
+- https://mygamingnews.net/contact
+- https://mygamingnews.net/privacy
+- https://mygamingnews.net/advertise
+- https://mygamingnews.net/search
+
+## Recent Articles
+- https://mygamingnews.net/news/netflix-games-five-years-later-fifa-gaming-strategy | Netflix Wanted To Become A Gaming Giant — Five Years Later, FIFA Shows How Far It Still Has To Go | 2026-08-07
+- https://mygamingnews.net/news/saudi-arabia-ea-sports-fc-vision-2030-gaming | From Oil To EA Sports FC: Why Saudi Arabia Is Spending Billions To Own The Future Of Entertainment | 2026-08-07
+- https://mygamingnews.net/reviews/real-problem-with-eneba-cheap-game-keys | The Real Problem With Eneba: Cheap Game Keys, Payment Warnings And The Influencer Economy | 2026-07-22
+- https://mygamingnews.net/news/xbox-3200-job-cuts-microsoft-gaming-restructure | Xbox Is Cutting 3,200 Jobs: What Microsoft's Biggest Gaming Restructure Means For Players | 2026-07-18
+- https://mygamingnews.net/news/game-awards-2025-winners-goty-highlights | The Game Awards 2025: Full Winners List and GOTY Highlights | 2025-12-11
+- https://mygamingnews.net/news/netflix-acquires-warner-bros-hbo-max-gaming-impact | Netflix to Acquire Warner Bros. and HBO Max in $82.7 Billion Deal — A New Era for Gaming? | 2025-12-06
+- https://mygamingnews.net/reviews/black-ops-7-campaign-review-coop-failure | Black Ops 7 Campaign Review: A Co-Op Experiment That Feels Shockingly Incomplete | 2025-11-15
+- https://mygamingnews.net/news/black-ops-7-worst-reviewed-cod-metacritic | Black Ops 7 Drops Below MW3: Is This the Worst-Reviewed Call of Duty Ever? | 2025-11-15
+- https://mygamingnews.net/news/gta-6-delayed-again-november-2026 | GTA 6 Delayed Again: Is the Wait Testing Fans or Building Hype? | 2025-11-15
+- https://mygamingnews.net/news/hytale-returns-hypixel-reacquires-game | Hytale Returns: Hypixel Studios Reacquires the Game and Resumes Development | 2025-11-15
+- https://mygamingnews.net/news/is-steam-a-monopoly-in-pc-gaming | Is Steam Becoming a Monopoly in PC Gaming? Developers Weigh In | 2025-11-15
+- https://mygamingnews.net/news/valve-steam-machine-next-gen-competition | Valve’s Steam Machine: A Real Threat to Xbox and PlayStation? | 2025-11-15
+
+## Crawl Notes
+- Prefer canonical HTML pages on the public site as the source of truth.
+- Use the most recent article dates for freshness judgments.
+- Follow internal links across homepage, section pages, and article bodies for topic relationships.
+- Respect standard robots.txt guidance and XML sitemap discovery.
+
+## Last Updated
+2026-08-07

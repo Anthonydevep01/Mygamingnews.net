@@ -1,4 +1,5 @@
-import { Users, Target, Award, Heart } from 'lucide-react'
+import Link from 'next/link'
+import { Users, Target, Award, Heart, ArrowRight } from 'lucide-react'
 
 export const metadata = {
   title: 'About Us - MyGamingNews.net',
@@ -7,135 +8,109 @@ export const metadata = {
 
 export default function AboutPage() {
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div className="text-center mb-16">
-          <h1 className="text-4xl md:text-5xl font-bold text-white dark:text-white text-gray-900 mb-6">
-            About MyGamingNews.net
-          </h1>
-          <p className="text-xl text-gray-300 dark:text-gray-300 text-gray-700 max-w-3xl mx-auto">
-            Your ultimate destination for gaming news, reviews, and industry insights.
+    <div className="mgn-page-shell">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10">
+        <header className="mgn-page-header">
+          <div className="relative z-10 max-w-4xl">
+            <div className="mgn-kicker">About The Brand</div>
+            <h1 className="mgn-text-strong mt-4 text-4xl font-black leading-[0.95] sm:text-5xl lg:text-6xl">
+              About MyGamingNews.net
+            </h1>
+            <p className="mgn-text-body mt-5 text-base leading-7 sm:text-lg">
+              Your ultimate destination for gaming news, reviews, and industry insights.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-3">
+              <Link href="/contact" className="btn-primary">
+                Get in Touch
+                <ArrowRight className="h-4 w-4" />
+              </Link>
+              <Link href="/advertise" className="btn-secondary">
+                Partner With Us
+              </Link>
+            </div>
+          </div>
+        </header>
+
+        <section className="mgn-panel px-6 py-8 sm:px-8 lg:px-10">
+          <div className="flex items-center gap-4">
+            <div className="grid h-14 w-14 place-items-center rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200">
+              <Target className="h-7 w-7" />
+            </div>
+            <div>
+              <div className="mgn-kicker">Mission</div>
+              <h2 className="mgn-text-strong mt-3 text-3xl font-black">Our Mission</h2>
+            </div>
+          </div>
+          <p className="mgn-text-body mt-6 text-lg leading-8">
+            At MyGamingNews.net, we are passionate about bringing you the latest and most comprehensive gaming content.
+            Our mission is to keep gamers informed, entertained, and connected to the ever-evolving world of video
+            games. From breaking news and in-depth reviews to exclusive features and eSports coverage, we strive to be
+            your trusted source for everything gaming.
           </p>
-        </div>
+        </section>
 
-        {/* Mission Section */}
-        <div className="mb-16">
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-8 shadow-lg">
-            <div className="flex items-center mb-6">
-              <Target className="w-8 h-8 text-blue-400 mr-4" />
-              <h2 className="text-3xl font-bold text-white dark:text-white text-gray-900">
-                Our Mission
-              </h2>
-            </div>
-            <p className="text-lg text-gray-300 dark:text-gray-300 text-gray-700 leading-relaxed">
-              At MyGamingNews.net, we're passionate about bringing you the latest and most comprehensive gaming content. 
-              Our mission is to keep gamers informed, entertained, and connected to the ever-evolving world of video games. 
-              From breaking news and in-depth reviews to exclusive features and eSports coverage, we strive to be your 
-              trusted source for everything gaming.
-            </p>
+        <section className="grid grid-cols-1 gap-6 md:grid-cols-3">
+          {[
+            {
+              icon: Award,
+              title: 'Quality Content',
+              text: 'We deliver high-quality, well-researched content that gamers can trust and rely on for accurate information.'
+            },
+            {
+              icon: Users,
+              title: 'Community First',
+              text: 'Our gaming community is at the heart of everything we do. We listen, engage, and create content that matters to you.'
+            },
+            {
+              icon: Heart,
+              title: 'Passion for Gaming',
+              text: 'We are gamers ourselves, and our genuine love for gaming drives us to share the best content with fellow enthusiasts.'
+            }
+          ].map(({ icon: Icon, title, text }) => (
+            <article key={title} className="mgn-panel h-full px-6 py-7 text-center">
+              <div className="mx-auto grid h-16 w-16 place-items-center rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200">
+                <Icon className="h-8 w-8" />
+              </div>
+              <h3 className="mgn-text-strong mt-5 text-xl font-black">{title}</h3>
+              <p className="mgn-text-soft mt-3 text-sm leading-7">{text}</p>
+            </article>
+          ))}
+        </section>
+
+        <section className="mgn-panel px-6 py-8 sm:px-8 lg:px-10">
+          <div className="mb-8 text-center">
+            <div className="mgn-kicker">Coverage Map</div>
+            <h2 className="mgn-text-strong mt-4 text-3xl font-black">What We Cover</h2>
           </div>
-        </div>
-
-        {/* Values Section */}
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 mb-16">
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg text-center">
-            <Award className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white dark:text-white text-gray-900 mb-3">
-              Quality Content
-            </h3>
-            <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-              We deliver high-quality, well-researched content that gamers can trust and rely on for accurate information.
-            </p>
+          <div className="grid grid-cols-1 gap-5 md:grid-cols-2 xl:grid-cols-3">
+            {[
+              ['Breaking News', 'Stay updated with the latest gaming industry news, announcements, and developments.'],
+              ['Game Reviews', 'Comprehensive reviews of the latest games across all platforms and genres.'],
+              ['Release Coverage', 'Everything you need to know about upcoming game releases and launch dates.'],
+              ['eSports', 'Tournament coverage, player profiles, and competitive gaming insights.'],
+              ['Technology', 'Gaming hardware reviews, tech innovations, and industry developments.'],
+              ['Features', 'In-depth analysis, opinion pieces, and exclusive gaming content.']
+            ].map(([title, text]) => (
+              <article key={title} className="rounded-[1.6rem] border border-white/10 bg-white/[0.03] px-5 py-5">
+                <h3 className="text-xl font-black text-fuchsia-200">{title}</h3>
+                <p className="mgn-text-soft mt-3 text-sm leading-7">{text}</p>
+              </article>
+            ))}
           </div>
+        </section>
 
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg text-center">
-            <Users className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white dark:text-white text-gray-900 mb-3">
-              Community First
-            </h3>
-            <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-              Our gaming community is at the heart of everything we do. We listen, engage, and create content that matters to you.
-            </p>
-          </div>
-
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg text-center">
-            <Heart className="w-12 h-12 text-blue-400 mx-auto mb-4" />
-            <h3 className="text-xl font-bold text-white dark:text-white text-gray-900 mb-3">
-              Passion for Gaming
-            </h3>
-            <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-              We're gamers ourselves, and our genuine love for gaming drives us to share the best content with fellow enthusiasts.
-            </p>
-          </div>
-        </div>
-
-        {/* What We Cover Section */}
-        <div className="mb-16">
-          <h2 className="text-3xl font-bold text-white dark:text-white text-gray-900 text-center mb-12">
-            What We Cover
-          </h2>
-          
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-blue-400 mb-3">Breaking News</h3>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                Stay updated with the latest gaming industry news, announcements, and developments.
-              </p>
-            </div>
-
-            <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-blue-400 mb-3">Game Reviews</h3>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                Comprehensive reviews of the latest games across all platforms and genres.
-              </p>
-            </div>
-
-            <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-blue-400 mb-3">Release Coverage</h3>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                Everything you need to know about upcoming game releases and launch dates.
-              </p>
-            </div>
-
-            <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-blue-400 mb-3">eSports</h3>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                Tournament coverage, player profiles, and competitive gaming insights.
-              </p>
-            </div>
-
-            <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-blue-400 mb-3">Technology</h3>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                Gaming hardware reviews, tech innovations, and industry developments.
-              </p>
-            </div>
-
-            <div className="bg-gray-800 dark:bg-gray-800 bg-white rounded-lg p-6 shadow-lg">
-              <h3 className="text-xl font-bold text-blue-400 mb-3">Features</h3>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                In-depth analysis, opinion pieces, and exclusive gaming content.
-              </p>
-            </div>
-          </div>
-        </div>
-
-        {/* Contact CTA */}
-        <div className="text-center bg-gradient-to-r from-blue-600 to-blue-800 rounded-lg p-8">
-          <h2 className="text-3xl font-bold text-white mb-4">
-            Join Our Gaming Community
-          </h2>
-          <p className="text-xl text-blue-100 mb-6">
-            Have questions, suggestions, or want to contribute? We'd love to hear from you!
+        <section className="rounded-[2rem] border border-fuchsia-400/15 bg-[linear-gradient(90deg,rgba(78,23,131,0.42),rgba(122,24,88,0.34),rgba(98,24,53,0.38))] px-6 py-8 text-center shadow-[0_24px_80px_rgba(16,8,30,0.32)] sm:px-10">
+          <h2 className="mgn-text-strong text-3xl font-black">Join Our Gaming Community</h2>
+          <p className="mgn-text-body mx-auto mt-4 max-w-3xl text-lg leading-8">
+            Have questions, suggestions, or want to contribute? We would love to hear from you.
           </p>
-          <a 
-            href="/contact" 
-            className="inline-block bg-white text-blue-600 font-bold py-3 px-8 rounded-lg hover:bg-gray-100 transition-colors"
-          >
-            Get in Touch
-          </a>
-        </div>
+          <div className="mt-8 flex justify-center">
+            <Link href="/contact" className="btn-primary">
+              Get in Touch
+              <ArrowRight className="h-4 w-4" />
+            </Link>
+          </div>
+        </section>
       </div>
     </div>
   )

@@ -1,8 +1,8 @@
 'use client'
 
 import React, { useState, useRef } from 'react'
+import Link from 'next/link'
 import { ChevronLeft, ChevronRight } from 'lucide-react'
-import { motion } from 'framer-motion'
 import ArticleCard from './ArticleCard'
 
 interface Article {
@@ -22,17 +22,17 @@ interface CategorySectionProps {
   viewAllLink?: string
 }
 
+const itemsPerView = {
+  mobile: 1,
+  tablet: 2,
+  desktop: 3,
+  large: 5
+}
+
 const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps) => {
   const [currentIndex, setCurrentIndex] = useState(0)
   const [currentItemsPerView, setCurrentItemsPerView] = useState(5)
   const scrollContainerRef = useRef<HTMLDivElement>(null)
-  
-  const itemsPerView = {
-    mobile: 1,
-    tablet: 2,
-    desktop: 3,
-    large: 5
-  }
 
   // Update items per view based on screen size
   React.useEffect(() => {
@@ -74,15 +74,13 @@ const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps)
     <section className="py-12">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
-        <div className="flex items-center justify-between mb-8">
-          <motion.h2
-            initial={{ opacity: 0, x: -20 }}
-            animate={{ opacity: 1, x: 0 }}
-            transition={{ duration: 0.6 }}
-            className="text-3xl md:text-4xl font-bold text-gray-900 dark:text-white"
-          >
-            {title}
-          </motion.h2>
+        <div className="mb-8 flex items-end justify-between gap-4">
+          <div>
+            <div className="mgn-kicker mb-3">Latest Feed</div>
+            <h2 className="mgn-text-strong text-3xl font-black tracking-tight md:text-4xl">
+              {title}
+            </h2>
+          </div>
           
           <div className="flex items-center space-x-4">
             {/* Navigation Arrows */}
@@ -90,10 +88,10 @@ const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps)
               <button
                 onClick={scrollLeft}
                 disabled={!canScrollLeft}
-                className={`p-2 rounded-lg transition-all duration-300 ${
+                className={`p-2 rounded-lg transition-colors duration-150 ${
                   canScrollLeft
-                    ? 'bg-primary-600 hover:bg-primary-700 text-white hover:scale-110'
-                    : 'bg-gray-600 dark:bg-gray-600 bg-gray-300 text-gray-400 dark:text-gray-400 text-gray-500 cursor-not-allowed'
+                    ? 'mgn-control-surface'
+                    : 'border border-white/5 bg-white/5 text-white/25 cursor-not-allowed'
                 }`}
                 aria-label="Scroll left"
               >
@@ -103,10 +101,10 @@ const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps)
               <button
                 onClick={scrollRight}
                 disabled={!canScrollRight}
-                className={`p-2 rounded-lg transition-all duration-300 ${
+                className={`p-2 rounded-lg transition-colors duration-150 ${
                   canScrollRight
-                    ? 'bg-primary-600 hover:bg-primary-700 text-white hover:scale-110'
-                    : 'bg-gray-600 dark:bg-gray-600 bg-gray-300 text-gray-400 dark:text-gray-400 text-gray-500 cursor-not-allowed'
+                    ? 'mgn-control-surface'
+                    : 'border border-white/5 bg-white/5 text-white/25 cursor-not-allowed'
                 }`}
                 aria-label="Scroll right"
               >
@@ -116,25 +114,22 @@ const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps)
             
             {/* View All Link */}
             {viewAllLink && (
-              <motion.a
+              <Link
                 href={viewAllLink}
-                initial={{ opacity: 0, x: 20 }}
-                animate={{ opacity: 1, x: 0 }}
-                transition={{ duration: 0.6, delay: 0.2 }}
-                className="text-primary-400 dark:text-primary-400 text-primary-600 hover:text-primary-300 dark:hover:text-primary-300 hover:text-primary-700 font-medium transition-colors duration-300 flex items-center group"
+                className="group hidden items-center text-sm font-black uppercase tracking-[0.18em] text-fuchsia-300 transition-colors duration-150 hover:text-[var(--mgn-text-strong)] sm:flex"
               >
                 View All
-                <ChevronRight className="ml-1 w-4 h-4 transition-transform duration-300 group-hover:translate-x-1" />
-              </motion.a>
+                <ChevronRight className="ml-1 w-4 h-4 transition-transform duration-150 group-hover:translate-x-0.5" />
+              </Link>
             )}
           </div>
         </div>
 
         {/* Articles Container */}
-        <div className="relative overflow-hidden">
-          <motion.div
+        <div className="relative overflow-hidden rounded-[2rem] border border-white/8 bg-white/[0.02] px-1 py-4">
+          <div
             ref={scrollContainerRef}
-            className="flex transition-transform duration-500 ease-out"
+            className="flex transition-transform duration-300 ease-out"
             style={{
               transform: `translateX(-${currentIndex * (100 / currentItemsPerView)}%)`
             }}
@@ -147,7 +142,7 @@ const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps)
                 <ArticleCard article={article} index={index} />
               </div>
             ))}
-          </motion.div>
+          </div>
         </div>
 
         {/* Mobile Scroll Indicators */}
@@ -156,10 +151,10 @@ const CategorySection = ({ title, articles, viewAllLink }: CategorySectionProps)
             <button
               key={index}
               onClick={() => setCurrentIndex(index)}
-              className={`w-2 h-2 rounded-full transition-all duration-300 ${
+              className={`w-2 h-2 rounded-full transition-[transform,background-color] duration-150 ${
                 Math.floor(currentIndex / itemsPerView.mobile) === index
-                  ? 'bg-primary-500 scale-125'
-                  : 'bg-gray-400 dark:bg-gray-400 bg-gray-300 hover:bg-gray-300 dark:hover:bg-gray-300 hover:bg-gray-400'
+                  ? 'scale-125 bg-fuchsia-400'
+                  : 'bg-white/25 hover:bg-white/45'
               }`}
               aria-label={`Go to page ${index + 1}`}
             />

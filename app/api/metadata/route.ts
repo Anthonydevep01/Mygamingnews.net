@@ -28,7 +28,7 @@ export async function GET(request: NextRequest) {
           title: article.meta_title || article.title,
           description: article.meta_description || article.description,
           url: `${baseUrl}/${article.category.toLowerCase()}/${article.slug}`,
-          image: article.image ? `${baseUrl}${article.image}` : `${baseUrl}/images/Mygamingnewslogo.png`,
+          image: article.image ? `${baseUrl}${article.image}` : `${baseUrl}/images/petlogo.png`,
           author: article.author,
           publishedTime: new Date(article.date).toISOString(),
           modifiedTime: new Date(article.date).toISOString(),

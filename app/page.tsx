@@ -1,5 +1,6 @@
 import Hero from './components/Hero'
 import CategorySection from './components/CategorySection'
+import DeferredSection from './components/DeferredSection'
 import { getRecentArticles, getArticlesByCategory } from './data/articles'
 
 export default function Home() {
@@ -25,39 +26,45 @@ export default function Home() {
         
         {/* Divider */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <hr className="border-gray-300 dark:border-gray-600" />
+          <hr className="mgn-divider" />
         </div>
         
-        {/* Releases Section */}
-        <CategorySection
-          title="New Releases"
-          articles={releasesArticles}
-          viewAllLink="/releases"
-        />
-        
+        <DeferredSection minHeight={520}>
+          {/* Releases Section */}
+          <CategorySection
+            title="New Releases"
+            articles={releasesArticles}
+            viewAllLink="/releases"
+          />
+        </DeferredSection>
+
         {/* Divider */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <hr className="border-gray-300 dark:border-gray-600" />
+          <hr className="mgn-divider" />
         </div>
-        
-        {/* Reviews Section */}
-        <CategorySection
-          title="Reviews"
-          articles={reviewsArticles}
-          viewAllLink="/reviews"
-        />
-        
+
+        <DeferredSection minHeight={520}>
+          {/* Reviews Section */}
+          <CategorySection
+            title="Reviews"
+            articles={reviewsArticles}
+            viewAllLink="/reviews"
+          />
+        </DeferredSection>
+
         {/* Divider */}
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          <hr className="border-gray-300 dark:border-gray-600" />
+          <hr className="mgn-divider" />
         </div>
-        
-        {/* Tech Section */}
-        <CategorySection
-          title="Tech"
-          articles={techArticles}
-          viewAllLink="/tech"
-        />
+
+        <DeferredSection minHeight={520}>
+          {/* Tech Section */}
+          <CategorySection
+            title="Tech"
+            articles={techArticles}
+            viewAllLink="/tech"
+          />
+        </DeferredSection>
       </div>
     </div>
   )

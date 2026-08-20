@@ -2,14 +2,44 @@ import { notFound } from 'next/navigation'
 import { getArticleBySlug, getArticlesByCategory } from '../data/articles'
 import Link from 'next/link'
 import Image from 'next/image'
-import { Calendar, User, ArrowLeft } from 'lucide-react'
+import { Calendar, User, ArrowLeft, ChevronDown } from 'lucide-react'
 import ArticleSidebar from './ArticleSidebar'
 import SchemaMarkup from './SchemaMarkup'
+import type { Article, FaqItem } from '../lib/markdown'
 
 interface ArticlePageProps {
   slug: string
   category: string
   categoryDisplayName: string
+}
+
+const formatInlineLinks = (text: string) =>
+  text.replace(
+    /\[([^\]]+)\]\(([^)]+)\)/g,
+    '<a href="$2" target="_blank" rel="noopener noreferrer" class="link-anchor">$1</a>'
+  )
+
+const getFallbackFaqs = (article: Article): FaqItem[] => {
+  const categoryLabel = article.category.toLowerCase()
+
+  return [
+    {
+      question: `What is this ${categoryLabel} article about?`,
+      answer: article.meta_description || article.description
+    },
+    {
+      question: `Why does this ${article.primary_keyword} story matter?`,
+      answer: `This article explains why the latest ${article.primary_keyword} developments matter, what they could change for players or the industry, and which details are worth following next.`
+    },
+    {
+      question: 'Is this article based on official information?',
+      answer: 'MyGamingNews.net uses official announcements and credible reporting whenever available, and the source list in each article is used to support the key facts covered in the story.'
+    },
+    {
+      question: `Where can I find more ${categoryLabel} coverage?`,
+      answer: `You can explore more ${categoryLabel} coverage on MyGamingNews.net for related updates, follow-up reports, and broader context around this topic.`
+    }
+  ]
 }
 
 export default function ArticlePage({ slug, category, categoryDisplayName }: ArticlePageProps) {
@@ -23,9 +53,10 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
   const newsArticles = getArticlesByCategory('News')
   const releasesArticles = getArticlesByCategory('Releases')
   const sportsArticles = getArticlesByCategory('Sports')
+  const faqs = article.faqs?.length ? article.faqs : getFallbackFaqs(article)
 
   return (
-    <div className="min-h-screen py-12">
+    <div className="mgn-page-shell">
       <SchemaMarkup 
         type="article" 
         data={{ 
@@ -51,35 +82,41 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
           ]
         }} 
       />
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+      <SchemaMarkup
+        type="faq"
+        data={{
+          faqs
+        }}
+      />
+      <div className="max-w-7xl mx-auto">
         {/* Back Button */}
         <Link 
           href={`/${category.toLowerCase()}`}
-          className="inline-flex items-center text-blue-400 hover:text-blue-300 transition-colors mb-8"
+          className="mgn-surface-chip mb-8 inline-flex items-center rounded-full px-4 py-2 text-sm font-black uppercase tracking-[0.16em] text-fuchsia-300 transition-colors hover:bg-white/10 hover:text-[var(--mgn-text-strong)]"
         >
           <ArrowLeft className="w-4 h-4 mr-2" />
           Back to {categoryDisplayName}
         </Link>
         
         {/* Main Layout with Sidebar */}
-        <div className="flex flex-col lg:flex-row gap-8">
+        <div className="flex flex-col gap-8 lg:flex-row">
           {/* Main Content */}
           <div className="flex-1 lg:max-w-4xl">
 
         {/* Article Header */}
-        <div className="mb-8">
+        <div className="mgn-page-header mb-8">
           <div className="mb-4">
-            <span className="inline-block px-3 py-1 text-sm font-medium bg-blue-600 text-white rounded-full">
+            <span className="mgn-kicker">
               {article.category}
             </span>
           </div>
           
-          <h1 className="text-4xl md:text-5xl font-bold text-gray-900 dark:text-white mb-4">
+          <h1 className="mgn-text-strong relative z-10 text-4xl font-black leading-[0.95] md:text-5xl">
             {article.title}
           </h1>
-          <hr className="border-gray-200 dark:border-gray-700 mb-6" />
+          <hr className="mgn-divider mb-6 mt-5" />
           
-          <div className="flex items-center space-x-6 text-gray-300 dark:text-gray-300 text-gray-600">
+          <div className="mgn-text-body flex flex-wrap items-center gap-6 text-sm uppercase tracking-[0.12em]">
             <div className="flex items-center">
               <User className="w-4 h-4 mr-2" />
               <span>{article.author}</span>
@@ -108,26 +145,26 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
               alt={article.title}
               width={1200}
               height={600}
-              className="w-full h-64 md:h-96 object-cover rounded-lg shadow-lg"
+              className="w-full rounded-[2rem] border border-white/10 object-cover shadow-[0_24px_80px_rgba(0,0,0,0.32)] h-64 md:h-96"
               priority
             />
           </div>
         )}
 
         {/* Article Content */}
-        <div className="prose prose-lg dark:prose-invert max-w-none">
-          <div className="text-gray-800 dark:text-gray-200 leading-relaxed">
+        <div className="prose prose-lg max-w-none">
+          <div className="mgn-panel mgn-text-body p-6 leading-relaxed sm:p-8 lg:p-10">
             {article.content.map((section, index) => {
               // Handle sections with both heading and text
               if (section.heading_h2 && section.text) {
                 return (
                   <div key={index}>
-                    <h2 className="text-2xl font-bold mt-8 mb-2 text-gray-900 dark:text-white">
+                    <h2 className="mgn-text-strong mt-8 mb-2 text-2xl font-black">
                       {section.heading_h2}
                     </h2>
-                    <hr className="border-gray-200 dark:border-gray-700 mb-4" />
+                    <hr className="mgn-divider mb-4" />
                     <div 
-                      className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
+                      className="mgn-text-body mb-4 leading-8"
                       dangerouslySetInnerHTML={{ __html: section.text }}
                     />
                   </div>
@@ -138,10 +175,10 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
               if (section.heading_h2 && !section.text) {
                 return (
                   <div key={index}>
-                    <h2 className="text-2xl font-bold mt-8 mb-2 text-gray-900 dark:text-white">
+                    <h2 className="mgn-text-strong mt-8 mb-2 text-2xl font-black">
                       {section.heading_h2}
                     </h2>
-                    <hr className="border-gray-200 dark:border-gray-700 mb-4" />
+                    <hr className="mgn-divider mb-4" />
                   </div>
                 )
               }
@@ -150,9 +187,10 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
               if (section.type === 'hook' && section.text) {
                 return (
                   <div key={index} className="mb-6">
-                    <p className="text-lg font-semibold text-gray-900 dark:text-white leading-relaxed">
-                      {section.text}
-                    </p>
+                    <div
+                      className="mgn-surface-chip mgn-text-strong rounded-[1.5rem] px-5 py-5 text-lg font-semibold leading-8"
+                      dangerouslySetInnerHTML={{ __html: formatInlineLinks(section.text) }}
+                    />
                   </div>
                 )
               }
@@ -162,8 +200,25 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
                 return (
                   <div key={index} className="my-8">
                     <div 
-                      className="aspect-video"
+                      className="aspect-video overflow-hidden rounded-[1.5rem] border border-white/10"
                       dangerouslySetInnerHTML={{ __html: section.video_embed }}
+                    />
+                  </div>
+                )
+              }
+
+              // Handle inline article images parsed from markdown
+              if (section.type === 'image' && section.image_src) {
+                const imageSrc = section.image_src.startsWith('/') ? section.image_src : `/${section.image_src}`
+
+                return (
+                  <div key={index} className="my-8 overflow-hidden rounded-[1.5rem] border border-white/10">
+                    <Image
+                      src={imageSrc}
+                      alt={section.image_alt || article.title}
+                      width={1200}
+                      height={700}
+                      className="h-auto w-full object-cover"
                     />
                   </div>
                 )
@@ -174,7 +229,7 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
                 return (
                   <div 
                     key={index} 
-                    className="mb-4 text-gray-800 dark:text-gray-200 leading-relaxed"
+                    className="mgn-text-body mb-4 leading-8"
                     dangerouslySetInnerHTML={{ __html: section.text }}
                   />
                 )
@@ -189,13 +244,55 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
         {article.primary_keyword && (
           <div className="mt-8">
             <div className="flex flex-wrap gap-2">
-              <span className="px-3 py-1 bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 rounded-full text-sm">
+              <span className="rounded-full border border-fuchsia-400/20 bg-fuchsia-500/10 px-3 py-1 text-sm text-fuchsia-200">
                 {article.primary_keyword}
               </span>
               {article.secondary_keywords?.map((keyword, index) => (
-                <span key={index} className="px-3 py-1 bg-gray-100 dark:bg-gray-700 text-gray-700 dark:text-gray-300 rounded-full text-sm">
+                <span key={index} className="mgn-surface-chip rounded-full px-3 py-1 text-sm">
                   {keyword}
                 </span>
+              ))}
+            </div>
+          </div>
+        )}
+
+        {article.score && (
+          <div className="mgn-panel mt-8 px-6 py-8 text-center">
+            <div className="text-[11px] font-black uppercase tracking-[0.24em] text-fuchsia-200/75">
+              Review Verdict
+            </div>
+            <div className="mgn-text-strong mt-4 text-5xl font-black">
+              {article.score}/10
+            </div>
+            <div className="mgn-text-body mt-2 text-sm uppercase tracking-[0.16em]">
+              MyGamingNews.net Score
+            </div>
+          </div>
+        )}
+
+        {faqs.length > 0 && (
+          <div className="mgn-panel mt-8 p-6 sm:p-8">
+            <div className="text-[11px] font-black uppercase tracking-[0.24em] text-fuchsia-200/75">
+              FAQ
+            </div>
+            <h2 className="mgn-text-strong mt-3 text-2xl font-black">
+              Frequently Asked Questions
+            </h2>
+            <hr className="mgn-divider mb-5 mt-4" />
+            <div className="space-y-3">
+              {faqs.map((faq, index) => (
+                <details
+                  key={`${faq.question}-${index}`}
+                  className="group overflow-hidden rounded-[1.25rem] border border-white/10 bg-white/5"
+                >
+                  <summary className="mgn-text-strong flex cursor-pointer list-none items-center justify-between gap-4 px-5 py-4 text-base font-bold marker:content-none">
+                    <span>{faq.question}</span>
+                    <ChevronDown className="h-5 w-5 flex-shrink-0 transition-transform duration-200 group-open:rotate-180" />
+                  </summary>
+                  <div className="mgn-text-body border-t border-white/10 px-5 py-4 text-sm leading-7 sm:text-base">
+                    {faq.answer}
+                  </div>
+                </details>
               ))}
             </div>
           </div>
@@ -204,7 +301,7 @@ export default function ArticlePage({ slug, category, categoryDisplayName }: Art
           </div>
 
           {/* Sidebar */}
-          <div className="lg:w-80">
+          <div className="lg:w-[24rem] lg:flex-shrink-0 xl:w-[25rem]">
             <ArticleSidebar 
               newsArticles={newsArticles}
               releasesArticles={releasesArticles}

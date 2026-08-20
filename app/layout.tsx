@@ -19,6 +19,11 @@ export const metadata = {
   creator: 'MyGamingNews.net',
   publisher: 'MyGamingNews.net',
   robots: 'index, follow',
+  icons: {
+    icon: '/images/pet.png',
+    shortcut: '/images/pet.png',
+    apple: '/images/pet.png'
+  },
   openGraph: {
     type: 'website',
     locale: 'en_US',
@@ -27,9 +32,9 @@ export const metadata = {
     title: 'MyGamingNews.net - Latest Gaming News & Reviews',
     description: 'Your ultimate destination for gaming news, reviews, features, releases, and eSports coverage.',
     images: [{
-      url: 'https://mygamingnews.net/images/Mygamingnewslogo.png',
-      width: 400,
-      height: 400,
+      url: 'https://mygamingnews.net/images/petlogo.png',
+      width: 1600,
+      height: 900,
       alt: 'MyGamingNews.net Logo'
     }]
   },
@@ -39,7 +44,7 @@ export const metadata = {
     creator: '@mygamingnews',
     title: 'MyGamingNews.net - Latest Gaming News & Reviews',
     description: 'Your ultimate destination for gaming news, reviews, features, releases, and eSports coverage.',
-    images: ['https://mygamingnews.net/images/Mygamingnewslogo.png']
+    images: ['https://mygamingnews.net/images/petlogo.png']
   }
 }
 
@@ -74,9 +79,10 @@ export default function RootLayout({
         >
           <SchemaMarkup type="website" />
           <SchemaMarkup type="organization" />
-          <div className="min-h-screen bg-gradient-dark dark:bg-gradient-dark bg-gradient-light transition-all duration-300">
+          <div className="site-frame min-h-screen">
+            <div className="pointer-events-none fixed inset-x-0 top-0 z-0 h-px bg-gradient-to-r from-transparent via-fuchsia-400/60 to-transparent" />
             <Navbar />
-            <main className="pt-20">
+            <main className="relative z-10 pt-24">
               {children}
             </main>
             <Footer />

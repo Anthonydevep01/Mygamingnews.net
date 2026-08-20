@@ -27,102 +27,80 @@ export default function ContactPage() {
   }
 
   return (
-    <div className="min-h-screen py-12">
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        {/* Page Header */}
-        <div className="text-center mb-12">
-          <h1 className="text-4xl md:text-5xl font-bold text-white dark:text-white text-gray-900 mb-4">
-            Contact Us
-          </h1>
-          <p className="text-xl text-gray-300 dark:text-gray-300 text-gray-700 max-w-3xl mx-auto">
-            Get in touch with our team. We'd love to hear from you!
-          </p>
-        </div>
-
-        <div className="grid grid-cols-1 lg:grid-cols-2 gap-12">
-          {/* Contact Information */}
-          <div className="space-y-8">
-            <div>
-              <h2 className="text-2xl font-bold text-white dark:text-white text-gray-900 mb-6">
-                Get in Touch
-              </h2>
-              <p className="text-gray-300 dark:text-gray-300 text-gray-700 mb-8">
-                Have a question, suggestion, or want to collaborate? We're here to help and would love to hear from you.
-              </p>
-            </div>
-
-            <div className="space-y-6">
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <Mail className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-white dark:text-white text-gray-900">
-                    Email
-                  </h3>
-                  <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                    contact@mygamingnews.net
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <Phone className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-white dark:text-white text-gray-900">
-                    Phone
-                  </h3>
-                  <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                    +1 (555) 123-4567
-                  </p>
-                </div>
-              </div>
-
-              <div className="flex items-center space-x-4">
-                <div className="flex-shrink-0">
-                  <MapPin className="w-6 h-6 text-blue-400" />
-                </div>
-                <div>
-                  <h3 className="text-lg font-medium text-white dark:text-white text-gray-900">
-                    Address
-                  </h3>
-                  <p className="text-gray-300 dark:text-gray-300 text-gray-700">
-                    123 Gaming Street<br />
-                    Tech City, TC 12345
-                  </p>
-                </div>
-              </div>
-            </div>
-
-            <div className="pt-8">
-              <h3 className="text-lg font-medium text-white dark:text-white text-gray-900 mb-4">
-                Follow Us
-              </h3>
-              <div className="flex space-x-4">
-                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
-                  Facebook
-                </a>
-                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
-                  Twitter
-                </a>
-                <a href="#" className="text-blue-400 hover:text-blue-300 transition-colors">
-                  Instagram
-                </a>
-              </div>
-            </div>
+    <div className="mgn-page-shell">
+      <div className="mx-auto flex max-w-7xl flex-col gap-10">
+        <header className="mgn-page-header">
+          <div className="relative z-10 max-w-4xl">
+            <div className="mgn-kicker">Contact Desk</div>
+            <h1 className="mgn-text-strong mt-4 text-4xl font-black leading-[0.95] sm:text-5xl lg:text-6xl">
+              Contact Us
+            </h1>
+            <p className="mgn-text-body mt-5 text-base leading-7 sm:text-lg">
+              Get in touch with our team. We would love to hear from you.
+            </p>
           </div>
+        </header>
 
-          {/* Contact Form */}
-          <div className="bg-gray-800 dark:bg-gray-800 bg-white p-8 rounded-lg shadow-lg">
-            <h2 className="text-2xl font-bold text-white dark:text-white text-gray-900 mb-6">
-              Send us a Message
-            </h2>
-            
-            <form onSubmit={handleSubmit} className="space-y-6">
+        <div className="grid grid-cols-1 gap-8 lg:grid-cols-[0.9fr_1.1fr]">
+          <section className="mgn-panel px-6 py-8 sm:px-8">
+            <div className="mgn-kicker">Direct Reach</div>
+            <h2 className="mgn-text-strong mt-4 text-2xl font-black">Get in Touch</h2>
+            <p className="mgn-text-soft mt-4 text-sm leading-7">
+              Have a question, suggestion, or want to collaborate? We are here to help and would love to hear from you.
+            </p>
+
+            <div className="mt-8 space-y-5">
+              {[
+                {
+                  icon: Mail,
+                  title: 'Email',
+                  body: 'contact@mygamingnews.net'
+                },
+                {
+                  icon: Phone,
+                  title: 'Phone',
+                  body: '+1 (555) 123-4567'
+                },
+                {
+                  icon: MapPin,
+                  title: 'Address',
+                  body: '123 Gaming Street, Tech City, TC 12345'
+                }
+              ].map(({ icon: Icon, title, body }) => (
+                <div key={title} className="flex items-start gap-4 rounded-[1.5rem] border border-white/10 bg-white/[0.03] px-4 py-4">
+                  <div className="grid h-11 w-11 place-items-center rounded-2xl border border-fuchsia-400/20 bg-fuchsia-500/10 text-fuchsia-200">
+                    <Icon className="h-5 w-5" />
+                  </div>
+                  <div>
+                    <h3 className="mgn-text-strong text-base font-black">{title}</h3>
+                    <p className="mgn-text-soft mt-1 text-sm leading-6">{body}</p>
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 border-t border-white/10 pt-8">
+              <h3 className="text-sm font-black uppercase tracking-[0.18em] text-fuchsia-200">Follow Us</h3>
+              <div className="mt-4 flex flex-wrap gap-3">
+                {['Facebook', 'Twitter', 'Instagram'].map((platform) => (
+                  <span
+                    key={platform}
+                    className="mgn-surface-chip rounded-full px-4 py-2 text-sm font-semibold transition-colors hover:border-fuchsia-400/30 hover:text-[var(--mgn-text-strong)]"
+                  >
+                    {platform}
+                  </span>
+                ))}
+              </div>
+            </div>
+          </section>
+
+          <section className="mgn-panel px-6 py-8 sm:px-8">
+            <div className="mgn-kicker">Message Form</div>
+            <h2 className="mgn-text-strong mt-4 text-2xl font-black">Send us a Message</h2>
+
+            <form onSubmit={handleSubmit} className="mt-8 space-y-6">
               <div>
-                <label htmlFor="name" className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+                <label htmlFor="name" className="mgn-text-body mb-2 block text-sm font-medium">
                   Name
                 </label>
                 <input
@@ -132,13 +110,13 @@ export default function ContactPage() {
                   value={formData.name}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-gray-50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="mgn-input"
                   placeholder="Your name"
                 />
               </div>
 
               <div>
-                <label htmlFor="email" className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+                <label htmlFor="email" className="mgn-text-body mb-2 block text-sm font-medium">
                   Email
                 </label>
                 <input
@@ -148,13 +126,13 @@ export default function ContactPage() {
                   value={formData.email}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-gray-50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+                  className="mgn-input"
                   placeholder="your.email@example.com"
                 />
               </div>
 
               <div>
-                <label htmlFor="subject" className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+                <label htmlFor="subject" className="mgn-text-body mb-2 block text-sm font-medium">
                   Subject
                 </label>
                 <input
@@ -164,13 +142,13 @@ export default function ContactPage() {
                   value={formData.subject}
                   onChange={handleChange}
                   required
-                  className="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-gray-50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
-                  placeholder="What's this about?"
+                  className="mgn-input"
+                  placeholder="What is this about?"
                 />
               </div>
 
               <div>
-                <label htmlFor="message" className="block text-sm font-medium text-gray-300 dark:text-gray-300 text-gray-700 mb-2">
+                <label htmlFor="message" className="mgn-text-body mb-2 block text-sm font-medium">
                   Message
                 </label>
                 <textarea
@@ -180,20 +158,20 @@ export default function ContactPage() {
                   onChange={handleChange}
                   required
                   rows={6}
-                  className="w-full px-4 py-3 bg-gray-700 dark:bg-gray-700 bg-gray-50 border border-gray-600 dark:border-gray-600 border-gray-300 rounded-lg text-white dark:text-white text-gray-900 placeholder-gray-400 dark:placeholder-gray-400 placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent resize-none"
+                  className="mgn-input resize-none"
                   placeholder="Tell us more about your message..."
                 />
               </div>
 
               <button
                 type="submit"
-                className="w-full btn-primary flex items-center justify-center space-x-2"
+                className="btn-primary w-full"
               >
-                <Send className="w-4 h-4" />
-                <span>Send Message</span>
+                <Send className="h-4 w-4" />
+                Send Message
               </button>
             </form>
-          </div>
+          </section>
         </div>
       </div>
     </div>
