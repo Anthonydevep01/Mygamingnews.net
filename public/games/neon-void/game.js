@@ -1,0 +1,1478 @@
+(() => {
+  'use strict';
+
+  const canvas = document.getElementById('game');
+  const ctx = canvas.getContext('2d', { alpha: false });
+  const $ = (id) => document.getElementById(id);
+
+  const STORAGE_KEY = 'mygamingnews.neonvoid.v1';
+  const VERSION = '1.0.0';
+
+  const UI = {
+    overlay: $('overlay'),
+    menuPanel: $('menuPanel'),
+    pausePanel: $('pausePanel'),
+    upgradePanel: $('upgradePanel'),
+    gameOverPanel: $('gameOverPanel'),
+    hud: $('hud'),
+    buildPanel: $('buildPanel'),
+    buildToggle: $('buildToggle'),
+    buildContents: $('buildContents'),
+    buildList: $('buildList'),
+    bossHud: $('bossHud'),
+    bossPhaseText: $('bossPhaseText'),
+    bossBar: $('bossBar'),
+    toast: $('toast'),
+    comboBurst: $('comboBurst'),
+    mobileInput: $('mobileInput'),
+    mobileHint: $('mobileHint'),
+    score: $('score'),
+    sector: $('sector'),
+    combo: $('combo'),
+    wpm: $('wpm'),
+    accuracy: $('accuracy'),
+    shieldText: $('shieldText'),
+    shieldBar: $('shieldBar'),
+    hullText: $('hullText'),
+    hullBar: $('hullBar'),
+    pulseText: $('pulseText'),
+    pulseBar: $('pulseBar'),
+    threatLabel: $('threatLabel'),
+    bestScore: $('bestScore'),
+    bestSector: $('bestSector'),
+    bestWpm: $('bestWpm'),
+    startBtn: $('startBtn'),
+    soundBtn: $('soundBtn'),
+    motionBtn: $('motionBtn'),
+    resumeBtn: $('resumeBtn'),
+    restartBtn: $('restartBtn'),
+    quitBtn: $('quitBtn'),
+    upgradeCards: $('upgradeCards'),
+    upgradeSub: $('upgradeSub'),
+    finalScore: $('finalScore'),
+    finalSector: $('finalSector'),
+    finalWpm: $('finalWpm'),
+    finalAccuracy: $('finalAccuracy'),
+    finalPerfect: $('finalPerfect'),
+    finalTime: $('finalTime'),
+    newRecord: $('newRecord'),
+    againBtn: $('againBtn'),
+    menuBtn: $('menuBtn')
+  };
+
+  const COLORS = {
+    bg: '#05030d',
+    purple: '#7c5cff',
+    cyan: '#20f6ff',
+    pink: '#ff3b86',
+    gold: '#ffd166',
+    green: '#63ffb1',
+    text: '#f8f7ff',
+    muted: '#9d95c9'
+  };
+
+  const WORDS = [
+    'aim','arc','boss','buff','build','camp','cast','clan','combo','core','craft','dash','drop','farm','frame','game','gear','grind','guild','heal','level','loot','mana','match','melee','meta','mod','party','patch','ping','quest','raid','rank','reset','roll','round','score','skill','spawn','tank','team','tier','vault','wave','zone',
+    'action','arcade','armor','battle','caster','charge','checkpoint','critical','damage','dodge','dungeon','engine','farming','fighter','framerate','glitch','grapple','healer','hitbox','indie','input','inventory','juggle','latency','lobby','matchup','mission','parry','platform','player','puzzle','recoil','respawn','rogue','sandbox','server','shader','shooter','stamina','stealth','stream','support','survival','tactics','upgrade','victory',
+    'adventure','animation','artifact','backtrack','campaign','challenge','character','collectible','controller','cooldown','cosmetic','difficulty','encounter','endgame','esports','exploration','finisher','graphics','handheld','headset','leaderboard','loadout','mechanic','multiplayer','objective','openworld','platformer','progression','racing','ranking','resource','roguelike','rotation','speedrun','strategy','tournament','training','tutorial','warrior','wizard',
+    'achievement','battleground','checkpoint','competitive','customization','environment','extraction','franchise','matchmaking','metroidvania','optimization','permadeath','procedural','simulation','spectator','storytelling','telemetry','visuals','worldbuilding','accessibility','counterplay','desynchronization','intermission','invulnerability','microstutter','replayability','shapeshifter','soundscape','speedrunner','synchronization','tactician','unpredictable'
+  ];
+
+  const ENEMY_TYPES = {
+    scout:   { color: '#7c5cff', speed: 1.00, damage: 15, radius: 22, min: 4, max: 8, score: 1.00 },
+    dart:    { color: '#20f6ff', speed: 1.48, damage: 12, radius: 17, min: 3, max: 6, score: 1.05 },
+    bulwark: { color: '#ff3b86', speed: 0.72, damage: 24, radius: 30, min: 8, max: 14, score: 1.45 },
+    splitter:{ color: '#ffd166', speed: 0.90, damage: 18, radius: 25, min: 5, max: 10, score: 1.25 },
+    phantom: { color: '#63ffb1', speed: 1.14, damage: 16, radius: 23, min: 6, max: 12, score: 1.32 },
+    fragment:{ color: '#ffd166', speed: 1.58, damage: 8,  radius: 13, min: 3, max: 5, score: 0.50 }
+  };
+
+  const UPGRADE_POOL = [
+    { id:'core_lattice', name:'Core Lattice', rarity:'common', max:6, desc:'+25 maximum Core integrity and repair 25 Core immediately.', apply:p=>{p.maxHull+=25;p.hull=Math.min(p.maxHull,p.hull+25);} },
+    { id:'aegis_array', name:'Aegis Array', rarity:'common', max:6, desc:'+20 maximum Shield and restore 20 Shield immediately.', apply:p=>{p.maxShield+=20;p.shield=Math.min(p.maxShield,p.shield+20);} },
+    { id:'nano_repair', name:'Nano Repair', rarity:'common', max:6, desc:'Repair +8 Core after every cleared sector.', apply:p=>{p.sectorHeal+=8;} },
+    { id:'chrono_drag', name:'Chrono Drag', rarity:'rare', max:5, desc:'Incoming threats move 8% slower. Bosses receive a reduced effect.', apply:p=>{p.enemySpeedMult*=0.92;} },
+    { id:'combo_kernel', name:'Combo Kernel', rarity:'common', max:5, desc:'Reach each combo multiplier 3 correct keys sooner.', apply:p=>{p.comboStep=Math.max(8,p.comboStep-3);} },
+    { id:'limit_break', name:'Limit Break', rarity:'rare', max:4, desc:'+1 maximum combo multiplier.', apply:p=>{p.comboMax+=1;} },
+    { id:'score_amp', name:'Score Amplifier', rarity:'common', max:8, desc:'+20% score from all typing and kills.', apply:p=>{p.scoreMult*=1.20;} },
+    { id:'perfect_guard', name:'Perfect Guard', rarity:'rare', max:6, desc:'Perfectly completed words restore +3 Shield.', apply:p=>{p.perfectShield+=3;} },
+    { id:'salvage_protocol', name:'Salvage Protocol', rarity:'rare', max:5, desc:'+10% chance for a kill to repair 8 Core.', apply:p=>{p.salvageChance=Math.min(0.50,p.salvageChance+0.10);} },
+    { id:'shield_regen', name:'Shield Recompiler', rarity:'common', max:6, desc:'+1.5 Shield regeneration per second.', apply:p=>{p.shieldRegen+=1.5;} },
+    { id:'fast_boot', name:'Fast Boot', rarity:'common', max:4, desc:'Shield regeneration begins 0.6 seconds sooner after taking damage.', apply:p=>{p.shieldDelay=Math.max(0.8,p.shieldDelay-0.6);} },
+    { id:'pulse_battery', name:'Pulse Battery', rarity:'common', max:5, desc:'+25 maximum Void Pulse charge and fill it immediately.', apply:p=>{p.maxPulse+=25;p.pulse=p.maxPulse;} },
+    { id:'pulse_feed', name:'Kinetic Feed', rarity:'rare', max:5, desc:'+35% Void Pulse charge generated by correct keystrokes.', apply:p=>{p.pulseGainMult*=1.35;} },
+    { id:'pulse_field', name:'Deep Freeze Pulse', rarity:'epic', max:4, desc:'Void Pulse slows enemies longer and pushes them farther from the Core.', apply:p=>{p.pulseDuration+=0.55;p.pulsePush+=18;} },
+    { id:'perfect_score', name:'Syntax Dividend', rarity:'common', max:7, desc:'+35% score from perfect word completions.', apply:p=>{p.perfectBonusMult*=1.35;} },
+    { id:'elite_hunter', name:'Anomaly Bounty', rarity:'rare', max:5, desc:'+35% score from Elite threats and Boss phases.', apply:p=>{p.eliteScoreMult*=1.35;} },
+    { id:'impact_plating', name:'Impact Plating', rarity:'rare', max:4, desc:'Reduce Core/Shield impact damage by 10%.', apply:p=>{p.damageReduction=Math.min(0.40,p.damageReduction+0.10);} },
+    { id:'sector_patch', name:'Sector Patch', rarity:'common', max:5, desc:'Restore +10 Shield at the start of every sector.', apply:p=>{p.sectorShield+=10;} },
+    { id:'last_signal', name:'Last Signal', rarity:'epic', max:1, desc:'Once per run, lethal damage instead restores 45% Core, fills Shield, and blasts nearby threats backward.', apply:p=>{p.revives+=1;} },
+    { id:'void_adaptation', name:'Void Adaptation', rarity:'common', max:Infinity, desc:'Repeatable evolution: +8% score and +2 maximum Shield.', apply:p=>{p.scoreMult*=1.08;p.maxShield+=2;p.shield=Math.min(p.maxShield,p.shield+2);} }
+  ];
+
+  const state = {
+    screen: 'menu',
+    running: false,
+    paused: false,
+    sector: 1,
+    score: 0,
+    correct: 0,
+    misses: 0,
+    streak: 0,
+    perfectWords: 0,
+    kills: 0,
+    runStart: 0,
+    pausedAt: 0,
+    totalPaused: 0,
+    elapsed: 0,
+    sectorStartedAt: 0,
+    sectorSpawnTarget: 0,
+    sectorSpawned: 0,
+    sectorResolved: false,
+    nextSpawnMs: 700,
+    spawnClock: 0,
+    target: null,
+    targetMistakes: 0,
+    enemies: [],
+    beams: [],
+    particles: [],
+    ripples: [],
+    floatingText: [],
+    stars: [],
+    dust: [],
+    pulseUntil: 0,
+    flash: 0,
+    shake: 0,
+    boss: null,
+    offers: [],
+    upgradeLevels: {},
+    newRecord: false
+  };
+
+  const player = createPlayer();
+  let settings = loadSettings();
+  let records = settings.records;
+  let audioCtx = null;
+  let ambientGain = null;
+  let lastFrame = performance.now();
+  let dpr = Math.min(2, window.devicePixelRatio || 1);
+  let W = 0, H = 0;
+  let labelFontNormal = '';
+  let labelFontBoss = '';
+  const wordMetricsCache = new Map();
+
+  function createPlayer() {
+    return {
+      maxHull: 100, hull: 100,
+      maxShield: 50, shield: 50,
+      shieldRegen: 3.5, shieldDelay: 3.8, lastDamageAt: -999,
+      sectorHeal: 0, sectorShield: 0,
+      enemySpeedMult: 1,
+      comboStep: 20, comboMax: 6,
+      scoreMult: 1,
+      perfectShield: 0,
+      salvageChance: 0,
+      maxPulse: 100, pulse: 100, pulseGainMult: 1,
+      pulseDuration: 2.2, pulsePush: 65,
+      perfectBonusMult: 1,
+      eliteScoreMult: 1,
+      damageReduction: 0,
+      revives: 0
+    };
+  }
+
+  function resetPlayer() {
+    Object.assign(player, createPlayer());
+  }
+
+  function loadSettings() {
+    const fallback = { sound: true, reducedMotion: false, records: { score: 0, sector: 0, wpm: 0 } };
+    try {
+      const raw = JSON.parse(localStorage.getItem(STORAGE_KEY) || 'null');
+      if (!raw) return fallback;
+      return {
+        sound: raw.sound !== false,
+        reducedMotion: !!raw.reducedMotion,
+        records: {
+          score: Number(raw.records?.score || 0),
+          sector: Number(raw.records?.sector || 0),
+          wpm: Number(raw.records?.wpm || 0)
+        }
+      };
+    } catch (_) { return fallback; }
+  }
+
+  function saveSettings() {
+    localStorage.setItem(STORAGE_KEY, JSON.stringify({
+      version: VERSION,
+      sound: settings.sound,
+      reducedMotion: settings.reducedMotion,
+      records
+    }));
+  }
+
+  function resize() {
+    W = window.innerWidth;
+    H = window.innerHeight;
+    dpr = Math.min(2, window.devicePixelRatio || 1);
+    canvas.width = Math.floor(W * dpr);
+    canvas.height = Math.floor(H * dpr);
+    canvas.style.width = `${W}px`;
+    canvas.style.height = `${H}px`;
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    setLabelFonts();
+    seedBackground();
+  }
+
+  function setLabelFonts() {
+    const normalSize = Math.max(12, Math.min(15, W / 85));
+    labelFontNormal = `800 ${normalSize}px ui-sans-serif,system-ui,sans-serif`;
+    labelFontBoss = '800 17px ui-sans-serif,system-ui,sans-serif';
+    wordMetricsCache.clear();
+  }
+
+  function wordMetrics(word, isBoss) {
+    const font = isBoss ? labelFontBoss : labelFontNormal;
+    const key = `${font}|${word}`;
+    const cached = wordMetricsCache.get(key);
+    if (cached) return cached;
+
+    ctx.save();
+    ctx.font = font;
+    const prefixWidths = new Array(word.length + 1);
+    prefixWidths[0] = 0;
+    for (let i = 1; i <= word.length; i++) {
+      prefixWidths[i] = ctx.measureText(word.slice(0, i)).width;
+    }
+    const charWidths = new Array(word.length);
+    for (let i = 0; i < word.length; i++) {
+      charWidths[i] = ctx.measureText(word[i]).width;
+    }
+    const metrics = { prefixWidths, charWidths, totalWidth: prefixWidths[word.length] };
+    ctx.restore();
+
+    wordMetricsCache.set(key, metrics);
+    return metrics;
+  }
+
+  function seedBackground() {
+    const starCount = Math.max(70, Math.floor(W * H / 12000));
+    state.stars = Array.from({ length: starCount }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      size: 0.4 + Math.random() * 1.8,
+      speed: 8 + Math.random() * 34,
+      alpha: 0.18 + Math.random() * 0.75,
+      hue: Math.random() > 0.7 ? 'cyan' : 'purple'
+    }));
+    state.dust = Array.from({ length: 24 }, () => ({
+      x: Math.random() * W,
+      y: Math.random() * H,
+      r: 40 + Math.random() * 160,
+      a: 0.01 + Math.random() * 0.025,
+      drift: (Math.random() - 0.5) * 4
+    }));
+  }
+
+  function showPanel(which) {
+    UI.overlay.classList.remove('is-hidden', 'passive');
+    for (const panel of [UI.menuPanel, UI.pausePanel, UI.upgradePanel, UI.gameOverPanel]) panel.classList.add('is-hidden');
+    which.classList.remove('is-hidden');
+  }
+
+  function hideOverlay() {
+    UI.overlay.classList.add('is-hidden');
+  }
+
+  function showMenu() {
+    state.screen = 'menu';
+    state.running = false;
+    state.paused = false;
+    stopAmbient();
+    showPanel(UI.menuPanel);
+    UI.hud.classList.add('is-hidden');
+    UI.buildPanel.classList.add('is-hidden');
+    UI.bossHud.classList.add('is-hidden');
+    refreshRecords();
+    refreshSettingsButtons();
+  }
+
+  function startRun() {
+    ensureAudio();
+    if (settings.sound && audioCtx?.state === 'suspended') audioCtx.resume();
+    startAmbient();
+    resetPlayer();
+    Object.assign(state, {
+      screen: 'running', running: true, paused: false, sector: 1, score: 0,
+      correct: 0, misses: 0, streak: 0, perfectWords: 0, kills: 0,
+      runStart: performance.now(), pausedAt: 0, totalPaused: 0, elapsed: 0,
+      target: null, targetMistakes: 0, enemies: [], beams: [], particles: [], ripples: [], floatingText: [],
+      pulseUntil: 0, flash: 0, shake: 0, boss: null, offers: [], upgradeLevels: {}, newRecord: false
+    });
+    hideOverlay();
+    UI.hud.classList.remove('is-hidden');
+    UI.buildPanel.classList.remove('is-hidden');
+    UI.buildPanel.classList.remove('open');
+    UI.buildToggle.setAttribute('aria-expanded', 'false');
+    updateBuildPanel();
+    beginSector(1, true);
+    focusMobileInput();
+  }
+
+  function beginSector(number, first = false) {
+    state.sector = number;
+    state.screen = 'running';
+    state.running = true;
+    state.paused = false;
+    state.sectorResolved = false;
+    state.target = null;
+    state.targetMistakes = 0;
+    state.enemies.length = 0;
+    state.beams.length = 0;
+    state.boss = null;
+    UI.bossHud.classList.add('is-hidden');
+
+    player.hull = Math.min(player.maxHull, player.hull + (first ? 0 : player.sectorHeal));
+    player.shield = Math.min(player.maxShield, player.shield + (first ? 0 : player.sectorShield));
+
+    if (isBossSector(number)) {
+      state.sectorSpawnTarget = 1;
+      state.sectorSpawned = 0;
+      state.nextSpawnMs = 700;
+      state.spawnClock = 0;
+      showToast(`ANOMALY ${number}`);
+    } else {
+      state.sectorSpawnTarget = Math.min(20, 7 + Math.floor(number * 1.35));
+      state.sectorSpawned = 0;
+      state.nextSpawnMs = 650;
+      state.spawnClock = 0;
+      showToast(`SECTOR ${number}`);
+    }
+    state.sectorStartedAt = performance.now();
+    updateHud();
+  }
+
+  function isBossSector(n) { return n % 5 === 0; }
+
+  function sectorThreat() {
+    if (isBossSector(state.sector)) return 'ANOMALY';
+    if (state.sector < 4) return 'LOW';
+    if (state.sector < 9) return 'RISING';
+    if (state.sector < 16) return 'HIGH';
+    if (state.sector < 26) return 'SEVERE';
+    return 'VOID';
+  }
+
+  function currentRunTime() {
+    if (!state.runStart) return 0;
+    const clockFrozen = ['paused', 'upgrade', 'transition'].includes(state.screen) && state.pausedAt;
+    const end = clockFrozen ? state.pausedAt : performance.now();
+    return Math.max(0, (end - state.runStart - state.totalPaused) / 1000);
+  }
+
+  function pickEnemyType() {
+    const s = state.sector;
+    const roll = Math.random();
+    if (s < 3) return roll < 0.72 ? 'scout' : 'dart';
+    if (s < 6) return roll < 0.46 ? 'scout' : roll < 0.68 ? 'dart' : roll < 0.84 ? 'splitter' : 'bulwark';
+    if (s < 12) return roll < 0.28 ? 'scout' : roll < 0.48 ? 'dart' : roll < 0.67 ? 'splitter' : roll < 0.84 ? 'bulwark' : 'phantom';
+    return roll < 0.18 ? 'scout' : roll < 0.37 ? 'dart' : roll < 0.58 ? 'splitter' : roll < 0.78 ? 'bulwark' : 'phantom';
+  }
+
+  function wordFor(type, boss = false) {
+    let min, max;
+    if (boss) {
+      min = Math.min(10, 7 + Math.floor(state.sector / 8));
+      max = Math.min(18, 11 + Math.floor(state.sector / 5));
+    } else {
+      const cfg = ENEMY_TYPES[type];
+      min = cfg.min;
+      max = cfg.max + Math.min(5, Math.floor(state.sector / 6));
+    }
+    const aliveInitials = new Set(state.enemies.filter(e => !e.dead && e.index === 0).map(e => e.word[0]));
+    let candidates = WORDS.filter(w => w.length >= min && w.length <= max);
+    if (!candidates.length) candidates = WORDS;
+    for (let tries = 0; tries < 22; tries++) {
+      const w = candidates[Math.floor(Math.random() * candidates.length)].toLowerCase();
+      if (boss || !aliveInitials.has(w[0])) return w;
+    }
+    return candidates[Math.floor(Math.random() * candidates.length)].toLowerCase();
+  }
+
+  function baseEnemySpeed() {
+    return 27 + Math.pow(state.sector, 0.82) * 4.3;
+  }
+
+  function spawnEnemy(type = pickEnemyType(), xOverride = null, yOverride = -46, forcedFragment = false) {
+    const cfg = ENEMY_TYPES[type];
+    const margin = Math.min(90, Math.max(52, W * 0.06));
+    const eliteChance = forcedFragment ? 0 : Math.min(0.32, 0.015 + state.sector * 0.011);
+    const elite = Math.random() < eliteChance;
+    const x = xOverride ?? (margin + Math.random() * Math.max(20, W - margin * 2));
+    const word = wordFor(type, false);
+    const enemy = {
+      id: makeId(), type, x, y: yOverride, word, index: 0, dead: false, perfect: true,
+      metrics: wordMetrics(word, false),
+      radius: cfg.radius * (elite ? 1.17 : 1),
+      speed: baseEnemySpeed() * cfg.speed * (elite ? 1.18 : 1),
+      damage: cfg.damage * (elite ? 1.4 : 1),
+      scoreFactor: cfg.score * (elite ? 2.8 : 1),
+      elite,
+      wobble: Math.random() * Math.PI * 2,
+      phase: Math.random() * Math.PI * 2,
+      fadePhase: Math.random() * Math.PI * 2,
+      isBoss: false,
+      fragment: forcedFragment
+    };
+    state.enemies.push(enemy);
+    return enemy;
+  }
+
+  function spawnBoss() {
+    const totalPhases = Math.min(13, 4 + Math.floor(state.sector / 5));
+    const boss = {
+      id: makeId(), type: 'boss', x: W / 2, y: -90, word: '', index: 0, dead: false, perfect: true,
+      radius: Math.min(76, Math.max(58, W * 0.055)),
+      speed: (18 + Math.sqrt(state.sector) * 2.8),
+      damage: 62 + state.sector * 1.5,
+      scoreFactor: 5.4,
+      elite: true, isBoss: true,
+      phase: 1, totalPhases,
+      wobble: 0, fadePhase: 0,
+      entering: true
+    };
+    boss.word = wordFor('bulwark', true);
+    boss.metrics = wordMetrics(boss.word, true);
+    state.boss = boss;
+    state.enemies.push(boss);
+    UI.bossHud.classList.remove('is-hidden');
+    updateBossHud();
+    return boss;
+  }
+
+  function makeId() {
+    return (crypto.randomUUID && crypto.randomUUID()) || `${Date.now()}-${Math.random().toString(36).slice(2)}`;
+  }
+
+  function activeEnemyCount() {
+    return state.enemies.reduce((n, e) => n + (!e.dead ? 1 : 0), 0);
+  }
+
+  function updateSpawning(dt) {
+    if (state.sectorResolved) return;
+    if (isBossSector(state.sector)) {
+      if (state.sectorSpawned === 0) {
+        state.spawnClock += dt * 1000;
+        if (state.spawnClock >= state.nextSpawnMs) {
+          spawnBoss();
+          state.sectorSpawned = 1;
+        }
+      }
+      return;
+    }
+
+    if (state.sectorSpawned >= state.sectorSpawnTarget) return;
+    const cap = Math.min(7, 2 + Math.floor(state.sector / 4));
+    if (activeEnemyCount() >= cap) return;
+
+    state.spawnClock += dt * 1000;
+    if (state.spawnClock >= state.nextSpawnMs) {
+      state.spawnClock = 0;
+      spawnEnemy();
+      state.sectorSpawned++;
+      const base = Math.max(330, 1100 - state.sector * 24);
+      state.nextSpawnMs = base * (0.72 + Math.random() * 0.48);
+    }
+  }
+
+  function chooseTarget(ch) {
+    const candidates = state.enemies.filter(e => !e.dead && e.index === 0 && e.word[0] === ch);
+    if (!candidates.length) return null;
+    candidates.sort((a, b) => (b.y + b.radius) - (a.y + a.radius));
+    return candidates[0];
+  }
+
+  function processCharacter(ch) {
+    if (state.screen !== 'running' || state.paused) return;
+    ch = ch.toLowerCase();
+    if (!/^[a-z]$/.test(ch)) return;
+
+    if (!state.target || state.target.dead) {
+      state.target = chooseTarget(ch);
+      state.targetMistakes = 0;
+    }
+
+    const target = state.target;
+    if (target && !target.dead && ch === target.word[target.index]) {
+      state.correct++;
+      state.streak++;
+      target.index++;
+      player.pulse = Math.min(player.maxPulse, player.pulse + 1.7 * player.pulseGainMult);
+      const combo = comboMultiplier();
+      const charScore = Math.round(10 * combo * player.scoreMult * (target.elite ? player.eliteScoreMult : 1));
+      state.score += charScore;
+      fireBeam(target);
+      impactFx(target.x, target.y);
+      playKeySound(target.index, target.word.length);
+
+      if (target.index >= target.word.length) completeWord(target);
+    } else {
+      state.misses++;
+      state.streak = 0;
+      state.targetMistakes++;
+      if (target) target.perfect = false;
+      state.shake = Math.max(state.shake, settings.reducedMotion ? 0 : 3.5);
+      floatText(target?.x ?? W / 2, (target?.y ?? H * 0.45) + 24, 'MISS', COLORS.pink, 0.65);
+      playMissSound();
+    }
+    updateHud();
+  }
+
+  function breakLock() {
+    if (state.screen !== 'running' || !state.target) return;
+    state.target.perfect = false;
+    state.target = null;
+    state.targetMistakes = 0;
+    state.streak = 0;
+    showComboBurst('LOCK BROKEN');
+    updateHud();
+  }
+
+  function comboMultiplier() {
+    return Math.min(player.comboMax, 1 + Math.floor(state.streak / player.comboStep));
+  }
+
+  function completeWord(enemy) {
+    const combo = comboMultiplier();
+    const eliteMult = enemy.elite ? player.eliteScoreMult : 1;
+    const perfect = enemy.perfect && state.targetMistakes === 0;
+    let bonus = 55 * enemy.word.length * combo * player.scoreMult * enemy.scoreFactor * eliteMult;
+    if (perfect) {
+      state.perfectWords++;
+      bonus *= (1.35 * player.perfectBonusMult);
+      player.shield = Math.min(player.maxShield, player.shield + player.perfectShield);
+      player.pulse = Math.min(player.maxPulse, player.pulse + 6 * player.pulseGainMult);
+      showComboBurst('PERFECT');
+    }
+    state.score += Math.round(bonus);
+
+    if (enemy.isBoss && enemy.phase < enemy.totalPhases) {
+      bossPhaseComplete(enemy, perfect);
+    } else {
+      destroyEnemy(enemy, true);
+    }
+    state.target = null;
+    state.targetMistakes = 0;
+    updateHud();
+  }
+
+  function bossPhaseComplete(boss, perfect) {
+    explode(boss.x, boss.y, 34, perfect ? COLORS.cyan : COLORS.pink);
+    state.score += Math.round(850 * state.sector * player.scoreMult * player.eliteScoreMult);
+    boss.phase++;
+    boss.index = 0;
+    boss.word = wordFor('bulwark', true);
+    boss.metrics = wordMetrics(boss.word, true);
+    boss.perfect = true;
+    boss.speed *= 1.045;
+    boss.y = Math.max(-20, boss.y - 22);
+    state.flash = Math.max(state.flash, settings.reducedMotion ? 0.08 : 0.18);
+    showToast(`PHASE ${boss.phase}`);
+    playBossPhaseSound();
+    updateBossHud();
+  }
+
+  function destroyEnemy(enemy, countKill) {
+    if (enemy.dead) return;
+    enemy.dead = true;
+    if (countKill) {
+      state.kills++;
+      if (player.salvageChance > 0 && Math.random() < player.salvageChance) {
+        player.hull = Math.min(player.maxHull, player.hull + 8);
+        floatText(enemy.x, enemy.y - 22, '+8 CORE', COLORS.green, 0.9);
+      }
+    }
+    explode(enemy.x, enemy.y, enemy.isBoss ? 68 : enemy.radius, enemy.type === 'phantom' ? COLORS.green : enemy.isBoss ? COLORS.pink : ENEMY_TYPES[enemy.type]?.color || COLORS.purple);
+    state.ripples.push({ x: enemy.x, y: enemy.y, r: 8, alpha: 1, speed: enemy.isBoss ? 150 : 90, color: enemy.isBoss ? COLORS.pink : COLORS.cyan });
+
+    if (enemy.type === 'splitter' && !enemy.fragment && !enemy.isBoss) {
+      const dx = 32;
+      spawnEnemy('fragment', Math.max(34, enemy.x - dx), enemy.y + 4, true);
+      spawnEnemy('fragment', Math.min(W - 34, enemy.x + dx), enemy.y + 4, true);
+    }
+
+    if (enemy.isBoss) {
+      state.boss = null;
+      UI.bossHud.classList.add('is-hidden');
+      state.score += Math.round(3500 * state.sector * player.scoreMult * player.eliteScoreMult);
+      showToast('ANOMALY COLLAPSED');
+      playBossKillSound();
+    } else {
+      playKillSound(enemy.elite);
+    }
+  }
+
+  function impactDamage(enemy) {
+    if (state.target === enemy) {
+      state.target = null;
+      state.targetMistakes = 0;
+    }
+    const amount = enemy.damage * (1 - player.damageReduction);
+    applyDamage(amount, enemy.x);
+    explode(enemy.x, defenseLineY(), enemy.radius * 0.8, COLORS.pink);
+
+    if (enemy.isBoss && player.hull > 0) {
+      enemy.dead = false;
+      enemy.y = Math.max(-20, H * 0.12);
+      enemy.index = 0;
+      enemy.word = wordFor('bulwark', true);
+      enemy.perfect = false;
+      enemy.speed *= 1.04;
+      showToast('CORE BREACH');
+    } else {
+      enemy.dead = true;
+    }
+  }
+
+  function applyDamage(amount, x = playerX()) {
+    player.lastDamageAt = state.elapsed;
+    let remaining = amount;
+    if (player.shield > 0) {
+      const absorbed = Math.min(player.shield, remaining);
+      player.shield -= absorbed;
+      remaining -= absorbed;
+    }
+    if (remaining > 0) player.hull -= remaining;
+
+    state.shake = Math.max(state.shake, settings.reducedMotion ? 0 : 8);
+    state.flash = Math.max(state.flash, settings.reducedMotion ? 0.05 : 0.2);
+    floatText(x, defenseLineY() - 28, `-${Math.round(amount)}`, COLORS.pink, 0.9);
+    playDamageSound();
+
+    if (player.hull <= 0) {
+      if (player.revives > 0) {
+        player.revives--;
+        player.hull = player.maxHull * 0.45;
+        player.shield = player.maxShield;
+        for (const e of state.enemies) if (!e.dead) e.y = Math.min(e.y, H * 0.42) - 80;
+        state.ripples.push({ x: playerX(), y: playerY(), r: 20, alpha: 1, speed: 320, color: COLORS.gold });
+        showToast('LAST SIGNAL');
+        playReviveSound();
+      } else {
+        player.hull = 0;
+        endRun();
+      }
+    }
+  }
+
+  function activatePulse() {
+    if (state.screen !== 'running' || state.paused || player.pulse < player.maxPulse - 0.01) return;
+    player.pulse = 0;
+    state.pulseUntil = state.elapsed + player.pulseDuration;
+    for (const e of state.enemies) {
+      if (e.dead) continue;
+      const push = e.isBoss ? player.pulsePush * 0.35 : player.pulsePush;
+      e.y -= push;
+    }
+    state.ripples.push({ x: playerX(), y: playerY(), r: 16, alpha: 1, speed: 420, color: COLORS.cyan });
+    state.flash = Math.max(state.flash, settings.reducedMotion ? 0.06 : 0.14);
+    showToast('VOID PULSE');
+    playPulseSound();
+    updateHud();
+  }
+
+  function update(dt) {
+    updateBackground(dt);
+    if (state.screen !== 'running' || state.paused) {
+      updateFx(dt);
+      return;
+    }
+
+    state.elapsed = currentRunTime();
+    updateSpawning(dt);
+
+    const pulseActive = state.elapsed < state.pulseUntil;
+    const line = defenseLineY();
+    for (const enemy of state.enemies) {
+      if (enemy.dead) continue;
+      enemy.wobble += dt * (enemy.isBoss ? 0.65 : 1.5);
+      enemy.fadePhase += dt * 2.1;
+      const pulseSlow = pulseActive ? (enemy.isBoss ? 0.72 : 0.46) : 1;
+      let move = enemy.speed * player.enemySpeedMult * pulseSlow * dt;
+      if (enemy.isBoss && enemy.entering && enemy.y < H * 0.16) move *= 2.4;
+      enemy.y += move;
+      if (enemy.isBoss) {
+        enemy.x = W / 2 + Math.sin(enemy.wobble) * Math.min(W * 0.24, 190);
+        if (enemy.y >= H * 0.16) enemy.entering = false;
+      } else {
+        enemy.x += Math.sin(enemy.wobble + enemy.phase) * dt * (enemy.type === 'dart' ? 18 : 8);
+        enemy.x = Math.max(28, Math.min(W - 28, enemy.x));
+      }
+      if (enemy.y + enemy.radius >= line) impactDamage(enemy);
+    }
+
+    if (state.elapsed - player.lastDamageAt >= player.shieldDelay && player.shield < player.maxShield) {
+      player.shield = Math.min(player.maxShield, player.shield + player.shieldRegen * dt);
+    }
+
+    state.enemies = state.enemies.filter(e => !e.dead);
+    updateFx(dt);
+    checkSectorComplete();
+    updateHud();
+  }
+
+  function checkSectorComplete() {
+    if (state.sectorResolved || state.screen !== 'running') return;
+    const allSpawned = state.sectorSpawned >= state.sectorSpawnTarget;
+    const anyAlive = state.enemies.some(e => !e.dead);
+    if (allSpawned && !anyAlive) {
+      state.sectorResolved = true;
+      setTimeout(() => {
+        if (state.screen === 'running' && state.sectorResolved) openUpgradeDraft();
+      }, 650);
+    }
+  }
+
+  function updateBackground(dt) {
+    const speedBoost = state.screen === 'running' ? 1 + Math.min(1.8, state.sector * 0.03) : 0.45;
+    for (const s of state.stars) {
+      s.y += s.speed * dt * speedBoost;
+      if (s.y > H + 5) { s.y = -5; s.x = Math.random() * W; }
+    }
+    for (const d of state.dust) {
+      d.x += d.drift * dt;
+      if (d.x < -d.r) d.x = W + d.r;
+      if (d.x > W + d.r) d.x = -d.r;
+    }
+  }
+
+  function updateFx(dt) {
+    for (const b of state.beams) b.life -= dt;
+    state.beams = state.beams.filter(b => b.life > 0);
+
+    for (const p of state.particles) {
+      p.life -= dt;
+      p.x += p.vx * dt;
+      p.y += p.vy * dt;
+      p.vx *= Math.pow(0.12, dt);
+      p.vy *= Math.pow(0.12, dt);
+    }
+    state.particles = state.particles.filter(p => p.life > 0);
+
+    for (const r of state.ripples) { r.r += r.speed * dt; r.alpha -= dt * 1.7; }
+    state.ripples = state.ripples.filter(r => r.alpha > 0);
+
+    for (const f of state.floatingText) { f.life -= dt; f.y -= 22 * dt; }
+    state.floatingText = state.floatingText.filter(f => f.life > 0);
+
+    state.flash = Math.max(0, state.flash - dt * 1.7);
+    state.shake = Math.max(0, state.shake - dt * 24);
+  }
+
+  function openUpgradeDraft() {
+    state.screen = 'upgrade';
+    state.running = false;
+    state.pausedAt = performance.now();
+    state.offers = rollUpgrades(3);
+    UI.upgradeCards.innerHTML = '';
+    state.offers.forEach((up, i) => {
+      const current = state.upgradeLevels[up.id] || 0;
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = `upgrade-card ${up.rarity}`;
+      button.innerHTML = `
+        <span class="upgrade-key">${i + 1}</span>
+        <span class="upgrade-rarity">${up.rarity}</span>
+        <h3>${up.name}</h3>
+        <p>${up.desc}</p>
+        <span class="upgrade-level">CURRENT LEVEL ${current}${Number.isFinite(up.max) ? ` / ${up.max}` : ''}</span>`;
+      button.addEventListener('click', () => selectUpgrade(i));
+      UI.upgradeCards.appendChild(button);
+    });
+    UI.upgradeSub.textContent = isBossSector(state.sector)
+      ? `Boss sector ${state.sector} cleared. The Void is offering stronger signals before Sector ${state.sector + 1}.`
+      : `Sector ${state.sector} cleared. Install one signal before Sector ${state.sector + 1}.`;
+    showPanel(UI.upgradePanel);
+    playUpgradeOpenSound();
+  }
+
+  function rollUpgrades(count) {
+    const available = UPGRADE_POOL.filter(u => (state.upgradeLevels[u.id] || 0) < u.max);
+    const results = [];
+    const pool = [...available];
+    while (results.length < count && pool.length) {
+      const weighted = pool.map(u => ({ u, w: rarityWeight(u.rarity) }));
+      const total = weighted.reduce((s, x) => s + x.w, 0);
+      let r = Math.random() * total;
+      let chosen = weighted[weighted.length - 1].u;
+      for (const item of weighted) { r -= item.w; if (r <= 0) { chosen = item.u; break; } }
+      results.push(chosen);
+      pool.splice(pool.findIndex(u => u.id === chosen.id), 1);
+    }
+    while (results.length < count) results.push(UPGRADE_POOL.find(u => u.id === 'void_adaptation'));
+    return results;
+  }
+
+  function rarityWeight(rarity) {
+    const bossBonus = isBossSector(state.sector) ? 1.4 : 1;
+    if (rarity === 'epic') return (8 + Math.min(12, state.sector * 0.3)) * bossBonus;
+    if (rarity === 'rare') return (28 + Math.min(12, state.sector * 0.25)) * bossBonus;
+    return 64;
+  }
+
+  function selectUpgrade(index) {
+    if (state.screen !== 'upgrade') return;
+    const up = state.offers[index];
+    if (!up) return;
+    state.screen = 'transition';
+    if (state.pausedAt) {
+      state.totalPaused += performance.now() - state.pausedAt;
+      state.pausedAt = 0;
+    }
+    up.apply(player);
+    state.upgradeLevels[up.id] = (state.upgradeLevels[up.id] || 0) + 1;
+    updateBuildPanel();
+    hideOverlay();
+    playUpgradeSelectSound();
+    showToast(up.name.toUpperCase());
+    setTimeout(() => {
+      if (state.screen === 'transition') beginSector(state.sector + 1);
+    }, 400);
+  }
+
+  function pauseGame() {
+    if (state.screen !== 'running' || state.paused) return;
+    state.paused = true;
+    state.screen = 'paused';
+    state.pausedAt = performance.now();
+    showPanel(UI.pausePanel);
+  }
+
+  function resumeGame() {
+    if (state.screen !== 'paused') return;
+    const now = performance.now();
+    state.totalPaused += now - state.pausedAt;
+    state.pausedAt = 0;
+    state.paused = false;
+    state.screen = 'running';
+    state.running = true;
+    hideOverlay();
+    focusMobileInput();
+  }
+
+  function endRun() {
+    state.screen = 'gameover';
+    state.running = false;
+    state.paused = false;
+    stopAmbient();
+    const wpm = calcWpm();
+    const accuracy = calcAccuracy();
+    state.newRecord = false;
+    if (state.score > records.score) { records.score = state.score; state.newRecord = true; }
+    if (state.sector > records.sector) { records.sector = state.sector; state.newRecord = true; }
+    if (wpm > records.wpm) { records.wpm = wpm; state.newRecord = true; }
+    saveSettings();
+
+    UI.finalScore.textContent = Math.round(state.score).toLocaleString();
+    UI.finalSector.textContent = state.sector;
+    UI.finalWpm.textContent = wpm;
+    UI.finalAccuracy.textContent = `${accuracy}%`;
+    UI.finalPerfect.textContent = state.perfectWords;
+    UI.finalTime.textContent = formatTime(currentRunTime());
+    UI.newRecord.classList.toggle('is-hidden', !state.newRecord);
+    showPanel(UI.gameOverPanel);
+    playGameOverSound();
+  }
+
+  function calcWpm() {
+    const mins = Math.max(1 / 60, currentRunTime() / 60);
+    return Math.round((state.correct / 5) / mins);
+  }
+
+  function calcAccuracy() {
+    const total = state.correct + state.misses;
+    return total ? Math.round((state.correct / total) * 100) : 100;
+  }
+
+  function updateHud() {
+    UI.score.textContent = Math.round(state.score).toLocaleString();
+    UI.sector.textContent = state.sector;
+    UI.combo.textContent = `x${comboMultiplier()}`;
+    UI.wpm.textContent = calcWpm();
+    UI.accuracy.textContent = `${calcAccuracy()}%`;
+    UI.shieldText.textContent = `${Math.ceil(player.shield)} / ${Math.ceil(player.maxShield)}`;
+    UI.hullText.textContent = `${Math.ceil(player.hull)} / ${Math.ceil(player.maxHull)}`;
+    UI.pulseText.textContent = `${Math.round((player.pulse / player.maxPulse) * 100)}%`;
+    UI.shieldBar.style.width = `${Math.max(0, Math.min(100, player.shield / player.maxShield * 100))}%`;
+    UI.hullBar.style.width = `${Math.max(0, Math.min(100, player.hull / player.maxHull * 100))}%`;
+    UI.pulseBar.style.width = `${Math.max(0, Math.min(100, player.pulse / player.maxPulse * 100))}%`;
+    UI.threatLabel.textContent = `SECTOR THREAT // ${sectorThreat()}`;
+    if (state.boss) updateBossHud();
+  }
+
+  function updateBossHud() {
+    if (!state.boss) return;
+    const b = state.boss;
+    UI.bossPhaseText.textContent = `PHASE ${b.phase} / ${b.totalPhases}`;
+    const remaining = b.totalPhases - b.phase + Math.max(0, (b.word.length - b.index) / Math.max(1, b.word.length));
+    const pct = Math.max(0, Math.min(100, remaining / b.totalPhases * 100));
+    UI.bossBar.style.width = `${pct}%`;
+  }
+
+  function updateBuildPanel() {
+    const rows = Object.entries(state.upgradeLevels)
+      .map(([id, level]) => ({ up: UPGRADE_POOL.find(u => u.id === id), level }))
+      .filter(x => x.up)
+      .sort((a, b) => a.up.name.localeCompare(b.up.name));
+    UI.buildList.innerHTML = rows.length
+      ? rows.map(({ up, level }) => `<div class="build-item"><span>${up.name}</span><b>LV ${level}</b></div>`).join('')
+      : '<span class="empty">No upgrades yet.</span>';
+  }
+
+  function refreshRecords() {
+    UI.bestScore.textContent = records.score.toLocaleString();
+    UI.bestSector.textContent = records.sector;
+    UI.bestWpm.textContent = records.wpm;
+  }
+
+  function refreshSettingsButtons() {
+    UI.soundBtn.textContent = `SOUND: ${settings.sound ? 'ON' : 'OFF'}`;
+    UI.motionBtn.textContent = `MOTION: ${settings.reducedMotion ? 'REDUCED' : 'FULL'}`;
+  }
+
+  function formatTime(sec) {
+    const m = Math.floor(sec / 60);
+    const s = Math.floor(sec % 60);
+    return `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+  }
+
+  function playerX() { return W / 2; }
+  function playerY() { return H - Math.max(62, Math.min(86, H * 0.085)); }
+  function defenseLineY() { return H - Math.max(112, Math.min(145, H * 0.14)); }
+
+  function fireBeam(target) {
+    state.beams.push({
+      x1: playerX(), y1: playerY() - 18,
+      x2: target.x, y2: target.y,
+      life: 0.13, maxLife: 0.13,
+      color: target.elite ? COLORS.gold : COLORS.cyan
+    });
+  }
+
+  function impactFx(x, y) {
+    const count = settings.reducedMotion ? 2 : 5;
+    for (let i = 0; i < count; i++) {
+      state.particles.push({
+        x, y,
+        vx: (Math.random() - 0.5) * 100,
+        vy: (Math.random() - 0.5) * 100,
+        life: 0.18 + Math.random() * 0.18,
+        maxLife: 0.36,
+        size: 1 + Math.random() * 2.5,
+        color: Math.random() > 0.5 ? COLORS.cyan : COLORS.purple
+      });
+    }
+  }
+
+  function explode(x, y, radius, color) {
+    const count = settings.reducedMotion ? 10 : Math.round(18 + radius * 0.38);
+    for (let i = 0; i < count; i++) {
+      const a = Math.random() * Math.PI * 2;
+      const speed = 30 + Math.random() * (90 + radius * 2);
+      state.particles.push({
+        x, y,
+        vx: Math.cos(a) * speed,
+        vy: Math.sin(a) * speed,
+        life: 0.35 + Math.random() * 0.65,
+        maxLife: 1,
+        size: 1 + Math.random() * Math.min(6, radius * 0.12),
+        color: Math.random() > 0.38 ? color : COLORS.cyan
+      });
+    }
+  }
+
+  function floatText(x, y, text, color, life = 0.8) {
+    state.floatingText.push({ x, y, text, color, life, maxLife: life });
+  }
+
+  function showToast(text) {
+    UI.toast.textContent = text;
+    UI.toast.animate([
+      { opacity: 0, transform: 'translateX(-50%) scale(.82)' },
+      { opacity: 1, transform: 'translateX(-50%) scale(1)', offset: 0.18 },
+      { opacity: 1, transform: 'translateX(-50%) scale(1)', offset: 0.64 },
+      { opacity: 0, transform: 'translateX(-50%) scale(1.08)' }
+    ], { duration: 1150, easing: 'ease-out' });
+  }
+
+  function showComboBurst(text) {
+    UI.comboBurst.textContent = text;
+    UI.comboBurst.animate([
+      { opacity: 0, transform: 'translateX(-50%) translateY(8px) scale(.9)' },
+      { opacity: 1, transform: 'translateX(-50%) translateY(0) scale(1)', offset: 0.22 },
+      { opacity: 0, transform: 'translateX(-50%) translateY(-14px) scale(1.04)' }
+    ], { duration: 750, easing: 'ease-out' });
+  }
+
+  function render() {
+    ctx.save();
+    if (state.shake > 0) ctx.translate((Math.random() - 0.5) * state.shake, (Math.random() - 0.5) * state.shake);
+    drawBackground();
+    drawDefenseLine();
+    drawBeams();
+    drawEnemies();
+    drawPlayer();
+    drawParticles();
+    drawRipples();
+    drawFloatingText();
+    if (state.flash > 0) {
+      ctx.fillStyle = `rgba(255,255,255,${Math.min(0.22, state.flash)})`;
+      ctx.fillRect(0, 0, W, H);
+    }
+    ctx.restore();
+  }
+
+  function drawBackground() {
+    ctx.fillStyle = COLORS.bg;
+    ctx.fillRect(0, 0, W, H);
+
+    const g = ctx.createRadialGradient(W * 0.5, H * 0.68, 20, W * 0.5, H * 0.55, Math.max(W, H) * 0.78);
+    g.addColorStop(0, 'rgba(124,92,255,.13)');
+    g.addColorStop(0.42, 'rgba(43,19,91,.055)');
+    g.addColorStop(1, 'rgba(0,0,0,0)');
+    ctx.fillStyle = g;
+    ctx.fillRect(0, 0, W, H);
+
+    for (const d of state.dust) {
+      const dg = ctx.createRadialGradient(d.x, d.y, 0, d.x, d.y, d.r);
+      dg.addColorStop(0, `rgba(32,246,255,${d.a})`);
+      dg.addColorStop(1, 'rgba(32,246,255,0)');
+      ctx.fillStyle = dg;
+      ctx.fillRect(d.x - d.r, d.y - d.r, d.r * 2, d.r * 2);
+    }
+
+    for (const s of state.stars) {
+      ctx.globalAlpha = s.alpha;
+      ctx.fillStyle = s.hue === 'cyan' ? '#7cfaff' : '#c1b4ff';
+      ctx.fillRect(s.x, s.y, s.size, s.size * 2.4);
+    }
+    ctx.globalAlpha = 1;
+
+    drawPerspectiveGrid();
+  }
+
+  function drawPerspectiveGrid() {
+    const horizon = H * 0.60;
+    const line = defenseLineY();
+    ctx.save();
+    ctx.strokeStyle = 'rgba(32,246,255,.075)';
+    ctx.lineWidth = 1;
+    const gap = 46;
+    for (let y = horizon; y < H; y += gap) {
+      const a = Math.max(0, Math.min(0.55, (y - horizon) / (H - horizon)));
+      ctx.globalAlpha = a;
+      ctx.beginPath();
+      ctx.moveTo(0, y);
+      ctx.lineTo(W, y);
+      ctx.stroke();
+    }
+    for (let x = -W; x < W * 2; x += 74) {
+      ctx.globalAlpha = 0.34;
+      ctx.beginPath();
+      ctx.moveTo(W / 2, horizon);
+      ctx.lineTo(x, H);
+      ctx.stroke();
+    }
+    ctx.globalAlpha = 0.18;
+    ctx.strokeStyle = COLORS.purple;
+    ctx.beginPath();
+    ctx.moveTo(0, line + 34);
+    ctx.lineTo(W, line + 34);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawDefenseLine() {
+    const y = defenseLineY();
+    const g = ctx.createLinearGradient(0, 0, W, 0);
+    g.addColorStop(0, 'rgba(32,246,255,0)');
+    g.addColorStop(0.18, 'rgba(32,246,255,.18)');
+    g.addColorStop(0.5, player.hull < player.maxHull * 0.35 ? 'rgba(255,59,134,.75)' : 'rgba(32,246,255,.5)');
+    g.addColorStop(0.82, 'rgba(32,246,255,.18)');
+    g.addColorStop(1, 'rgba(32,246,255,0)');
+    ctx.strokeStyle = g;
+    ctx.lineWidth = 1;
+    ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke();
+  }
+
+  function drawPlayer() {
+    const x = playerX(), y = playerY();
+    ctx.save();
+    ctx.translate(x, y);
+    const pulseReady = player.pulse >= player.maxPulse - 0.01;
+    if (pulseReady) {
+      ctx.strokeStyle = 'rgba(32,246,255,.24)';
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(0, 0, 34 + Math.sin(performance.now() / 220) * 3, 0, Math.PI * 2); ctx.stroke();
+    }
+    ctx.shadowBlur = 24;
+    ctx.shadowColor = COLORS.cyan;
+    ctx.fillStyle = COLORS.cyan;
+    ctx.beginPath();
+    ctx.moveTo(0, -24); ctx.lineTo(20, 17); ctx.lineTo(7, 11); ctx.lineTo(0, 20); ctx.lineTo(-7, 11); ctx.lineTo(-20, 17); ctx.closePath();
+    ctx.fill();
+    ctx.shadowBlur = 16;
+    ctx.shadowColor = COLORS.purple;
+    ctx.fillStyle = COLORS.purple;
+    ctx.fillRect(-3, 14, 6, 26 + Math.sin(performance.now() / 90) * 4);
+    ctx.restore();
+  }
+
+  function drawEnemies() {
+    for (const e of state.enemies) {
+      if (e.dead) continue;
+      drawEnemyBody(e);
+      drawWordLabel(e);
+      if (e.elite && !e.isBoss) drawEliteAura(e);
+      if (state.target === e) drawTargetLock(e);
+    }
+  }
+
+  function drawEnemyBody(e) {
+    ctx.save();
+    ctx.translate(e.x, e.y);
+    const cfg = e.isBoss ? { color: COLORS.pink } : ENEMY_TYPES[e.type];
+    const color = cfg.color;
+    const locked = state.target === e;
+    const phantomAlpha = e.type === 'phantom' ? 0.42 + (Math.sin(e.fadePhase) + 1) * 0.25 : 1;
+    ctx.globalAlpha = phantomAlpha;
+    ctx.strokeStyle = locked ? COLORS.cyan : color;
+    ctx.fillStyle = hexToRgba(color, e.isBoss ? 0.09 : 0.07);
+    ctx.lineWidth = e.elite ? 2.1 : 1.6;
+    ctx.shadowBlur = e.isBoss ? 34 : locked ? 25 : 14;
+    ctx.shadowColor = locked ? COLORS.cyan : color;
+
+    if (e.isBoss) drawBossShape(e);
+    else if (e.type === 'dart') drawDartShape(e);
+    else if (e.type === 'bulwark') drawBulwarkShape(e);
+    else if (e.type === 'splitter') drawSplitterShape(e);
+    else if (e.type === 'phantom') drawPhantomShape(e);
+    else if (e.type === 'fragment') drawFragmentShape(e);
+    else drawScoutShape(e);
+    ctx.restore();
+  }
+
+  function drawScoutShape(e) {
+    const r = e.radius;
+    ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r * .9, 0); ctx.lineTo(0, r * .58); ctx.lineTo(-r * .9, 0); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(-r * .42, 0); ctx.lineTo(r * .42, 0); ctx.stroke();
+  }
+  function drawDartShape(e) {
+    const r = e.radius;
+    ctx.beginPath(); ctx.moveTo(0, r); ctx.lineTo(r * .8, -r * .8); ctx.lineTo(0, -r * .35); ctx.lineTo(-r * .8, -r * .8); ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  function drawBulwarkShape(e) {
+    polygonPath(6, e.radius, Math.PI / 6); ctx.fill(); ctx.stroke();
+    polygonPath(6, e.radius * .55, Math.PI / 6); ctx.stroke();
+  }
+  function drawSplitterShape(e) {
+    ctx.beginPath(); ctx.arc(0, 0, e.radius * .62, 0, Math.PI * 2); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.arc(0, 0, e.radius, 0, Math.PI * 2); ctx.stroke();
+    const a = performance.now() / 500;
+    for (let i = 0; i < 3; i++) {
+      const p = a + i * Math.PI * 2 / 3;
+      ctx.beginPath(); ctx.arc(Math.cos(p) * e.radius * .82, Math.sin(p) * e.radius * .82, 3, 0, Math.PI * 2); ctx.fill();
+    }
+  }
+  function drawPhantomShape(e) {
+    const r = e.radius;
+    ctx.beginPath(); ctx.arc(0, 0, r, -Math.PI * .7, Math.PI * .7); ctx.arc(r * .22, 0, r * .66, Math.PI * .7, -Math.PI * .7, true); ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  function drawFragmentShape(e) {
+    const r = e.radius;
+    ctx.beginPath(); ctx.moveTo(0, -r); ctx.lineTo(r, r); ctx.lineTo(-r, r); ctx.closePath(); ctx.fill(); ctx.stroke();
+  }
+  function drawBossShape(e) {
+    const r = e.radius;
+    const rot = performance.now() / 1700;
+    ctx.save(); ctx.rotate(rot);
+    polygonPath(8, r, Math.PI / 8); ctx.fill(); ctx.stroke();
+    ctx.rotate(-rot * 1.8);
+    polygonPath(6, r * .62, Math.PI / 6); ctx.stroke();
+    for (let i = 0; i < 4; i++) {
+      ctx.rotate(Math.PI / 2);
+      ctx.beginPath(); ctx.moveTo(r * .72, 0); ctx.lineTo(r * 1.15, 0); ctx.stroke();
+    }
+    ctx.restore();
+    ctx.fillStyle = 'rgba(32,246,255,.18)';
+    ctx.beginPath(); ctx.arc(0, 0, r * .23, 0, Math.PI * 2); ctx.fill();
+  }
+
+  function polygonPath(sides, radius, offset = 0) {
+    ctx.beginPath();
+    for (let i = 0; i < sides; i++) {
+      const a = offset + i * Math.PI * 2 / sides;
+      const x = Math.cos(a) * radius;
+      const y = Math.sin(a) * radius;
+      if (i === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+    }
+    ctx.closePath();
+  }
+
+  function drawEliteAura(e) {
+    ctx.save();
+    ctx.strokeStyle = 'rgba(255,209,102,.62)';
+    ctx.lineWidth = 1;
+    ctx.setLineDash([5, 5]);
+    ctx.beginPath(); ctx.arc(e.x, e.y, e.radius + 10 + Math.sin(performance.now() / 170) * 2, 0, Math.PI * 2); ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawTargetLock(e) {
+    ctx.save();
+    ctx.translate(e.x, e.y);
+    ctx.strokeStyle = COLORS.cyan;
+    ctx.lineWidth = 1.5;
+    ctx.shadowBlur = 16;
+    ctx.shadowColor = COLORS.cyan;
+    const r = e.radius + 12;
+    const c = 9;
+    ctx.beginPath();
+    ctx.moveTo(-r, -r + c); ctx.lineTo(-r, -r); ctx.lineTo(-r + c, -r);
+    ctx.moveTo(r - c, -r); ctx.lineTo(r, -r); ctx.lineTo(r, -r + c);
+    ctx.moveTo(r, r - c); ctx.lineTo(r, r); ctx.lineTo(r - c, r);
+    ctx.moveTo(-r + c, r); ctx.lineTo(-r, r); ctx.lineTo(-r, r - c);
+    ctx.stroke();
+    ctx.restore();
+  }
+
+  function drawWordLabel(e) {
+    const typed = e.word.slice(0, e.index);
+    const rest = e.word.slice(e.index);
+    const fontSize = e.isBoss ? 17 : Math.max(12, Math.min(15, W / 85));
+    ctx.save();
+    ctx.font = e.isBoss ? labelFontBoss : labelFontNormal;
+    const metrics = e.metrics || wordMetrics(e.word, e.isBoss);
+    const typedW = metrics.prefixWidths[Math.max(0, Math.min(e.index, e.word.length))] || 0;
+    const totalW = metrics.totalWidth || 0;
+    const pad = 9;
+    const labelW = totalW + pad * 2;
+    const y = e.y + e.radius + (e.isBoss ? 25 : 20);
+    const x = e.x - labelW / 2;
+    roundedRect(x, y - fontSize, labelW, fontSize + 12, 7);
+    ctx.fillStyle = state.target === e ? 'rgba(4,7,18,.92)' : 'rgba(4,5,12,.74)'; ctx.fill();
+    ctx.strokeStyle = state.target === e ? COLORS.cyan : e.elite ? 'rgba(255,209,102,.42)' : 'rgba(255,255,255,.12)'; ctx.lineWidth = 1; ctx.stroke();
+    ctx.textBaseline = 'middle'; ctx.textAlign = 'left';
+    const textY = y - fontSize / 2 + 6;
+    ctx.fillStyle = '#6d6887'; ctx.fillText(typed, e.x - totalW / 2, textY);
+    ctx.fillStyle = state.target === e ? COLORS.text : '#dedbf2'; ctx.fillText(rest, e.x - totalW / 2 + typedW, textY);
+    if (state.target === e && rest.length) {
+      const charW = metrics.charWidths[Math.max(0, Math.min(e.index, metrics.charWidths.length - 1))] || ctx.measureText(rest[0]).width;
+      ctx.fillStyle = COLORS.cyan;
+      ctx.fillRect(e.x - totalW / 2 + typedW, textY + fontSize * .56, charW, 2);
+    }
+    ctx.restore();
+  }
+
+  function drawBeams() {
+    for (const b of state.beams) {
+      const alpha = b.life / b.maxLife;
+      ctx.save();
+      ctx.globalAlpha = alpha;
+      ctx.strokeStyle = b.color;
+      ctx.lineWidth = 2.4;
+      ctx.shadowBlur = 18;
+      ctx.shadowColor = b.color;
+      ctx.beginPath(); ctx.moveTo(b.x1, b.y1); ctx.lineTo(b.x2, b.y2); ctx.stroke();
+      ctx.lineWidth = 0.8; ctx.strokeStyle = '#ffffff'; ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function drawParticles() {
+    for (const p of state.particles) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, p.life / p.maxLife);
+      ctx.fillStyle = p.color;
+      ctx.shadowBlur = 10;
+      ctx.shadowColor = p.color;
+      ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+      ctx.restore();
+    }
+  }
+
+  function drawRipples() {
+    for (const r of state.ripples) {
+      ctx.save();
+      ctx.globalAlpha = Math.max(0, r.alpha);
+      ctx.strokeStyle = r.color;
+      ctx.lineWidth = 1.5;
+      ctx.beginPath(); ctx.arc(r.x, r.y, r.r, 0, Math.PI * 2); ctx.stroke();
+      ctx.restore();
+    }
+  }
+
+  function drawFloatingText() {
+    ctx.save();
+    ctx.textAlign = 'center';
+    ctx.font = '900 11px ui-sans-serif,system-ui,sans-serif';
+    for (const f of state.floatingText) {
+      ctx.globalAlpha = Math.max(0, f.life / f.maxLife);
+      ctx.fillStyle = f.color;
+      ctx.fillText(f.text, f.x, f.y);
+    }
+    ctx.restore();
+  }
+
+  function roundedRect(x, y, w, h, r) {
+    if (ctx.roundRect) { ctx.beginPath(); ctx.roundRect(x, y, w, h, r); return; }
+    ctx.beginPath();
+    ctx.moveTo(x + r, y);
+    ctx.arcTo(x + w, y, x + w, y + h, r);
+    ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r);
+    ctx.arcTo(x, y, x + w, y, r);
+    ctx.closePath();
+  }
+
+  function hexToRgba(hex, a) {
+    const v = hex.replace('#', '');
+    const n = parseInt(v, 16);
+    return `rgba(${(n >> 16) & 255},${(n >> 8) & 255},${n & 255},${a})`;
+  }
+
+  function ensureAudio() {
+    if (audioCtx) return;
+    try { audioCtx = new (window.AudioContext || window.webkitAudioContext)(); } catch (_) {}
+  }
+
+  function tone(freq, duration = 0.05, type = 'sine', volume = 0.025, delay = 0) {
+    if (!settings.sound || !audioCtx) return;
+    const o = audioCtx.createOscillator();
+    const g = audioCtx.createGain();
+    const t = audioCtx.currentTime + delay;
+    o.type = type;
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(volume, t);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + duration);
+    o.connect(g); g.connect(audioCtx.destination);
+    o.start(t); o.stop(t + duration);
+  }
+
+  function startAmbient() {
+    if (!settings.sound) return;
+    ensureAudio();
+    if (!audioCtx || ambientGain) return;
+    ambientGain = audioCtx.createGain();
+    ambientGain.gain.value = 0.012;
+    ambientGain.connect(audioCtx.destination);
+    const freqs = [55, 82.41];
+    ambientGain._nodes = freqs.map((f, i) => {
+      const o = audioCtx.createOscillator();
+      o.type = i ? 'triangle' : 'sine';
+      o.frequency.value = f;
+      o.connect(ambientGain); o.start(); return o;
+    });
+  }
+
+  function stopAmbient() {
+    if (!ambientGain) return;
+    for (const o of ambientGain._nodes || []) { try { o.stop(); } catch (_) {} }
+    try { ambientGain.disconnect(); } catch (_) {}
+    ambientGain = null;
+  }
+
+  function playKeySound(index, len) { tone(420 + index * 28 + len * 4, 0.035, 'sine', 0.022); }
+  function playMissSound() { tone(120, 0.075, 'sawtooth', 0.024); }
+  function playKillSound(elite) { tone(elite ? 155 : 105, 0.09, 'triangle', elite ? 0.045 : 0.03); tone(elite ? 680 : 560, 0.05, 'sine', 0.018, 0.035); }
+  function playDamageSound() { tone(78, 0.17, 'sawtooth', 0.05); }
+  function playPulseSound() { tone(120, 0.24, 'sine', 0.04); tone(620, 0.21, 'sine', 0.025, 0.04); }
+  function playBossPhaseSound() { tone(180, 0.14, 'square', 0.035); tone(450, 0.13, 'triangle', 0.025, 0.05); }
+  function playBossKillSound() { tone(72, 0.35, 'sawtooth', 0.05); tone(520, 0.3, 'sine', 0.03, 0.08); tone(880, 0.25, 'sine', 0.02, 0.16); }
+  function playUpgradeOpenSound() { tone(360, 0.12, 'sine', 0.024); tone(540, 0.14, 'sine', 0.02, 0.08); }
+  function playUpgradeSelectSound() { tone(440, 0.1, 'triangle', 0.025); tone(660, 0.12, 'triangle', 0.023, 0.06); tone(880, 0.13, 'triangle', 0.02, 0.12); }
+  function playReviveSound() { tone(110, 0.35, 'sine', 0.04); tone(440, 0.3, 'triangle', 0.025, 0.08); tone(880, 0.28, 'sine', 0.02, 0.16); }
+  function playGameOverSound() { tone(180, 0.25, 'sawtooth', 0.035); tone(120, 0.4, 'triangle', 0.03, 0.2); }
+
+  function focusMobileInput() {
+    if (window.matchMedia('(pointer: coarse)').matches) {
+      setTimeout(() => { try { UI.mobileInput.focus({ preventScroll: true }); } catch (_) {} }, 50);
+    }
+  }
+
+  window.addEventListener('keydown', (e) => {
+    if (state.screen === 'upgrade') {
+      if (['1','2','3'].includes(e.key)) { e.preventDefault(); selectUpgrade(Number(e.key) - 1); }
+      return;
+    }
+    if (e.key === 'Escape') {
+      e.preventDefault();
+      if (state.screen === 'running') pauseGame();
+      else if (state.screen === 'paused') resumeGame();
+      return;
+    }
+    if (state.screen !== 'running') return;
+    if (e.key === ' ') { e.preventDefault(); activatePulse(); return; }
+    if (e.key === 'Backspace') { e.preventDefault(); breakLock(); return; }
+    if (e.key.length === 1 && /^[a-zA-Z]$/.test(e.key)) { e.preventDefault(); processCharacter(e.key); }
+  });
+
+  UI.mobileInput.addEventListener('input', () => {
+    const value = UI.mobileInput.value.toLowerCase();
+    for (const ch of value) if (/^[a-z]$/.test(ch)) processCharacter(ch);
+    UI.mobileInput.value = '';
+  });
+  canvas.addEventListener('pointerdown', focusMobileInput);
+
+  UI.startBtn.addEventListener('click', startRun);
+  UI.resumeBtn.addEventListener('click', resumeGame);
+  UI.restartBtn.addEventListener('click', startRun);
+  UI.quitBtn.addEventListener('click', showMenu);
+  UI.againBtn.addEventListener('click', startRun);
+  UI.menuBtn.addEventListener('click', showMenu);
+
+  UI.soundBtn.addEventListener('click', () => {
+    settings.sound = !settings.sound;
+    if (!settings.sound) stopAmbient();
+    else if (state.screen === 'running') startAmbient();
+    saveSettings(); refreshSettingsButtons();
+  });
+  UI.motionBtn.addEventListener('click', () => {
+    settings.reducedMotion = !settings.reducedMotion;
+    saveSettings(); refreshSettingsButtons();
+  });
+  UI.buildToggle.addEventListener('click', () => {
+    const open = UI.buildPanel.classList.toggle('open');
+    UI.buildToggle.setAttribute('aria-expanded', String(open));
+  });
+
+  window.addEventListener('message', (event) => {
+    if (event.origin !== window.location.origin) return;
+    if (event.data !== 'mgn:resume-audio') return;
+    ensureAudio();
+    if (settings.sound && audioCtx?.state === 'suspended') audioCtx.resume();
+    if (settings.sound && state.screen === 'running') startAmbient();
+  });
+
+  window.addEventListener('blur', () => {
+    if (state.screen === 'running') pauseGame();
+  });
+  window.addEventListener('resize', resize, { passive: true });
+  document.addEventListener('visibilitychange', () => {
+    if (document.hidden && state.screen === 'running') pauseGame();
+  });
+
+  function loop(now) {
+    const dt = Math.min(0.035, Math.max(0, (now - lastFrame) / 1000));
+    lastFrame = now;
+    update(dt);
+    render();
+    requestAnimationFrame(loop);
+  }
+
+  resize();
+  refreshRecords();
+  refreshSettingsButtons();
+  showMenu();
+  requestAnimationFrame(loop);
+})();

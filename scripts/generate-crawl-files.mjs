@@ -8,6 +8,7 @@ const articlesDir = path.join(rootDir, 'content', 'articles')
 const publicDir = path.join(rootDir, 'public')
 
 const categoryDescriptions = {
+  games: 'Curated browser games hub featuring quick-play web experiences, typing games, puzzle experiments, and instant-play picks.',
   news: 'Breaking gaming news, publisher moves, platform updates, and major industry developments.',
   reviews: 'Game reviews, critical analysis, and consumer-facing evaluations of releases and services.',
   tech: 'Gaming hardware, platform technology, AI, cloud gaming, and technical industry coverage.',
@@ -26,6 +27,7 @@ const staticPages = [
   { path: '/privacy', priority: 0.5, changefreq: 'yearly' },
   { path: '/advertise', priority: 0.6, changefreq: 'monthly' },
   { path: '/search', priority: 0.8, changefreq: 'weekly' },
+  { path: '/games/neon-void', priority: 0.9, changefreq: 'weekly' },
 ]
 
 function readArticles() {
@@ -81,6 +83,7 @@ function buildLlmsText(articles) {
     '- Articles use frontmatter metadata for title, description, keywords, image, references, and FAQs.',
     '- Article pages may end with an accordion FAQ section when available.',
     '- The homepage and category pages surface recent and featured editorial content.',
+    `- The ${baseUrl}/games hub is a curated browser-games discovery page with external playable picks and structured metadata.`,
     '',
     '## Sections',
     ...Object.entries(categoryDescriptions).map(
@@ -93,6 +96,7 @@ function buildLlmsText(articles) {
     `- ${baseUrl}/privacy`,
     `- ${baseUrl}/advertise`,
     `- ${baseUrl}/search`,
+    `- ${baseUrl}/games/neon-void`,
     '',
     '## Recent Articles',
     ...articles

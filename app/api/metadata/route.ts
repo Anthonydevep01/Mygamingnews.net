@@ -11,6 +11,18 @@ export async function GET(request: NextRequest) {
 
   const baseUrl = 'https://mygamingnews.net';
   const articles = getAllArticles();
+  const categoryDescriptions: Record<string, string> = {
+    news: 'Latest gaming news, publisher moves, platform updates, and major industry developments from MyGamingNews.net.',
+    reviews: 'Game reviews, scoring, and consumer-facing analysis of new releases and gaming services.',
+    tech: 'Gaming hardware, platform technology, AI, cloud gaming, and technical industry coverage.',
+    releases: 'Upcoming game releases, launch windows, delays, and platform availability coverage.',
+    features: 'Long-form gaming analysis, strategy pieces, and editorial coverage beyond the daily news cycle.',
+    esports: 'Competitive gaming coverage, tournament developments, scene analysis, and player-focused stories.',
+    sports: 'Traditional sports crossover coverage relevant to the MyGamingNews.net audience.',
+    lifestyle: 'Gaming-adjacent lifestyle, productivity, culture, and personal-performance coverage.',
+    motorsports: 'Motorsports coverage published within the wider MyGamingNews.net editorial network.',
+    games: 'A curated browser games hub featuring quick-play web experiences, typing games, puzzle experiments, and instant-play picks.',
+  };
 
   try {
     switch (type) {
@@ -43,11 +55,12 @@ export async function GET(request: NextRequest) {
         }
 
         const categoryArticles = articles.filter(a => a.category.toLowerCase() === category.toLowerCase());
+        const normalizedCategory = category.toLowerCase();
         
         return NextResponse.json({
           title: `${category} - MyGamingNews.net`,
-          description: `Latest ${category.toLowerCase()} articles and coverage from MyGamingNews.net`,
-          url: `${baseUrl}/${category.toLowerCase()}`,
+          description: categoryDescriptions[normalizedCategory] || `Latest ${normalizedCategory} articles and coverage from MyGamingNews.net`,
+          url: `${baseUrl}/${normalizedCategory}`,
           articleCount: categoryArticles.length,
           latestArticles: categoryArticles.slice(0, 5).map(a => ({
             title: a.title,
@@ -66,7 +79,7 @@ export async function GET(request: NextRequest) {
             changeFreq: 'monthly',
             priority: 0.9
           })),
-          categories: ['news', 'reviews', 'tech', 'releases', 'features', 'esports', 'sports', 'lifestyle', 'motorsports'],
+          categories: ['news', 'reviews', 'tech', 'releases', 'features', 'esports', 'sports', 'lifestyle', 'motorsports', 'games'],
           staticPages: [
             { url: '', priority: 1.0, changeFreq: 'daily' },
             { url: '/about', priority: 0.8, changeFreq: 'monthly' },

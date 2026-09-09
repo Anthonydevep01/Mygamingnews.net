@@ -16,8 +16,10 @@ https://mygamingnews.net
 - Articles use frontmatter metadata for title, description, keywords, image, references, and FAQs.
 - Article pages may end with an accordion FAQ section when available.
 - The homepage and category pages surface recent and featured editorial content.
+- The https://mygamingnews.net/games hub is a curated browser-games discovery page with external playable picks and structured metadata.
 
 ## Sections
+- https://mygamingnews.net/games - Curated browser games hub featuring quick-play web experiences, typing games, puzzle experiments, and instant-play picks.
 - https://mygamingnews.net/news - Breaking gaming news, publisher moves, platform updates, and major industry developments.
 - https://mygamingnews.net/reviews - Game reviews, critical analysis, and consumer-facing evaluations of releases and services.
 - https://mygamingnews.net/tech - Gaming hardware, platform technology, AI, cloud gaming, and technical industry coverage.
@@ -34,6 +36,7 @@ https://mygamingnews.net
 - https://mygamingnews.net/privacy
 - https://mygamingnews.net/advertise
 - https://mygamingnews.net/search
+- https://mygamingnews.net/games/neon-void
 
 ## Recent Articles
 - https://mygamingnews.net/news/netflix-games-five-years-later-fifa-gaming-strategy | Netflix Wanted To Become A Gaming Giant — Five Years Later, FIFA Shows How Far It Still Has To Go | 2026-08-07

@@ -7,6 +7,7 @@ import { Facebook, Twitter, Instagram } from 'lucide-react'
 const Footer = () => {
   const quickLinks = [
     { name: 'Home', href: '/' },
+    { name: 'Games', href: '/games' },
     { name: 'News', href: '/news' },
     { name: 'Reviews', href: '/reviews' },
     { name: 'Features', href: '/features' },
@@ -36,11 +37,11 @@ const Footer = () => {
               <div className="mb-3 text-[11px] font-black uppercase tracking-[0.28em] text-fuchsia-200/80">The MGN Drop</div>
               <h2 className="mgn-text-strong text-2xl font-black sm:text-3xl">One gaming brief. No filler.</h2>
               <p className="mgn-text-body mt-3 max-w-2xl text-sm leading-7 sm:text-base">
-                News, reviews, releases, features, eSports and platform trends in one broadcast-style destination.
+                News, reviews, releases, features, browser games, and platform trends in one broadcast-style destination.
               </p>
             </div>
             <div className="flex flex-wrap gap-3 lg:justify-end">
-              <Link href="/news" className="btn-primary">Start Reading</Link>
+              <Link href="/games" className="btn-primary">Open Games Hub</Link>
               <Link href="/advertise" className="btn-secondary">Advertise With Us</Link>
             </div>
           </div>

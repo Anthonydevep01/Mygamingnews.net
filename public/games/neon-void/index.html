@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no,viewport-fit=cover" />
+  <meta name="theme-color" content="#05030d" />
+  <meta name="description" content="Neon Void — an infinite roguelike typing shooter for MyGamingNews.net." />
+  <title>Neon Void — MyGamingNews Arcade</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <canvas id="game" aria-label="Neon Void typing shooter game"></canvas>
+
+  <header id="hud" class="hud is-hidden" aria-live="polite">
+    <div class="brand-panel glass">
+      <span class="eyebrow">MYGAMINGNEWS // ARCADE</span>
+      <strong>NEON VOID</strong>
+      <small id="threatLabel">SECTOR THREAT // LOW</small>
+    </div>
+
+    <div class="stat-row">
+      <div class="stat glass"><span>Score</span><b id="score">0</b></div>
+      <div class="stat glass"><span>Sector</span><b id="sector">1</b></div>
+      <div class="stat glass"><span>Combo</span><b id="combo">x1</b></div>
+      <div class="stat glass"><span>WPM</span><b id="wpm">0</b></div>
+      <div class="stat glass"><span>Accuracy</span><b id="accuracy">100%</b></div>
+    </div>
+
+    <div class="vitals glass">
+      <div class="vital-line"><span>SHIELD</span><b id="shieldText">50 / 50</b></div>
+      <div class="meter shield-meter"><i id="shieldBar"></i></div>
+      <div class="vital-line"><span>CORE</span><b id="hullText">100 / 100</b></div>
+      <div class="meter hull-meter"><i id="hullBar"></i></div>
+      <div class="vital-line pulse-line"><span>VOID PULSE <em>[SPACE]</em></span><b id="pulseText">100%</b></div>
+      <div class="meter pulse-meter"><i id="pulseBar"></i></div>
+    </div>
+  </header>
+
+  <aside id="buildPanel" class="build-panel glass is-hidden">
+    <button id="buildToggle" class="icon-button" type="button" aria-expanded="false" aria-controls="buildContents">BUILD</button>
+    <div id="buildContents">
+      <div class="build-title">RUN BUILD</div>
+      <div id="buildList" class="build-list"><span class="empty">No upgrades yet.</span></div>
+    </div>
+  </aside>
+
+  <div id="bossHud" class="boss-hud is-hidden">
+    <div class="boss-title"><span>VOID ANOMALY</span><b id="bossPhaseText">PHASE 1 / 5</b></div>
+    <div class="boss-meter"><i id="bossBar"></i></div>
+  </div>
+
+  <div id="toast" class="toast" aria-live="assertive"></div>
+  <div id="comboBurst" class="combo-burst"></div>
+  <div id="mobileHint" class="mobile-hint">TAP PLAYFIELD TO OPEN KEYBOARD</div>
+  <input id="mobileInput" class="mobile-input" autocomplete="off" autocapitalize="none" autocorrect="off" spellcheck="false" inputmode="text" aria-label="Typing input" />
+
+  <main id="overlay" class="overlay">
+    <section id="menuPanel" class="panel menu-panel">
+      <div class="panel-kicker">MYGAMINGNEWS.NET PRESENTS</div>
+      <h1>NEON <span>VOID</span></h1>
+      <p class="lede">An infinite roguelike typing shooter. Lock targets with the first letter, finish their words to fire, survive procedural sectors, and evolve your ship after every clear.</p>
+
+      <div class="menu-grid">
+        <div class="menu-info glass-soft">
+          <h2>HOW TO SURVIVE</h2>
+          <ul>
+            <li><kbd>A-Z</kbd><span>Lock and fire at incoming threats.</span></li>
+            <li><kbd>BACKSPACE</kbd><span>Break target lock, but lose your streak.</span></li>
+            <li><kbd>SPACE</kbd><span>Trigger Void Pulse when fully charged.</span></li>
+            <li><kbd>ESC</kbd><span>Pause the run.</span></li>
+          </ul>
+        </div>
+        <div class="records glass-soft">
+          <h2>LOCAL RECORDS</h2>
+          <div><span>Best Score</span><b id="bestScore">0</b></div>
+          <div><span>Best Sector</span><b id="bestSector">0</b></div>
+          <div><span>Best WPM</span><b id="bestWpm">0</b></div>
+        </div>
+      </div>
+
+      <div class="menu-actions">
+        <button id="startBtn" class="primary-button" type="button">BEGIN RUN</button>
+        <button id="soundBtn" class="secondary-button" type="button">SOUND: ON</button>
+        <button id="motionBtn" class="secondary-button" type="button">MOTION: FULL</button>
+      </div>
+      <p class="microcopy">No account required. Records are stored only in this browser. Global leaderboards can be connected later through the MyGamingNews.net backend.</p>
+    </section>
+
+    <section id="pausePanel" class="panel compact-panel is-hidden">
+      <div class="panel-kicker">RUN SUSPENDED</div>
+      <h2>PAUSED</h2>
+      <p>Your target lock is frozen. Resume when ready.</p>
+      <div class="stack-actions">
+        <button id="resumeBtn" class="primary-button" type="button">RESUME</button>
+        <button id="restartBtn" class="secondary-button" type="button">RESTART RUN</button>
+        <button id="quitBtn" class="text-button" type="button">QUIT TO MENU</button>
+      </div>
+    </section>
+
+    <section id="upgradePanel" class="panel upgrade-panel is-hidden">
+      <div class="panel-kicker">SECTOR CLEARED // EVOLUTION AVAILABLE</div>
+      <h2>CHOOSE ONE UPGRADE</h2>
+      <p id="upgradeSub">Three signals survived the jump. Install one before entering the next sector.</p>
+      <div id="upgradeCards" class="upgrade-cards"></div>
+      <p class="microcopy">Press <kbd>1</kbd>, <kbd>2</kbd>, or <kbd>3</kbd> — or click a card.</p>
+    </section>
+
+    <section id="gameOverPanel" class="panel gameover-panel is-hidden">
+      <div class="panel-kicker">SIGNAL TERMINATED</div>
+      <h2>RUN OVER</h2>
+      <div id="newRecord" class="new-record is-hidden">NEW LOCAL RECORD</div>
+      <div class="summary-grid">
+        <div><span>Score</span><b id="finalScore">0</b></div>
+        <div><span>Sector</span><b id="finalSector">1</b></div>
+        <div><span>WPM</span><b id="finalWpm">0</b></div>
+        <div><span>Accuracy</span><b id="finalAccuracy">100%</b></div>
+        <div><span>Perfect Words</span><b id="finalPerfect">0</b></div>
+        <div><span>Run Time</span><b id="finalTime">00:00</b></div>
+      </div>
+      <div class="stack-actions horizontal-actions">
+        <button id="againBtn" class="primary-button" type="button">NEW RUN</button>
+        <button id="menuBtn" class="secondary-button" type="button">MAIN MENU</button>
+      </div>
+    </section>
+  </main>
+
+  <noscript>Neon Void requires JavaScript to run.</noscript>
+  <script src="game.js"></script>
+</body>
+</html>
