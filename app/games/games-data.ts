@@ -10,6 +10,7 @@ export interface HubGame {
   accentFrom: string
   accentTo: string
   accentGlow: string
+  previewImage?: string
   featured?: boolean
 }
 
@@ -118,6 +119,21 @@ export const hubGames: HubGame[] = [
     accentFrom: '#f43f5e',
     accentTo: '#fb923c',
     accentGlow: 'rgba(255, 77, 92, 0.3)',
+  },
+  {
+    name: 'Pizza Shift',
+    href: '/games/pizza-shift',
+    description: 'Run a pizza shop, prepare customer orders, manage the ovens, and upgrade your kitchen.',
+    genre: 'Kitchen Management',
+    playMode: 'Solo',
+    difficulty: 'Easy',
+    session: '10-20 min',
+    tags: ['Simulation', 'Management', 'Cooking'],
+    accentFrom: '#db503c',
+    accentTo: '#e8bb58',
+    accentGlow: 'rgba(219, 80, 60, 0.32)',
+    previewImage: '/games/pizza-shift/pizza-shift-preview.gif',
+    featured: true,
   },
 ]
 

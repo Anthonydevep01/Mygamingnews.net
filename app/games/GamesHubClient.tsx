@@ -75,50 +75,50 @@ const shelves = [
     title: 'Most Popular Games Today',
     description: 'High-visibility picks with quick launch paths and immediate readability.',
     badge: 'Top',
-    items: [hubGames[0], hubGames[4], hubGames[5], hubGames[2], hubGames[1], hubGames[3]],
+    items: [hubGames[0], hubGames[7], hubGames[4], hubGames[5], hubGames[2], hubGames[1]],
     featured: true,
   },
   {
     title: 'Featured Games',
     description: 'A tighter curated row with stronger visual emphasis.',
     badge: 'Hot',
-    items: [hubGames[4], hubGames[2], hubGames[0], hubGames[3], hubGames[5], hubGames[1]],
+    items: [hubGames[7], hubGames[0], hubGames[4], hubGames[3], hubGames[5], hubGames[2]],
   },
   {
     title: 'New Games',
     description: 'Fresh browser-play ideas and experiments worth trying.',
     badge: 'New',
-    items: [hubGames[1], hubGames[3], hubGames[5], hubGames[0], hubGames[2], hubGames[4]],
+    items: [hubGames[7], hubGames[1], hubGames[3], hubGames[2], hubGames[4], hubGames[6]],
   },
   {
     title: 'Train your brain',
     description: 'Puzzle and focus-heavy picks for lower-friction sessions.',
     badge: 'Mind',
-    items: [hubGames[2], hubGames[1], hubGames[3], hubGames[5], hubGames[0], hubGames[2]],
+    items: [hubGames[3], hubGames[2], hubGames[6], hubGames[1], hubGames[7], hubGames[4]],
   },
   {
     title: 'Adrenaline',
     description: 'Action and competitive tabs when you want the pace up immediately.',
     badge: 'Rush',
-    items: [hubGames[4], hubGames[5], hubGames[0], hubGames[1], hubGames[4], hubGames[5]],
+    items: [hubGames[5], hubGames[0], hubGames[1], hubGames[6], hubGames[7], hubGames[5]],
   },
   {
     title: 'Play With Friends',
     description: 'Faster multiplayer-friendly picks and shareable tab games.',
     badge: 'Party',
-    items: [hubGames[4], hubGames[5], hubGames[0], hubGames[4], hubGames[5], hubGames[1]],
+    items: [hubGames[5], hubGames[6], hubGames[5], hubGames[6], hubGames[1], hubGames[0]],
   },
   {
     title: '5-Minute Fun',
     description: 'Short sessions built for a break, not a commitment.',
     badge: 'Quick',
-    items: [hubGames[1], hubGames[2], hubGames[3], hubGames[0], hubGames[5], hubGames[2]],
+    items: [hubGames[2], hubGames[4], hubGames[1], hubGames[0], hubGames[6], hubGames[7]],
   },
   {
     title: 'Timeless Classics',
     description: 'Simple browser formats that still work because the loop is so clear.',
     badge: 'Classic',
-    items: [hubGames[0], hubGames[5], hubGames[4], hubGames[2], hubGames[1], hubGames[3]],
+    items: [hubGames[6], hubGames[5], hubGames[4], hubGames[1], hubGames[3], hubGames[7]],
   },
 ]
 
@@ -283,6 +283,13 @@ export default function GamesHubClient() {
                     }
                   >
                     <div className="games-tile-art">
+                      {game.previewImage ? (
+                        <div
+                          className="games-tile-preview"
+                          style={{ backgroundImage: `url(${game.previewImage})` }}
+                          aria-hidden="true"
+                        />
+                      ) : null}
                       <div className="games-tile-orb" />
                       <div className="games-tile-grid" />
                     </div>
