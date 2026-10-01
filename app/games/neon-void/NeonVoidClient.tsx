@@ -132,14 +132,14 @@ export default function NeonVoidClient({ gamePath }: Props) {
   const playingChrome = (
     <div
       ref={containerRef}
-      className={`relative overflow-hidden border border-white/10 bg-black/40 shadow-[0_30px_120px_rgba(0,0,0,0.5)] ${
-        isFullscreen || isCssFullscreen ? 'fixed inset-0 z-[60] rounded-none border-none bg-black' : 'rounded-3xl'
+      className={`relative flex flex-col overflow-hidden border border-white/10 bg-black/40 shadow-[0_30px_120px_rgba(0,0,0,0.5)] ${
+        isFullscreen || isCssFullscreen
+          ? 'fixed inset-0 z-[60] h-[100svh] rounded-none border-none bg-black'
+          : 'rounded-3xl'
       }`}
     >
       <div
-        className={`flex flex-wrap items-center justify-between gap-3 bg-black/40 px-4 py-3 backdrop-blur ${
-          isFullscreen || isCssFullscreen ? 'absolute inset-x-0 top-0 z-10 border-b border-white/10' : 'border-b border-white/10'
-        }`}
+        className="flex flex-wrap items-center justify-between gap-3 border-b border-white/10 bg-black/40 px-4 py-3 backdrop-blur"
       >
         <div className="flex items-center gap-2">
           <span className="text-xs font-black uppercase tracking-[0.14em] text-white/70">Now Playing</span>
@@ -170,8 +170,8 @@ export default function NeonVoidClient({ gamePath }: Props) {
       </div>
 
       <div
-        className={`w-full ${
-          isFullscreen || isCssFullscreen ? 'h-[100svh]' : 'h-[min(80svh,860px)] min-h-[360px] sm:min-h-[520px]'
+        className={`w-full flex-1 min-h-0 ${
+          isFullscreen || isCssFullscreen ? '' : 'h-[min(80svh,860px)] min-h-[360px] sm:min-h-[520px]'
         }`}
       >
         <iframe

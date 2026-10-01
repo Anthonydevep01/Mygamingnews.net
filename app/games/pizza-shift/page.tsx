@@ -105,16 +105,9 @@ export default function PizzaShiftPage() {
   return (
     <>
       <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(schema) }} />
-      <div className="mx-auto w-full max-w-[1500px] px-4 pb-16 pt-6 md:px-6 md:pt-10">
-        <div className="mb-6">
-          <div className="inline-flex items-center rounded-full border border-white/10 bg-white/5 px-3 py-1 text-xs font-black uppercase tracking-[0.14em] text-white/70">
-            Games
-          </div>
-        </div>
-
+      <div className="mx-auto w-full max-w-[1500px] px-4 pb-10 pt-4 md:px-6 md:pt-6">
         <PizzaShiftClient gamePath="/games/pizza-shift" />
       </div>
     </>
   )
 }
-
