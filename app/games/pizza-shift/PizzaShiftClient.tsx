@@ -111,6 +111,10 @@ export default function PizzaShiftClient({ gamePath }: Props) {
       docEl.style.transform = ''
       docEl.style.width = ''
       docEl.style.height = ''
+      docEl.style.overflow = ''
+      if (body) body.style.overflow = ''
+
+      if (scaleMode === 'readable') return
 
       const contentWidth = Math.max(docEl.scrollWidth, body?.scrollWidth ?? 0)
       const contentHeight = Math.max(docEl.scrollHeight, body?.scrollHeight ?? 0)
@@ -120,18 +124,15 @@ export default function PizzaShiftClient({ gamePath }: Props) {
 
       if (!contentWidth || !contentHeight || !frameWidth || !frameHeight) return
 
-      const scale =
-        scaleMode === 'fit'
-          ? Math.min(frameWidth / contentWidth, frameHeight / contentHeight, 1)
-          : Math.min(frameWidth / contentWidth, 1)
+      const scale = Math.min(frameWidth / contentWidth, frameHeight / contentHeight, 1)
       const usedWidth = contentWidth * scale
       const usedHeight = contentHeight * scale
       const offsetX = Math.max((frameWidth - usedWidth) / 2, 0)
-      const offsetY = scaleMode === 'fit' ? Math.max((frameHeight - usedHeight) / 2, 0) : 0
+      const offsetY = Math.max((frameHeight - usedHeight) / 2, 0)
 
       docEl.style.transformOrigin = 'top left'
-      docEl.style.overflow = scaleMode === 'fit' ? 'hidden' : ''
-      if (body) body.style.overflow = scaleMode === 'fit' ? 'hidden' : ''
+      docEl.style.overflow = 'hidden'
+      if (body) body.style.overflow = 'hidden'
 
       if (scale === 1 && offsetX === 0 && offsetY === 0) {
         docEl.style.transform = ''
