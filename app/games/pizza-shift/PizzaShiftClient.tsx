@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ExternalLink, Maximize2, MousePointerClick, Play, SlidersHorizontal, Type, Volume2, X } from 'lucide-react'
+import { ExternalLink, Maximize2, MousePointerClick, Play, SlidersHorizontal, Type, Volume2, VolumeX, X } from 'lucide-react'
 
 type Props = {
   gamePath: string
@@ -79,6 +79,8 @@ export default function PizzaShiftClient({ gamePath }: Props) {
   const [isFullscreen, setIsFullscreen] = useState(false)
   const [isCssFullscreen, setIsCssFullscreen] = useState(false)
   const [scaleMode, setScaleMode] = useState<'fit' | 'readable'>('readable')
+  const [gameSoundOn, setGameSoundOn] = useState<boolean | null>(null)
+  const [gameSettingsOpen, setGameSettingsOpen] = useState(false)
   const [dockTop, setDockTop] = useState<number | null>(null)
   const iframeRef = useRef<HTMLIFrameElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
@@ -123,6 +125,38 @@ export default function PizzaShiftClient({ gamePath }: Props) {
       const doc = iframe.contentDocument
       const button = doc?.getElementById(id) as HTMLButtonElement | null
       button?.click()
+    } catch {
+      return
+    }
+  }, [])
+
+  const closeGameSettings = useCallback(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    try {
+      const doc = iframe.contentDocument
+      const modal = doc?.getElementById('modal') as HTMLDialogElement | null
+      if (!modal) return
+      if (modal.hasAttribute('open')) modal.close()
+    } catch {
+      return
+    }
+  }, [])
+
+  const syncGameUiState = useCallback(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    try {
+      const doc = iframe.contentDocument
+      if (!doc) return
+
+      const soundBtn = doc.getElementById('sound-btn')
+      if (soundBtn) setGameSoundOn(soundBtn.getAttribute('aria-pressed') === 'true')
+
+      const modal = doc.getElementById('modal') as HTMLDialogElement | null
+      setGameSettingsOpen(Boolean(modal?.hasAttribute('open')))
     } catch {
       return
     }
@@ -209,13 +243,15 @@ export default function PizzaShiftClient({ gamePath }: Props) {
       iframeRef.current?.focus()
       syncDockTop()
       applyIframeUiOverrides()
+      syncGameUiState()
       syncIframeScale()
       window.setTimeout(syncDockTop, 80)
       window.setTimeout(applyIframeUiOverrides, 120)
+      window.setTimeout(syncGameUiState, 160)
       window.setTimeout(syncIframeScale, 400)
     }, 50)
     return () => window.clearTimeout(handle)
-  }, [applyIframeUiOverrides, isPlaying, syncDockTop, syncIframeScale])
+  }, [applyIframeUiOverrides, isPlaying, syncDockTop, syncGameUiState, syncIframeScale])
 
   useEffect(() => {
     if (!isPlaying) return
@@ -238,6 +274,12 @@ export default function PizzaShiftClient({ gamePath }: Props) {
     syncIframeScale()
     window.setTimeout(syncIframeScale, 120)
   }, [isPlaying, scaleMode, syncIframeScale])
+
+  useEffect(() => {
+    if (!isPlaying) return
+    const interval = window.setInterval(syncGameUiState, 500)
+    return () => window.clearInterval(interval)
+  }, [isPlaying, syncGameUiState])
 
   useEffect(() => {
     const onEscape = (event: KeyboardEvent) => {
@@ -374,17 +416,26 @@ export default function PizzaShiftClient({ gamePath }: Props) {
           <div className="flex items-center gap-2">
             <button
               type="button"
-              onClick={() => clickGameButton('sound-btn')}
+              onClick={() => {
+                clickGameButton('sound-btn')
+                window.setTimeout(syncGameUiState, 60)
+              }}
               className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-white/80 transition hover:bg-white/10"
               aria-label="Toggle in-game sound"
             >
-              <Volume2 className="h-4 w-4" />
-              Sound
+              {gameSoundOn === false ? <VolumeX className="h-4 w-4" /> : <Volume2 className="h-4 w-4" />}
+              {gameSoundOn === false ? 'Muted' : 'Sound'}
             </button>
             <button
               type="button"
-              onClick={() => clickGameButton('settings-btn')}
-              className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-white/80 transition hover:bg-white/10"
+              onClick={() => {
+                if (gameSettingsOpen) closeGameSettings()
+                else clickGameButton('settings-btn')
+                window.setTimeout(syncGameUiState, 60)
+              }}
+              className={`inline-flex items-center gap-2 rounded-2xl border border-white/12 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] transition ${
+                gameSettingsOpen ? 'bg-white/12 text-white' : 'bg-white/5 text-white/80 hover:bg-white/10'
+              }`}
               aria-label="Open in-game settings"
             >
               <SlidersHorizontal className="h-4 w-4" />
@@ -430,8 +481,10 @@ export default function PizzaShiftClient({ gamePath }: Props) {
             tabIndex={0}
             onLoad={() => {
               applyIframeUiOverrides()
+              syncGameUiState()
               syncIframeScale()
               window.setTimeout(applyIframeUiOverrides, 120)
+              window.setTimeout(syncGameUiState, 160)
               window.setTimeout(syncIframeScale, 400)
             }}
             allow="autoplay; fullscreen"
