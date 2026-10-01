@@ -2,7 +2,7 @@
 
 import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
 import { createPortal } from 'react-dom'
-import { ExternalLink, Maximize2, MousePointerClick, Play, Type, X } from 'lucide-react'
+import { ExternalLink, Maximize2, MousePointerClick, Play, SlidersHorizontal, Type, Volume2, X } from 'lucide-react'
 
 type Props = {
   gamePath: string
@@ -89,6 +89,45 @@ export default function PizzaShiftClient({ gamePath }: Props) {
 
   const iframeSrc = useMemo(() => `${gamePath.replace(/\/+$/, '')}/index.html`, [gamePath])
 
+  const applyIframeUiOverrides = useCallback(() => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    try {
+      const doc = iframe.contentDocument
+      if (!doc) return
+
+      const id = 'mgn-pizza-shift-iframe-overrides'
+      let styleEl = doc.getElementById(id) as HTMLStyleElement | null
+      if (!styleEl) {
+        styleEl = doc.createElement('style')
+        styleEl.id = id
+        doc.head?.appendChild(styleEl)
+      }
+
+      styleEl.textContent = `
+        .topbar { display: none !important; }
+        .site-footer { display: none !important; }
+        main { padding-top: 0 !important; }
+      `
+    } catch {
+      return
+    }
+  }, [])
+
+  const clickGameButton = useCallback((id: string) => {
+    const iframe = iframeRef.current
+    if (!iframe) return
+
+    try {
+      const doc = iframe.contentDocument
+      const button = doc?.getElementById(id) as HTMLButtonElement | null
+      button?.click()
+    } catch {
+      return
+    }
+  }, [])
+
   const syncDockTop = useCallback(() => {
     if (document.fullscreenElement || isCssFullscreen) return
     const nav = document.querySelector('nav') ?? document.querySelector('[role="navigation"]')
@@ -169,12 +208,14 @@ export default function PizzaShiftClient({ gamePath }: Props) {
       window.scrollTo(0, 0)
       iframeRef.current?.focus()
       syncDockTop()
+      applyIframeUiOverrides()
       syncIframeScale()
       window.setTimeout(syncDockTop, 80)
+      window.setTimeout(applyIframeUiOverrides, 120)
       window.setTimeout(syncIframeScale, 400)
     }, 50)
     return () => window.clearTimeout(handle)
-  }, [isPlaying, syncDockTop, syncIframeScale])
+  }, [applyIframeUiOverrides, isPlaying, syncDockTop, syncIframeScale])
 
   useEffect(() => {
     if (!isPlaying) return
@@ -333,6 +374,24 @@ export default function PizzaShiftClient({ gamePath }: Props) {
           <div className="flex items-center gap-2">
             <button
               type="button"
+              onClick={() => clickGameButton('sound-btn')}
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-white/80 transition hover:bg-white/10"
+              aria-label="Toggle in-game sound"
+            >
+              <Volume2 className="h-4 w-4" />
+              Sound
+            </button>
+            <button
+              type="button"
+              onClick={() => clickGameButton('settings-btn')}
+              className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-white/80 transition hover:bg-white/10"
+              aria-label="Open in-game settings"
+            >
+              <SlidersHorizontal className="h-4 w-4" />
+              Settings
+            </button>
+            <button
+              type="button"
               onClick={toggleFullscreen}
               className="inline-flex items-center gap-2 rounded-2xl border border-white/12 bg-white/5 px-3 py-2 text-xs font-black uppercase tracking-[0.14em] text-white/80 transition hover:bg-white/10"
             >
@@ -370,7 +429,9 @@ export default function PizzaShiftClient({ gamePath }: Props) {
             className="h-full w-full"
             tabIndex={0}
             onLoad={() => {
+              applyIframeUiOverrides()
               syncIframeScale()
+              window.setTimeout(applyIframeUiOverrides, 120)
               window.setTimeout(syncIframeScale, 400)
             }}
             allow="autoplay; fullscreen"
