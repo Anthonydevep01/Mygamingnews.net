@@ -273,7 +273,7 @@ export default function GamesHubClient() {
                     href={game.href}
                     target="_blank"
                     rel="noopener noreferrer"
-                    className={`games-tile${shelf.featured && index === 0 ? ' games-tile--hero' : ''}`}
+                    className={`games-tile${shelf.featured && index === 0 ? ' games-tile--hero' : ''}${game.previewImage ? ' games-tile--has-preview' : ''}`}
                     style={
                       {
                         '--games-from': game.accentFrom,

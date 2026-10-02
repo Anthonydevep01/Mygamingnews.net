@@ -1102,6 +1102,8 @@ html {
   .games-tile-art {
     position: absolute;
     inset: 0;
+    isolation: isolate;
+    overflow: hidden;
     background:
       linear-gradient(145deg, color-mix(in srgb, var(--games-from) 72%, #161a2d) 0%, color-mix(in srgb, var(--games-to) 58%, #090b16) 100%);
   }
@@ -1109,6 +1111,7 @@ html {
   .games-tile-preview {
     position: absolute;
     inset: 0;
+    z-index: 0;
     background-position: center;
     background-repeat: no-repeat;
     background-size: cover;
@@ -1124,17 +1127,42 @@ html {
     transform: scale(1);
   }
 
+  .games-tile:focus-visible .games-tile-preview,
+  .games-tile:focus-within .games-tile-preview {
+    opacity: 0.92;
+    transform: scale(1);
+  }
+
+  @media (hover: none) {
+    .games-tile--has-preview .games-tile-preview {
+      opacity: 0.88;
+      transform: scale(1);
+    }
+  }
+
   .games-tile-art::after {
     content: "";
     position: absolute;
     inset: 0;
+    z-index: 1;
+    pointer-events: none;
     background: linear-gradient(180deg, rgba(0, 0, 0, 0.02), rgba(5, 5, 12, 0.8) 78%, rgba(4, 4, 10, 0.92));
+  }
+
+  .games-tile--has-preview .games-tile-art::after {
+    background: linear-gradient(180deg, rgba(0, 0, 0, 0.0), rgba(5, 5, 12, 0.52) 78%, rgba(4, 4, 10, 0.68));
+  }
+
+  .games-tile--has-preview:hover .games-tile-preview {
+    opacity: 1;
+    filter: brightness(1.12) saturate(1.08);
   }
 
   .games-tile-orb {
     position: absolute;
     right: -1.4rem;
     top: -1.4rem;
+    z-index: 2;
     height: 5.8rem;
     width: 5.8rem;
     border-radius: 999px;
@@ -1151,6 +1179,7 @@ html {
   .games-tile-grid {
     position: absolute;
     inset: 0;
+    z-index: 3;
     background-image:
       linear-gradient(rgba(255, 255, 255, 0.08) 1px, transparent 1px),
       linear-gradient(90deg, rgba(255, 255, 255, 0.08) 1px, transparent 1px);
