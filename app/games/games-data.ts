@@ -39,6 +39,7 @@ export const hubGames: HubGame[] = [
     accentFrom: '#00e5ff',
     accentTo: '#7b44ff',
     accentGlow: 'rgba(0, 229, 255, 0.3)',
+    previewImage: '/games/neon-void/neon-void-preview.gif',
     featured: true,
   },
   {

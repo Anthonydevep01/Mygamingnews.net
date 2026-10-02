@@ -30,7 +30,7 @@ export const metadata: Metadata = {
     type: 'website',
     images: [
       {
-        url: `${baseUrl}/images/petlogo.png`,
+        url: `${baseUrl}/games/neon-void/neon-void-preview.jpg`,
         width: 1600,
         height: 900,
         alt: 'Neon Void - MyGamingNews.net browser game',
@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     title: 'Neon Void: Infinite Roguelike Typing Shooter',
     description:
       'Type to destroy enemies, earn upgrades, and survive infinite sector progression with bosses, WPM, and accuracy tracking.',
-    images: [`${baseUrl}/images/petlogo.png`],
+    images: [`${baseUrl}/games/neon-void/neon-void-preview.jpg`],
   },
 }
 
@@ -120,4 +120,3 @@ export default function NeonVoidPage() {
     </>
   )
 }
-
