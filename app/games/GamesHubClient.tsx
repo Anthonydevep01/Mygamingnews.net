@@ -70,55 +70,115 @@ const categoryBands = [
   },
 ]
 
+const getGame = (href: string) => hubGames.find((game) => game.href === href)
+
+const makeShelfItems = (hrefs: string[]) => hrefs.map(getGame).filter(Boolean) as HubGame[]
+
 const shelves = [
   {
     title: 'Most Popular Games Today',
     description: 'High-visibility picks with quick launch paths and immediate readability.',
     badge: 'Top',
-    items: [hubGames[0], hubGames[7], hubGames[4], hubGames[5], hubGames[2], hubGames[1]],
+    items: makeShelfItems([
+      '/games/neon-void',
+      '/games/pizza-shift',
+      '/games/cozy-word-garden',
+      'https://sandspiel.club/',
+      'https://slither.io/',
+      'https://zty.pe/',
+    ]),
     featured: true,
   },
   {
     title: 'Featured Games',
     description: 'A tighter curated row with stronger visual emphasis.',
     badge: 'Hot',
-    items: [hubGames[7], hubGames[0], hubGames[4], hubGames[3], hubGames[5], hubGames[2]],
+    items: makeShelfItems([
+      '/games/pizza-shift',
+      '/games/neon-void',
+      '/games/cozy-word-garden',
+      'https://zty.pe/',
+      'https://quickdraw.withgoogle.com/',
+      'https://sandspiel.club/',
+    ]),
   },
   {
     title: 'New Games',
     description: 'Fresh browser-play ideas and experiments worth trying.',
     badge: 'New',
-    items: [hubGames[7], hubGames[1], hubGames[3], hubGames[2], hubGames[4], hubGames[6]],
+    items: makeShelfItems([
+      '/games/cozy-word-garden',
+      '/games/pizza-shift',
+      '/games/neon-void',
+      'https://littlealchemy2.com/',
+      'https://quickdraw.withgoogle.com/',
+      'https://zty.pe/',
+    ]),
   },
   {
     title: 'Train your brain',
     description: 'Puzzle and focus-heavy picks for lower-friction sessions.',
     badge: 'Mind',
-    items: [hubGames[3], hubGames[2], hubGames[6], hubGames[1], hubGames[7], hubGames[4]],
+    items: makeShelfItems([
+      '/games/cozy-word-garden',
+      'https://littlealchemy2.com/',
+      'https://quickdraw.withgoogle.com/',
+      '/games/pizza-shift',
+      'https://sandspiel.club/',
+      '/games/neon-void',
+    ]),
   },
   {
     title: 'Adrenaline',
     description: 'Action and competitive tabs when you want the pace up immediately.',
     badge: 'Rush',
-    items: [hubGames[5], hubGames[0], hubGames[1], hubGames[6], hubGames[7], hubGames[5]],
+    items: makeShelfItems([
+      '/games/neon-void',
+      'https://zty.pe/',
+      'https://slither.io/',
+      'https://agar.io/',
+      '/games/pizza-shift',
+      'https://quickdraw.withgoogle.com/',
+    ]),
   },
   {
     title: 'Play With Friends',
     description: 'Faster multiplayer-friendly picks and shareable tab games.',
     badge: 'Party',
-    items: [hubGames[5], hubGames[6], hubGames[5], hubGames[6], hubGames[1], hubGames[0]],
+    items: makeShelfItems([
+      'https://slither.io/',
+      'https://agar.io/',
+      'https://slither.io/',
+      'https://agar.io/',
+      'https://zty.pe/',
+      '/games/neon-void',
+    ]),
   },
   {
     title: '5-Minute Fun',
     description: 'Short sessions built for a break, not a commitment.',
     badge: 'Quick',
-    items: [hubGames[2], hubGames[4], hubGames[1], hubGames[0], hubGames[6], hubGames[7]],
+    items: makeShelfItems([
+      'https://quickdraw.withgoogle.com/',
+      'https://sandspiel.club/',
+      'https://zty.pe/',
+      '/games/cozy-word-garden',
+      'https://agar.io/',
+      '/games/pizza-shift',
+    ]),
   },
   {
     title: 'Timeless Classics',
     description: 'Simple browser formats that still work because the loop is so clear.',
     badge: 'Classic',
-    items: [hubGames[6], hubGames[5], hubGames[4], hubGames[1], hubGames[3], hubGames[7]],
+    items: makeShelfItems([
+      'https://agar.io/',
+      'https://slither.io/',
+      'https://sandspiel.club/',
+      'https://zty.pe/',
+      'https://littlealchemy2.com/',
+      '/games/pizza-shift',
+    ]),
   },
 ]
 
