@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#5f7660">
+<title>Cozy Word Garden — Infinite Educational Word Search</title>
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+<div class="app" id="app" data-scene="nature">
+  <div class="ambient-bg"></div>
+  <div class="rain-layer"></div>
+  <header class="topbar">
+    <div class="brand">
+      <div class="brand-orb">📖</div>
+      <div><span class="eyebrow">MYGAMINGNEWS.NET // COZY ARCADE</span><h1 id="brandTitle">Cozy Word Garden</h1></div>
+    </div>
+    <div class="audio-strip">
+      <div class="now-playing">
+        <span>♫</span><div><small id="musicLabel">NOW PLAYING</small><strong id="trackName">Rainy Reading Nook</strong></div>
+      </div>
+      <button class="small-btn" id="musicBtn" title="Music on/off">♫</button>
+      <button class="small-btn" id="sfxBtn" title="Sound effects on/off">✦</button>
+      <button class="small-btn" id="pauseBtn" title="Pause">Ⅱ</button>
+    </div>
+  </header>
+
+  <main class="shell">
+    <section class="room-scene">
+      <div class="window">
+        <div class="window-sky"></div><div class="window-rain"></div>
+        <div class="window-sill"><span>🪴</span><span>☕</span></div>
+      </div>
+      <div class="lamp"><i></i></div>
+      <div class="scene-caption"><span id="themeIcon">🌿</span><div><small id="themeOverline">TODAY'S LITTLE LESSON</small><strong id="themeName">Nature</strong></div></div>
+      <div class="scene-decor left">📚</div><div class="scene-decor right">🕯️</div>
+    </section>
+
+    <section class="game-panel">
+      <div class="stats">
+        <div class="stat"><small id="levelLabel">Level</small><b id="levelStat">1</b></div>
+        <div class="stat"><small id="starsLabel">Stars</small><b id="starsStat">0</b></div>
+        <div class="stat key"><small id="keysLabel">Keys</small><b id="keysStat">0 🔑</b></div>
+        <div class="stat"><small id="coinsLabel">Coins</small><b id="coinsStat">0</b></div>
+        <div class="stat knowledge"><small id="knowledgeLabel">Knowledge</small><b id="knowledgeStat">0</b></div>
+        <div class="stat"><small id="streakLabel">Streak</small><b id="streakStat">0</b></div>
+      </div>
+
+      <div class="game-layout">
+        <section class="board-card">
+          <div class="board-head">
+            <div><span class="chapter" id="chapterText">Nature · Level 1</span></div>
+            <div class="progress-wrap"><span id="progressText">0 / 0</span><div class="progress"><i id="progressBar"></i></div></div>
+          </div>
+          <div class="board-wrap" id="boardWrap">
+            <div class="board" id="board"></div>
+            <canvas id="selectionCanvas"></canvas>
+          </div>
+          <div class="board-tip" id="boardTip">Drag in a straight line across letters.</div>
+        </section>
+
+        <aside class="sidebar">
+          <section class="side-box">
+            <div class="side-head"><strong id="wordsTitle">Word List</strong><span class="difficulty" id="difficultyBadge">COZY</span></div>
+            <div class="word-list" id="wordList"></div>
+          </section>
+
+          <section class="learn-card" id="learnCard">
+            <div class="learn-empty" id="learnEmpty">
+              <span>🍃</span><strong id="learnEmptyTitle">Every word teaches something</strong><p id="learnEmptyText">Find a word to reveal a short definition or fact.</p>
+            </div>
+            <div class="learn-content" id="learnContent" hidden>
+              <div class="learn-top"><span id="learnIcon">🌿</span><div><small id="learnCategory">NATURE</small><h3 id="learnWord">ROOT</h3></div><em id="learnReward">+1</em></div>
+              <p id="learnDefinition"></p>
+            </div>
+          </section>
+
+          <section class="side-box">
+            <div class="side-head"><strong id="helpersTitle">Golden Key Helpers</strong><span>🔑</span></div>
+            <div class="helpers">
+              <button class="helper" id="sparkBtn"><span>✨</span><div><strong id="sparkTitle">Spark</strong><small id="sparkText">Show a starting letter</small></div><em>1 🔑</em></button>
+              <button class="helper" id="compassBtn"><span>🧭</span><div><strong id="compassTitle">Compass</strong><small id="compassText">Reveal a word direction</small></div><em>1 🔑</em></button>
+              <button class="helper" id="lanternBtn"><span>🏮</span><div><strong id="lanternTitle">Lantern</strong><small id="lanternText">Reveal one full word</small></div><em>2 🔑</em></button>
+            </div>
+          </section>
+
+          <section class="secret-box">
+            <span>🔐</span><div><strong id="secretTitle">Secret Discovery</strong><small id="secretText">An unlisted educational word is hidden on every board.</small><div id="secretStatus">? ? ?</div></div>
+          </section>
+        </aside>
+      </div>
+    </section>
+
+    <section class="reward-shelf">
+      <div><span class="eyebrow" id="shelfEyebrow">YOUR READING NOOK</span><strong id="shelfTitle">Rewards that stay with you</strong></div>
+      <div id="collection" class="collection"></div>
+    </section>
+  </main>
+</div>
+
+<div class="modal show" id="startModal">
+  <div class="modal-card start-card">
+    <div class="start-icon">🍵</div>
+    <span class="eyebrow">MYGAMINGNEWS.NET // GAME LAB</span>
+    <h2>Cozy Word Garden</h2>
+    <p id="introText" class="lead">A calm infinite word search with real things to learn. The room stays cozy; the vocabulary goes far beyond cozy words.</p>
+    <div class="language-title">Choose your language / Elige tu idioma</div>
+    <div class="language-grid">
+      <button class="language-btn selected" data-lang="en"><b>EN</b><div><strong>English</strong><small>English words + definitions</small></div></button>
+      <button class="language-btn" data-lang="es"><b>ES</b><div><strong>Español</strong><small>Palabras + definiciones en español</small></div></button>
+    </div>
+    <div class="feature-grid">
+      <div><span>📚</span><b id="feature1a">Educational Themes</b><small id="feature1b">Nature, science, space, technology and more.</small></div>
+      <div><span>🔑</span><b id="feature2a">Hidden Rewards</b><small id="feature2b">Hard and secret words earn Golden Keys.</small></div>
+      <div><span>🎵</span><b id="feature3a">Original Soundtrack</b><small id="feature3b">Two cozy tracks rotate as you play.</small></div>
+    </div>
+    <button class="primary" id="startBtn">Start</button>
+    <button class="text-btn" id="resetBtn">Reset saved progress</button>
+  </div>
+</div>
+
+<div class="modal" id="completeModal">
+  <div class="modal-card complete-card">
+    <div class="complete-symbol">✦</div>
+    <span class="eyebrow" id="completeEyebrow">LEVEL COMPLETE</span>
+    <h2 id="completeTitle">A few more things learned.</h2>
+    <div class="reward-grid">
+      <div><span>⭐</span><b id="rewardStars">+3</b><small id="rewardStarsLabel">Stars</small></div>
+      <div><span>🪙</span><b id="rewardCoins">+30</b><small id="rewardCoinsLabel">Coins</small></div>
+      <div><span>🔑</span><b id="rewardKeys">+0</b><small id="rewardKeysLabel">Keys</small></div>
+      <div><span>📖</span><b id="rewardKnowledge">+0</b><small id="rewardKnowledgeLabel">Knowledge</small></div>
+    </div>
+    <div class="perfect-banner" id="perfectBanner" hidden>✨ Perfect lesson bonus: +1 Golden Key</div>
+    <div class="glossary-wrap"><strong id="glossaryTitle">What you learned</strong><div id="glossary" class="glossary"></div></div>
+    <div class="unlock" id="unlockMessage"></div>
+    <button class="primary" id="nextBtn">Next Level</button>
+  </div>
+</div>
+
+<div class="modal" id="pauseModal">
+  <div class="modal-card pause-card">
+    <span class="eyebrow">COZY BREAK</span><h2 id="pauseTitle">Tea time?</h2><p id="pauseText">The page will stay open for you.</p>
+    <button class="primary" id="resumeBtn">Resume</button>
+    <button class="secondary" id="restartBtn">Restart Level</button>
+    <button class="danger-btn" id="exitRunBtn">Exit Run</button>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+<div class="sparkles" id="sparkles"></div>
+<audio id="musicPlayer" preload="auto" loop></audio>
+<script src="game.js"></script>
+</body>
+</html>

@@ -29,6 +29,7 @@ const staticPages = [
   { path: '/search', priority: 0.8, changefreq: 'weekly' },
   { path: '/games/neon-void', priority: 0.9, changefreq: 'weekly' },
   { path: '/games/pizza-shift', priority: 0.9, changefreq: 'weekly' },
+  { path: '/games/cozy-word-garden', priority: 0.9, changefreq: 'weekly' },
 ]
 
 function readArticles() {
@@ -99,6 +100,7 @@ function buildLlmsText(articles) {
     `- ${baseUrl}/search`,
     `- ${baseUrl}/games/neon-void`,
     `- ${baseUrl}/games/pizza-shift`,
+    `- ${baseUrl}/games/cozy-word-garden`,
     '',
     '## Recent Articles',
     ...articles

@@ -122,6 +122,22 @@ export const hubGames: HubGame[] = [
     accentGlow: 'rgba(255, 77, 92, 0.3)',
   },
   {
+    name: 'Cozy Word Garden',
+    href: '/games/cozy-word-garden',
+    description:
+      'A calm educational word search with themed vocabulary, cozy ambience, and short definitions in English and Spanish.',
+    genre: 'Educational Word Search',
+    playMode: 'Solo',
+    difficulty: 'Easy',
+    session: '5-15 min',
+    tags: ['Word Search', 'Educational', 'Relaxing'],
+    accentFrom: '#5f7660',
+    accentTo: '#d0b58a',
+    accentGlow: 'rgba(95, 118, 96, 0.3)',
+    previewImage: '/games/cozy-word-garden/cozy-word-garden-preview.gif',
+    featured: true,
+  },
+  {
     name: 'Pizza Shift',
     href: '/games/pizza-shift',
     description: 'Run a pizza shop, prepare customer orders, manage the ovens, and upgrade your kitchen.',
